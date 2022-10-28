@@ -4,33 +4,13 @@
 
 (define key-map {})
 
-(class InputKey
-  (define (_map-key)
-    null))
+(define (->input-key evt-or-key)
+  (if (is evt-or-key InputKeyBase)
+      evt-or-key
+      (InputKeys.evt->input-key evt-or-key)))
 
-(class InputKeyKey (extends InputKey)
-  (define evt : InputEventKey)
-  (define (_init evt)
-    (set! (.-evt self) evt))
-  (define (_map-key)
-    ["Key" (.get-scancode-with-modifiers evt)]))
-
-(class InputKeyMouse (extends InputKey)
-  (define evt : InputEventMouse)
-  (define (_init evt)
-    (set! (.-evt self) evt))
-  (define (_map-key)
-    ["Mouse" (.button-mask evt)]))
-
-(define (evt->input-key [evt : InputEvent])
-  (print evt)
-  (match (.get-class evt)
-    ["InputEventKey" (.new InputKeyKey evt)]
-    ["InputEventMouse" (.new InputKeyMouse evt)]
-    [_ null]))
-
-(define (bind-key [evt : InputEvent] binding)
-  (define key (evt->input-key evt))
+(define (bind-key evt-or-key binding)
+  (define key (->input-key evt-or-key))
   (cond
     [(== key null)
      null]
@@ -40,8 +20,8 @@
      (set! (ref key-map (._map-key key)) binding)])
   null)
 
-(define (lookup-key [evt : InputEvent])
-  (define key (evt->input-key evt))
+(define (lookup-key evt-or-key)
+  (define key (->input-key evt-or-key))
   (if (== key null)
       null
       (.get key-map (._map-key key) null)))

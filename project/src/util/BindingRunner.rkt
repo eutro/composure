@@ -2,7 +2,7 @@
 
 (extends Node)
 
-;#;#;
+#;#;
 (class HiPrinter
   (define (run)
     (print "Hello!!")

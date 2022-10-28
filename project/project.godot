@@ -10,11 +10,41 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
+"class": "ActionBase",
+"language": "GDScript",
+"path": "res://src/actions/ActionBase.gd"
+}, {
+"base": "Reference",
+"class": "InputKeyBase",
+"language": "GDScript",
+"path": "res://src/util/input_key/InputKeyBase.gd"
+}, {
+"base": "InputKeyBase",
+"class": "InputKeyKeyboard",
+"language": "GDScript",
+"path": "res://src/util/input_key/InputKeyKeyboard.gd"
+}, {
+"base": "InputKey",
+"class": "InputKeyMouse",
+"language": "GDScript",
+"path": "res://src/util/input_key/InputKeyMouse.gd"
+}, {
+"base": "Reference",
+"class": "InputKeys",
+"language": "GDScript",
+"path": "res://src/util/input_key/InputKeys.gd"
+}, {
+"base": "Reference",
 "class": "KeyBinder",
 "language": "GDScript",
 "path": "res://src/util/KeyBinder.gd"
 } ]
 _global_script_class_icons={
+"ActionBase": "",
+"InputKeyBase": "",
+"InputKeyKeyboard": "",
+"InputKeyMouse": "",
+"InputKeys": "",
 "KeyBinder": ""
 }
 
@@ -25,3 +55,7 @@ run/main_scene="res://src/Main.tscn"
 [autoload]
 
 Game="*res://src/util/Game.gd"
+
+[gui]
+
+theme/custom="res://assets/themes/FlatUI/kenneyUI-red.tres"
