@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/transience.ogg-8a48e2dd691c5d13cc3297777ff39064.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/music/transience.ogg"
+dest_files=[ "res://.import/transience.ogg-8a48e2dd691c5d13cc3297777ff39064.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
