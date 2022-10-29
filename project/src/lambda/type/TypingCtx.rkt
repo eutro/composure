@@ -56,7 +56,7 @@
   ;; returns null if ok, a string error message otherwise
   (define s0 (apply-substs-0 expected))
   (define s1 (apply-substs-0 actual))
-  (print "unifying " s0 " and " s1)
+  #;(print "unifying " s0 " and " s1)
   (cond
     [(== s0 s1) null]
     [(or (is s0 LambdaMonoVar)

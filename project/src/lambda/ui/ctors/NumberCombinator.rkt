@@ -6,7 +6,7 @@
 (define onready slot $HBox/Slot)
 
 (define (set-value value)
-  (.set-term slot (.new LambdaNumber value)))
+  (.set-term slot (Values.wrap-num value)))
 
 (define (_on_Number_value_changed value)
   (set-value value))

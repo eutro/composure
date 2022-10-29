@@ -14,3 +14,6 @@
 
 (define (_scene)
   (preload "KeyboardDisplay.tscn"))
+
+(define (_lambda-type)
+  Types.TY_UNIT)

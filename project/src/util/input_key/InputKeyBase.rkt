@@ -12,3 +12,6 @@
   (define scn (.instance (_scene)))
   (.init scn self)
   scn)
+
+(define (_lambda-type)
+  null)

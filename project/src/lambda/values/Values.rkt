@@ -51,7 +51,10 @@
              func-ref
              (.new Cons x p-args))])))
 
-(define (add a b) (.new LambdaNumber (+ (.-value a) (.-value b))))
+(define (wrap-num x) (LambdaWrapper.new x Types.TY_NUM))
+(define (wrap-vec x) (LambdaWrapper.new x Types.TY_VEC))
+
+(define (add a b) (wrap-num (+ (.-value a) (.-value b))))
 
 (define VAL_ADD
   (Partial.new
@@ -182,3 +185,14 @@
   (define (apply x) x))
 
 (define VAL_I (.new Id))
+
+(class Unit
+  (extends LambdaValue)
+
+  (define (get-type)
+    Types.TY_UNIT)
+
+  (define (create-preview)
+    (.create TextPreview "()")))
+
+(define VAL_UNIT (.new Unit))

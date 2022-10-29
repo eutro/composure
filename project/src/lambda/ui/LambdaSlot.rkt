@@ -33,7 +33,7 @@
     (.add-child cont (.create-preview term))
     (set-drag-preview cont))
   (define t term)
-  (when editable
+  (when (and editable (not (Input.is-action-pressed "ui_duplicate")))
     (set-term null))
   t)
 
@@ -42,3 +42,36 @@
 
 (define (drop-data _posn data)
   (set-term data))
+
+(define (_gui-input evt)
+  (cond
+    [(.is-action evt "ui_pick")
+     (Game.set-copy-source (get-path))
+     (.show $Selected)
+     (.connect Game "copy_source_changed" self "_on_Game_deselect")
+     (.connect self "tree_exited" self "_on_tree_exited")
+     (accept-event)]
+    [(and editable (.is-action evt "ui_drop"))
+     (when (!= null Game.copy-src)
+       (define node (get-node-or-null Game.copy-src))
+       (when (!= null node)
+         (set-term (.-term node))
+         (accept-event)))]
+    [(and editable (.is-action evt "ui_delete"))
+     (set-term null)
+     (accept-event)])
+  null)
+
+(define (_on_Game_deselect)
+  (.hide $Selected)
+  (.disconnect Game "copy_source_changed" self "_on_Game_deselect")
+  (.disconnect self "tree_exited" self "_on_tree_exited"))
+
+(define (_on_tree_exited)
+  (Game.set-copy-source null))
+
+(define (_on-LambdaSlot-focus-entered)
+  (.show $Focus))
+
+(define (_on-LambdaSlot-focus-exited)
+  (.hide $Focus))

@@ -18,6 +18,7 @@
 
 (define (inputs-changed)
   (.set-term output null)
+  (.set-text error "")
 
   ;; we _can_ fold if we have at least two terms to apply
   (define can-fold
@@ -52,7 +53,6 @@
        (.get-type x)))
     (cond
       [(.-is-ok res)
-       (.set-text error "")
        (set! acc-ty (.-value res))
        (fset! acc-val .apply x)]
       [else

@@ -1,16 +1,19 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/themes/FlatUI/kenneyUI.tres" type="Theme" id=1]
 [ext_resource path="res://src/lambda/ui/ctors/NumberCombinator.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/lambda/ui/ctors/AppCombinator.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/lambda/ui/LambdaSlot.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/lambda/ui/DefinitionList.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/lambda/ui/LambdaEditor.gd" type="Script" id=6]
 
 [node name="LambdaEditor" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -3.0
 margin_bottom = -3.0
+script = ExtResource( 6 )
+initial_focus = NodePath("HBoxContainer2/Control2/Control/AppCombinator/VBox/HBoxContainer/Fun1")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="."]
 anchor_right = 1.0
@@ -36,11 +39,11 @@ margin_right = -10.0
 margin_bottom = -10.0
 size_flags_horizontal = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer2/Control2/Control"]
-anchor_top = 1.0
+[node name="HBoxContainer" type="VBoxContainer" parent="HBoxContainer2/Control2/Control"]
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -50.0
-margin_right = 740.0
+margin_left = -50.0
 
 [node name="LambdaSlot" parent="HBoxContainer2/Control2/Control/HBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
@@ -51,16 +54,16 @@ margin_bottom = 50.0
 [node name="LambdaSlot2" parent="HBoxContainer2/Control2/Control/HBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 54.0
-margin_right = 104.0
-margin_bottom = 50.0
+margin_top = 54.0
+margin_right = 50.0
+margin_bottom = 104.0
 
 [node name="LambdaSlot3" parent="HBoxContainer2/Control2/Control/HBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 108.0
-margin_right = 158.0
-margin_bottom = 50.0
+margin_top = 108.0
+margin_right = 50.0
+margin_bottom = 158.0
 
 [node name="AppCombinator" parent="HBoxContainer2/Control2/Control" instance=ExtResource( 3 )]
 anchor_left = 0.5

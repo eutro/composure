@@ -17,6 +17,7 @@ anchor_bottom = 0.0833333
 margin_right = -50.0
 margin_bottom = -50.0
 rect_min_size = Vector2( 50, 50 )
+focus_mode = 2
 mouse_default_cursor_shape = 2
 script = ExtResource( 2 )
 __meta__ = {
@@ -28,3 +29,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
 custom_styles/panel = SubResource( 1 )
+
+[node name="Focus" type="NinePatchRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+region_rect = Rect2( 320, 620, 50, 50 )
+patch_margin_left = 8
+patch_margin_top = 9
+patch_margin_right = 8
+patch_margin_bottom = 12
+
+[node name="Selected" type="NinePatchRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 1 )
+region_rect = Rect2( 320, 560, 50, 50 )
+patch_margin_left = 8
+patch_margin_top = 9
+patch_margin_right = 8
+patch_margin_bottom = 12
+
+[connection signal="focus_entered" from="." to="." method="_on_LambdaSlot_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_LambdaSlot_focus_exited"]
