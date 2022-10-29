@@ -10,9 +10,9 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 1 )
-region_rect = Rect2( 211, 180, 190, 49 )
-margin_left = 12.5436
-margin_right = 8.78053
+region_rect = Rect2( 1051, 180, 190, 49 )
+margin_left = 12.0
+margin_right = 13.0
 margin_top = 10.0349
 margin_bottom = 14.2161
 
@@ -20,7 +20,7 @@ margin_bottom = 14.2161
 
 [sub_resource type="StyleBoxTexture" id=3]
 texture = ExtResource( 1 )
-region_rect = Rect2( 1, 180, 190, 49 )
+region_rect = Rect2( 631, 180, 190, 49 )
 margin_left = 12.5436
 margin_right = 8.78053
 margin_top = 10.0349
@@ -28,7 +28,7 @@ margin_bottom = 14.2161
 
 [sub_resource type="StyleBoxTexture" id=4]
 texture = ExtResource( 1 )
-region_rect = Rect2( 211, 180, 190, 49 )
+region_rect = Rect2( 1051, 180, 190, 49 )
 margin_left = 12.5436
 margin_right = 8.78053
 margin_top = 10.0349
@@ -36,7 +36,7 @@ margin_bottom = 14.2161
 
 [sub_resource type="StyleBoxTexture" id=5]
 texture = ExtResource( 1 )
-region_rect = Rect2( 421, 184, 190, 45 )
+region_rect = Rect2( 1261, 180, 190, 50 )
 margin_left = 12.5436
 margin_right = 8.78053
 margin_top = 10.0349
@@ -160,15 +160,15 @@ expand_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxTexture" id=33]
 texture = ExtResource( 1 )
-region_rect = Rect2( 500, 620, 50, 50 )
+region_rect = Rect2( 620, 440, 50, 50 )
 margin_left = 12.3202
 margin_right = 13.3469
 margin_top = 13.3469
 margin_bottom = 11.2935
 
-[sub_resource type="StyleBoxTexture" id=32]
+[sub_resource type="StyleBoxTexture" id=34]
 texture = ExtResource( 1 )
-region_rect = Rect2( 560, 620, 50, 50 )
+region_rect = Rect2( 680, 440, 50, 50 )
 margin_left = 12.3202
 margin_right = 13.3469
 margin_top = 13.3469
@@ -250,6 +250,7 @@ HSlider/icons/tick = null
 HSlider/styles/grabber_area = SubResource( 17 )
 HSlider/styles/grabber_area_highlight = SubResource( 17 )
 HSlider/styles/slider = SubResource( 17 )
+Label/colors/font_color = Color( 0, 0, 0, 1 )
 LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 1, 1, 1, 1 )
 LineEdit/colors/cursor_color = Color( 0.34902, 0.34902, 0.34902, 1 )
@@ -299,7 +300,7 @@ PopupMenu/styles/separator = null
 TabContainer/styles/panel = SubResource( 21 )
 TabContainer/styles/tab_bg = SubResource( 33 )
 TabContainer/styles/tab_disabled = SubResource( 33 )
-TabContainer/styles/tab_fg = SubResource( 32 )
+TabContainer/styles/tab_fg = SubResource( 34 )
 Tabs/styles/button = null
 Tabs/styles/button_pressed = null
 Tabs/styles/tab_bg = null

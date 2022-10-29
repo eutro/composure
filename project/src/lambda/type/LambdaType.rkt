@@ -13,9 +13,10 @@
   (set! mono mn))
 
 (define (_to-string)
+  (.to-string mono) ;; Haskell-style
+  #;
   (cond
     [((len type-vars) . > . 0)
-     (define s "∀")
      (for ([tv type-vars])
        (+set! s " ")
        (+set! s (LambdaMonoVar.name-for tv)))

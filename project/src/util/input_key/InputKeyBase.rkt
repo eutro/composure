@@ -14,4 +14,9 @@
   scn)
 
 (define (_lambda-type)
+  ;; type this input can provide the user
+  null)
+
+(define (resolve-value)
+  ;; get the value to provide the user, must be a (_lambda-type)
   null)

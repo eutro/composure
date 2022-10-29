@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/themes/FlatUI/kenneyUI-red.tres" type="Theme" id=1]
+[ext_resource path="res://src/ui/KeyBinder.gd" type="Script" id=2]
+[ext_resource path="res://src/lambda/ui/TypeDisplay.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/lambda/ui/TckLambdaSlot.tscn" type="PackedScene" id=5]
+
+[node name="KeyBinder" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+focus_mode = 2
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+button_path = NodePath("Control/PickKey/Button")
+display_path = NodePath("Control/KeyDisplay")
+slot_path = NodePath("Control/BoundLambda")
+hint_path = NodePath("Control/Hint")
+
+[node name="Control" type="Control" parent="."]
+anchor_left = 0.255859
+anchor_top = 0.0466667
+anchor_right = 0.744141
+anchor_bottom = 0.943333
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="PickKey" type="Control" parent="Control"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -40.0
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Control/PickKey"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Waiting for input..."
+align = 1
+valign = 1
+
+[node name="Button" type="Button" parent="Control/PickKey"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 6.251
+text = "Pick Key"
+
+[node name="KeyDisplay" type="CenterContainer" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 0.59276
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="BoundLambda" parent="Control" instance=ExtResource( 5 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.699
+anchor_right = 0.5
+anchor_bottom = 0.699
+margin_left = -25.0
+margin_top = -24.958
+margin_right = 25.0
+margin_bottom = 25.042
+editable = true
+remove_on_drag = true
+
+[node name="Hint" parent="Control" instance=ExtResource( 4 )]
+anchor_top = 0.778281
+anchor_right = 1.0
+anchor_bottom = 0.855204
+mouse_filter = 1
+
+[connection signal="pressed" from="Control/PickKey/Button" to="." method="_on_Button_pressed"]
+[connection signal="term_changed" from="Control/BoundLambda" to="." method="_on_BoundLambda_term_changed"]

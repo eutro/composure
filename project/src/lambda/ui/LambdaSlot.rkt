@@ -6,25 +6,30 @@
 (define term : LambdaValue)
 
 (define (export bool) editable true)
+(define (export bool) remove-on-drag true)
 
 (signal term_changed #;term)
 
 (define preview null)
 
+(define (_check-term term)
+  true)
+
 (define (set-term new-term)
-  (when (!= null preview)
-    (remove-child preview)
-    (.queue-free preview)
-    (set! preview null)
-    (set! hint_tooltip ""))
+  (when (_check-term new-term)
+    (when (!= null preview)
+      (remove-child preview)
+      (.queue-free preview)
+      (set! preview null)
+      (set! hint_tooltip ""))
 
-  (when (!= null new-term)
-    (set! preview (.create-preview new-term))
-    (add-child preview)
-    (set! hint_tooltip (.to-string (.get-type new-term))))
+    (when (!= null new-term)
+      (set! preview (.create-preview new-term))
+      (add-child preview)
+      (set! hint_tooltip (.to-string (.get-type new-term))))
 
-  (set! term new-term)
-  (emit-signal "term_changed" term))
+    (set! term new-term)
+    (emit-signal "term_changed" term)))
 
 (define (get-drag-data _posn)
   (when (!= null term)
@@ -33,12 +38,12 @@
     (.add-child cont (.create-preview term))
     (set-drag-preview cont))
   (define t term)
-  (when (and editable (not (Input.is-action-pressed "ui_duplicate")))
+  (when (and editable remove-on-drag (not (Input.is-action-pressed "ui_duplicate")))
     (set-term null))
   t)
 
 (define (can-drop-data _posn data)
-  (and editable (is data LambdaValue)))
+  (and editable (is data LambdaValue) (_check-term data)))
 
 (define (drop-data _posn data)
   (set-term data))

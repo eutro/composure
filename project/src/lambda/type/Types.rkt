@@ -8,7 +8,7 @@
 
 (define CTOR_PAIR := (.new TypeCtor ":" 2 true))
 (define CTOR_FUN := (.new TypeCtor "->" 2 true))
-(define CTOR_ACTION := (.new TypeCtor "=>" 2 true))
+(define CTOR_ACTION := (.new TypeCtor "~>" 2 true))
 
 (define MON_NUM := (.new LambdaMonoCtor CTOR_NUM []))
 (define MON_VEC := (.new LambdaMonoCtor CTOR_VEC []))
@@ -20,6 +20,9 @@
 
 (define (mono-fun arg ret)
   (.new LambdaMonoCtor CTOR_FUN [arg ret]))
+
+(define (mono-action arg ret)
+  (.new LambdaMonoCtor CTOR_ACTION [arg ret]))
 
 (define (mono-bin-fun arg1 arg2 ret)
   (mono-fun arg1 (mono-fun arg2 ret)))

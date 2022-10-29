@@ -17,3 +17,6 @@
 
 (define (_lambda-type)
   Types.TY_UNIT)
+
+(define (resolve-value)
+  Values.VAL_UNIT)

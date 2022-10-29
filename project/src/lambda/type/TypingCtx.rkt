@@ -118,4 +118,7 @@
     (fset! type-counter max (+ tv 1)))
   (for ([tv (.-type-vars ty)])
     (set! (ref substitutions tv) (.new LambdaMonoVar (newtype))))
-  (apply-substs (.-mono ty)))
+  (define substituted (apply-substs (.-mono ty)))
+  (for ([tv (.-type-vars ty)])
+    (.erase substitutions tv))
+  substituted)

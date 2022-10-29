@@ -196,3 +196,58 @@
     (.create TextPreview "()")))
 
 (define VAL_UNIT (.new Unit))
+
+
+;; ACTIONS
+
+(class Corrupt
+  (extends LambdaValue)
+
+  (define f)
+  (define type)
+  (define (_init fv)
+    (set! f fv))
+
+  (define (get-type)
+    (when (== null type)
+      (define pure-ty (.get-type f))
+      (define mono (.new LambdaMonoCtor Types.CTOR_ACTION pure-ty.mono.args))
+      (set! type (.new LambdaType pure-ty.type-vars mono)))
+    type)
+
+  (define (create-preview)
+    (.create TextPreview "f♭"))
+
+  (define (apply x)
+    (.apply f x)))
+
+(define (corrupt x) (.new Corrupt x))
+
+(define VAL_CORRUPT
+  (Partial.new
+   "♭"
+   (LambdaType.new
+    [0 1]
+    (Types.mono-fun
+     (Types.mono-fun TV_A TV_B)
+     (Types.mono-action TV_A TV_B)))
+   1
+   (funcref self "corrupt")
+   null))
+
+(define (move v)
+  (print "We shmoving " v)
+  VAL_UNIT)
+
+(define VAL_MOVE
+  (VAL_CORRUPT.apply
+   (Partial.new
+    "_"
+    (LambdaType.new
+     []
+     (Types.mono-fun
+      Types.MON_VEC
+      Types.MON_UNIT))
+    1
+    (funcref self "move")
+    null)))

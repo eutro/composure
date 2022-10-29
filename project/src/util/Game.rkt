@@ -19,7 +19,9 @@
           [["add" Values.VAL_ADD]
            ["compose" Values.VAL_COMPOSE]
            ["id" Values.VAL_I]
-           ["S" Values.VAL_S]])))
+           ["S" Values.VAL_S]
+           ["corrupt" Values.VAL_CORRUPT]
+           ["move" Values.VAL_MOVE]])))
 
 (signal copy-source-changed)
 (define copy-src)

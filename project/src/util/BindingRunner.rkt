@@ -15,7 +15,8 @@
   null)
 
 (define (_unhandled-input evt)
+  (define key (InputKeys.evt->input-key evt))
   (define binding (.lookup-key Game.keys evt))
   (when (!= null binding)
-    (.run binding))
+    (.apply binding (.resolve-value key)))
   null)
