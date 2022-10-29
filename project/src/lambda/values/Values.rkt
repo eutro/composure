@@ -90,7 +90,7 @@
       (.unify tcx null (Types.mono-fun b c) g-ty)
       (define res (.compute-substs tcx))
       (assert (.-is-ok res))
-      (set! ty (.generalise tcx c)))
+      (set! ty (.generalise tcx (Types.mono-fun a c))))
     ty)
 
   (define (create-preview)

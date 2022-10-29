@@ -15,57 +15,23 @@ __meta__ = {
 
 [node name="VBox" type="VBoxContainer" parent="."]
 margin_right = 200.0
-margin_bottom = 138.0
+margin_bottom = 130.0
 rect_min_size = Vector2( 120, 130 )
-
-[node name="HBox" type="HBoxContainer" parent="VBox"]
-margin_right = 200.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 120, 50 )
-custom_constants/separation = 5
-
-[node name="Fun" parent="VBox/HBox" instance=ExtResource( 1 )]
-unique_name_in_owner = true
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 50.0
-margin_bottom = 50.0
-
-[node name="Label" type="Label" parent="VBox/HBox"]
-margin_left = 55.0
-margin_top = 14.0
-margin_right = 65.0
-margin_bottom = 36.0
-text = "$"
-align = 1
-valign = 1
-
-[node name="Arg" parent="VBox/HBox" instance=ExtResource( 1 )]
-unique_name_in_owner = true
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 70.0
-margin_right = 120.0
-margin_bottom = 50.0
 
 [node name="Output" parent="VBox" instance=ExtResource( 1 )]
 unique_name_in_owner = true
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 54.0
 margin_right = 50.0
-margin_bottom = 104.0
+margin_bottom = 50.0
 size_flags_horizontal = 0
 editable = false
 
 [node name="Error" type="Label" parent="VBox"]
 unique_name_in_owner = true
-margin_top = 108.0
+margin_top = 54.0
 margin_right = 200.0
-margin_bottom = 138.0
+margin_bottom = 84.0
 rect_min_size = Vector2( 200, 30 )
 custom_colors/font_color = Color( 0.733333, 0.188235, 0.188235, 1 )
 autowrap = true
-
-[connection signal="term_changed" from="VBox/HBox/Fun" to="." method="_on_Fun_term_changed"]
-[connection signal="term_changed" from="VBox/HBox/Arg" to="." method="_on_Arg_term_changed"]

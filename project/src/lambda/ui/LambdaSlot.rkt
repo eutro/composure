@@ -1,5 +1,6 @@
 #lang gdlisp
 
+(class-name LambdaSlot)
 (extends Control)
 
 (define term : LambdaValue)
@@ -31,7 +32,10 @@
     (set! (.-use-top-left cont) true)
     (.add-child cont (.create-preview term))
     (set-drag-preview cont))
-  term)
+  (define t term)
+  (when editable
+    (set-term null))
+  t)
 
 (define (can-drop-data _posn data)
   (and editable (is data LambdaValue)))

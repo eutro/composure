@@ -2,34 +2,60 @@
 
 (extends AspectRatioContainer)
 
-(define onready fun (get-node "%Fun"))
-(define onready arg (get-node "%Arg"))
+(define (export Array NodePath) args)
+
 (define onready output (get-node "%Output"))
 (define onready error (get-node "%Error"))
 
-(define (_on_Fun_term_changed _term)
-  (inputs-changed))
+(define (_ready)
+  (when (!= null args)
+    (for ([arg args])
+      (.connect (get-node arg) "term_changed" self "on_term_changed"))))
 
-(define (_on_Arg_term_changed _term)
-  (inputs-changed))
+(define (on-term-changed _term)
+  (inputs-changed)
+  null)
 
 (define (inputs-changed)
-  (cond
-    [(and (!= null fun.term)
-          (!= null arg.term))
-     (compute-output fun.term arg.term)]
-    [else (.set-term output null)]))
+  (.set-term output null)
 
-(define (compute-output f x)
-  (define res
-    (Types.compute-application
-     (.get-type f)
-     (.get-type x)))
-  (cond
-    [(.-is-ok res)
-     (.set-text error "")
-     (.set-term output (.apply f x))]
-    [else
-     (.set-text error (ref res.value 0))
-     (.set-term output null)])
+  ;; we _can_ fold if we have at least two terms to apply
+  (define can-fold
+    (and ((len args) . >= . 2)
+         (!= null (.-term (get-node (ref args 0))))
+         (!= null (.-term (get-node (ref args 1))))))
+
+  ;; check that there's no nulls before another term...
+  (define seen-null false)
+  (for ([i (range 2 (len args))])
+    (define is-null (== null (.-term (get-node (ref args i)))))
+    (cond
+      [(and is-null seen-null)
+       (set! can-fold false)
+       break]
+      [is-null (set! seen-null true)]))
+
+  (when can-fold (compute-output))
+
   null)
+
+(define (compute-output)
+  (define acc-val (.-term (get-node (ref args 0))))
+  (define acc-ty (.get-type acc-val))
+  (for ([i (range 1 (len args))])
+    (define x (.-term (get-node (ref args i))))
+    (when (== null x)
+      (#%gdscript "break"))
+    (define res
+      (Types.compute-application
+       acc-ty
+       (.get-type x)))
+    (cond
+      [(.-is-ok res)
+       (.set-text error "")
+       (set! acc-ty (.-value res))
+       (fset! acc-val .apply x)]
+      [else
+       (.set-text error (ref res.value 0))
+       (#%gdscript "return")]))
+  (.set-term output acc-val))

@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/lambda/ui/DefinitionList.gd" type="Script" id=1]
+
+[node name="DefinitionList" type="Control"]
+anchor_bottom = 1.0
+margin_right = 260.0
+rect_min_size = Vector2( 260, 0 )
+script = ExtResource( 1 )
+list_path = NodePath("Panel/ScrollContainer/VBoxContainer")
+
+[node name="Panel" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -12.0
+margin_bottom = -5.0
+scroll_horizontal_enabled = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+margin_right = 243.0
+rect_min_size = Vector2( 243, 0 )

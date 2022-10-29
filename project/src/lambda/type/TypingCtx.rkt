@@ -45,6 +45,7 @@
          (.new LambdaMonoCtor (.-ctor term) new-tys))]))
 
 (define (define-subst vr type)
+  (fset! type apply-substs)
   (define free-vars {})
   (._collect-free-vars type free-vars)
   (cond

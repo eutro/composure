@@ -5,7 +5,11 @@
 
 [sub_resource type="StyleBoxTexture" id=1]
 texture = ExtResource( 1 )
-region_rect = Rect2( 500, 439, 51, 51 )
+region_rect = Rect2( 500, 440, 50, 50 )
+margin_left = 9.0
+margin_right = 8.0
+margin_top = 8.0
+margin_bottom = 11.0
 
 [node name="LambdaSlot" type="Control"]
 anchor_right = 0.0488281
