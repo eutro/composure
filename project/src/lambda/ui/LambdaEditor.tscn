@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/lambda/ui/LambdaEditor.gd" type="Script" id=1]
+[ext_resource path="res://src/lambda/ui/ctors/NumberCombinator.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/lambda/ui/ctors/AppCombinator.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/lambda/ui/LambdaSlot.tscn" type="PackedScene" id=4]
+
+[node name="LambdaEditor" type="Control"]
+anchor_right = 0.53418
+anchor_bottom = 0.548333
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 130.0
+columns = 3
+
+[node name="NumberCombinator" parent="GridContainer" instance=ExtResource( 2 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 225.0
+margin_bottom = 50.0
+size_flags_vertical = 0
+
+[node name="Control" type="Control" parent="GridContainer"]
+margin_left = 229.0
+margin_right = 343.0
+margin_bottom = 138.0
+size_flags_horizontal = 3
+
+[node name="AppCombinator" parent="GridContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 347.0
+margin_right = 547.0
+margin_bottom = 138.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -50.0
+
+[node name="Add" parent="HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 50.0
+margin_bottom = 50.0
+editable = false
+
+[node name="S" parent="HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 54.0
+margin_right = 104.0
+margin_bottom = 50.0
+editable = false
+
+[node name="I" parent="HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 108.0
+margin_right = 158.0
+margin_bottom = 50.0
+editable = false
+
+[node name="Compose" parent="HBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 162.0
+margin_right = 212.0
+margin_bottom = 50.0
+editable = false
+
+[node name="LambdaSlot" parent="HBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 216.0
+margin_right = 266.0
+margin_bottom = 50.0
+
+[node name="LambdaSlot2" parent="HBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 270.0
+margin_right = 320.0
+margin_bottom = 50.0
+
+[node name="LambdaSlot3" parent="HBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 324.0
+margin_right = 374.0
+margin_bottom = 50.0

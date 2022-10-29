@@ -24,7 +24,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/util/input_key/InputKeyKeyboard.gd"
 }, {
-"base": "InputKey",
+"base": "InputKeyBase",
 "class": "InputKeyMouse",
 "language": "GDScript",
 "path": "res://src/util/input_key/InputKeyMouse.gd"
@@ -38,6 +38,61 @@ _global_script_classes=[ {
 "class": "KeyBinder",
 "language": "GDScript",
 "path": "res://src/util/KeyBinder.gd"
+}, {
+"base": "Reference",
+"class": "LambdaMono",
+"language": "GDScript",
+"path": "res://src/lambda/type/LambdaMono.gd"
+}, {
+"base": "LambdaMono",
+"class": "LambdaMonoCtor",
+"language": "GDScript",
+"path": "res://src/lambda/type/LambdaMonoCtor.gd"
+}, {
+"base": "LambdaMono",
+"class": "LambdaMonoVar",
+"language": "GDScript",
+"path": "res://src/lambda/type/LambdaMonoVar.gd"
+}, {
+"base": "LambdaValue",
+"class": "LambdaNumber",
+"language": "GDScript",
+"path": "res://src/lambda/values/LambdaNumber.gd"
+}, {
+"base": "Reference",
+"class": "LambdaType",
+"language": "GDScript",
+"path": "res://src/lambda/type/LambdaType.gd"
+}, {
+"base": "Reference",
+"class": "LambdaValue",
+"language": "GDScript",
+"path": "res://src/lambda/values/LambdaValue.gd"
+}, {
+"base": "Control",
+"class": "NumberCombinator",
+"language": "GDScript",
+"path": "res://src/lambda/ui/ctors/NumberCombinator.gd"
+}, {
+"base": "Reference",
+"class": "Result",
+"language": "GDScript",
+"path": "res://src/util/Result.gd"
+}, {
+"base": "Control",
+"class": "TextPreview",
+"language": "GDScript",
+"path": "res://src/lambda/ui/TextPreview.gd"
+}, {
+"base": "Reference",
+"class": "TypeCtor",
+"language": "GDScript",
+"path": "res://src/lambda/type/TypeCtor.gd"
+}, {
+"base": "Reference",
+"class": "TypingCtx",
+"language": "GDScript",
+"path": "res://src/lambda/type/TypingCtx.gd"
 } ]
 _global_script_class_icons={
 "ActionBase": "",
@@ -45,16 +100,30 @@ _global_script_class_icons={
 "InputKeyKeyboard": "",
 "InputKeyMouse": "",
 "InputKeys": "",
-"KeyBinder": ""
+"KeyBinder": "",
+"LambdaMono": "",
+"LambdaMonoCtor": "",
+"LambdaMonoVar": "",
+"LambdaNumber": "",
+"LambdaType": "",
+"LambdaValue": "",
+"NumberCombinator": "",
+"Result": "",
+"TextPreview": "",
+"TypeCtor": "",
+"TypingCtx": ""
 }
 
 [application]
 
+config/name="Composure"
 run/main_scene="res://src/Main.tscn"
 
 [autoload]
 
 Game="*res://src/util/Game.gd"
+Types="*res://src/lambda/type/Types.gd"
+Values="*res://src/lambda/values/Values.gd"
 
 [gui]
 

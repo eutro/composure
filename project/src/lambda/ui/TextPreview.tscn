@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/lambda/ui/TextPreview.gd" type="Script" id=1]
+
+[node name="TextPreview" type="Control"]
+anchor_right = 0.0488281
+anchor_bottom = 0.0833333
+rect_min_size = Vector2( 50, 50 )
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "λ?"
+align = 1
+valign = 1

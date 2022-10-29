@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/lambda/ui/LambdaSlot.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/lambda/ui/ctors/NumberCombinator.gd" type="Script" id=2]
+
+[node name="NumberCombinator" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -799.0
+margin_bottom = -550.0
+rect_min_size = Vector2( 225, 50 )
+script = ExtResource( 2 )
+
+[node name="HBox" type="HBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Slot" parent="HBox" instance=ExtResource( 1 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 50.0
+margin_bottom = 50.0
+editable = false
+
+[node name="Number" type="SpinBox" parent="HBox"]
+margin_left = 54.0
+margin_right = 220.865
+margin_bottom = 50.0
+min_value = -99.0
+max_value = 99.0
+
+[connection signal="value_changed" from="HBox/Number" to="." method="_on_Number_value_changed"]
