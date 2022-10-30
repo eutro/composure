@@ -31,7 +31,7 @@
   (for ([i (range 2 (len args))])
     (define is-null (== null (.-term (get-node (ref args i)))))
     (cond
-      [(and is-null seen-null)
+      [(and seen-null (not is-null))
        (set! can-fold false)
        break]
       [is-null (set! seen-null true)]))

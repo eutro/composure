@@ -16,12 +16,15 @@
 (define (init-defs)
   (when (== null builtin-defs)
     (set! builtin-defs
-          [["add" Values.VAL_ADD]
-           ["compose" Values.VAL_COMPOSE]
-           ["id" Values.VAL_I]
-           ["S" Values.VAL_S]
-           ["corrupt" Values.VAL_CORRUPT]
-           ["move" Values.VAL_MOVE]])))
+          [["Vector" Values.VAL_VEC]
+           ["Compose" Values.VAL_COMPOSE]
+           ["ComposeA" Values.VAL_COMPOSEA]
+           ["Constant" Values.VAL_K]
+           ["Identity" Values.VAL_I]
+           ["Ap" Values.VAL_S]
+           ["Corrupt" Values.VAL_CORRUPT]
+           ["Move" Values.VAL_MOVE]
+           ["Prn" Values.VAL_PRN]])))
 
 (signal copy-source-changed)
 (define copy-src)

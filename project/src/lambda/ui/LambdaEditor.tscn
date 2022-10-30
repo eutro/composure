@@ -31,15 +31,15 @@ margin_left = -135.5
 margin_top = -111.0
 margin_right = 135.5
 margin_bottom = 111.0
-args = [ NodePath("VBox/HBoxContainer/Fun1"), NodePath("VBox/HBoxContainer/Arg1"), NodePath("VBox/HBoxContainer/Arg2") ]
+args = [ NodePath("VBox/HBoxContainer/Fun1"), NodePath("VBox/HBoxContainer/Arg1"), NodePath("VBox/HBoxContainer/Arg2"), NodePath("VBox/HBoxContainer/Arg3") ]
 
 [node name="VBox" parent="AppCombinator" index="0"]
-margin_left = 24.5
-margin_right = 246.5
+margin_left = 8.5
+margin_right = 262.5
 margin_bottom = 222.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="AppCombinator/VBox" index="0"]
-margin_right = 222.0
+margin_right = 254.0
 margin_bottom = 50.0
 
 [node name="Fun1" parent="AppCombinator/VBox/HBoxContainer" instance=ExtResource( 4 )]
@@ -78,21 +78,39 @@ margin_left = 136.0
 margin_right = 186.0
 margin_bottom = 50.0
 
+[node name="Label3" type="Label" parent="AppCombinator/VBox/HBoxContainer"]
+margin_left = 190.0
+margin_top = 14.0
+margin_right = 200.0
+margin_bottom = 36.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "$"
+
+[node name="Arg3" parent="AppCombinator/VBox/HBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 204.0
+margin_right = 254.0
+margin_bottom = 50.0
+
 [node name="Output" parent="AppCombinator/VBox" index="1"]
 margin_top = 54.0
 margin_bottom = 104.0
 
 [node name="Error" parent="AppCombinator/VBox" index="2"]
 margin_top = 108.0
-margin_right = 222.0
+margin_right = 254.0
 margin_bottom = 138.0
 
 [node name="HBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -50.0
-margin_bottom = -69.0
+anchor_bottom = 0.885
+margin_left = -49.9999
+rect_min_size = Vector2( 50, 0 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="LambdaSlot" parent="HBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0

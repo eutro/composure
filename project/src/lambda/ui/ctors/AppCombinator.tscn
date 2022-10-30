@@ -5,9 +5,7 @@
 
 [node name="AppCombinator" type="AspectRatioContainer"]
 anchor_right = 0.195312
-anchor_bottom = 0.23
-margin_right = -200.0
-margin_bottom = -138.0
+anchor_bottom = 0.216667
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": true

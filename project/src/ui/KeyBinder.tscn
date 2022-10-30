@@ -11,10 +11,10 @@ anchor_bottom = 1.0
 focus_mode = 2
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
-button_path = NodePath("Control/PickKey/Button")
-display_path = NodePath("Control/KeyDisplay")
-slot_path = NodePath("Control/BoundLambda")
-hint_path = NodePath("Control/Hint")
+button_path = NodePath("Control/VBoxContainer/PickKey/Button")
+display_path = NodePath("Control/VBoxContainer/KeyDisplay")
+slot_path = NodePath("Control/VBoxContainer/Control/BoundLambda")
+hint_path = NodePath("Control/VBoxContainer/Hint")
 
 [node name="Control" type="Control" parent="."]
 anchor_left = 0.255859
@@ -26,14 +26,57 @@ __meta__ = {
 "_edit_use_anchors_": true
 }
 
-[node name="PickKey" type="Control" parent="Control"]
-anchor_top = 1.0
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -40.0
+
+[node name="KeyDisplay" type="CenterContainer" parent="Control/VBoxContainer"]
+margin_right = 500.0
+margin_bottom = 365.0
+mouse_filter = 1
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Control" type="Control" parent="Control/VBoxContainer"]
+margin_top = 369.0
+margin_right = 500.0
+margin_bottom = 429.0
+rect_min_size = Vector2( 0, 60 )
 mouse_filter = 1
 
-[node name="Label" type="Label" parent="Control/PickKey"]
+[node name="BoundLambda" parent="Control/VBoxContainer/Control" instance=ExtResource( 5 )]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -25.0
+margin_top = -25.0
+margin_right = 25.0
+margin_bottom = 25.0
+size_flags_horizontal = 0
+editable = true
+remove_on_drag = true
+
+[node name="Hint" parent="Control/VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 433.0
+margin_right = 500.0
+margin_bottom = 483.0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 1
+
+[node name="PickKey" type="Control" parent="Control/VBoxContainer"]
+margin_top = 487.0
+margin_right = 500.0
+margin_bottom = 537.0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 1
+
+[node name="Label" type="Label" parent="Control/VBoxContainer/PickKey"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
@@ -41,38 +84,11 @@ text = "Waiting for input..."
 align = 1
 valign = 1
 
-[node name="Button" type="Button" parent="Control/PickKey"]
+[node name="Button" type="Button" parent="Control/VBoxContainer/PickKey"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_bottom = 6.251
 text = "Pick Key"
 
-[node name="KeyDisplay" type="CenterContainer" parent="Control"]
-anchor_right = 1.0
-anchor_bottom = 0.59276
-mouse_filter = 1
-__meta__ = {
-"_edit_use_anchors_": true
-}
-
-[node name="BoundLambda" parent="Control" instance=ExtResource( 5 )]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.699
-anchor_right = 0.5
-anchor_bottom = 0.699
-margin_left = -25.0
-margin_top = -24.958
-margin_right = 25.0
-margin_bottom = 25.042
-editable = true
-remove_on_drag = true
-
-[node name="Hint" parent="Control" instance=ExtResource( 4 )]
-anchor_top = 0.778281
-anchor_right = 1.0
-anchor_bottom = 0.855204
-mouse_filter = 1
-
-[connection signal="pressed" from="Control/PickKey/Button" to="." method="_on_Button_pressed"]
-[connection signal="term_changed" from="Control/BoundLambda" to="." method="_on_BoundLambda_term_changed"]
+[connection signal="term_changed" from="Control/VBoxContainer/Control/BoundLambda" to="." method="_on_BoundLambda_term_changed"]
+[connection signal="pressed" from="Control/VBoxContainer/PickKey/Button" to="." method="_on_Button_pressed"]

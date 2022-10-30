@@ -15,6 +15,9 @@
 (define (_scene)
   (preload "KeyboardDisplay.tscn"))
 
+(define (get-lock-type)
+  (.-pressed event))
+
 (define (_lambda-type)
   Types.TY_UNIT)
 

@@ -13,6 +13,12 @@
   (.init scn self)
   scn)
 
+(define (get-lock-type)
+  false
+  ;; true -> pressed
+  ;; false -> released
+  )
+
 (define (_lambda-type)
   ;; type this input can provide the user
   null)

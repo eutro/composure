@@ -9,9 +9,9 @@
 [ext_resource path="res://assets/textures/mouse/rmb.svg" type="Texture" id=7]
 
 [node name="MouseDisplay" type="Control"]
-anchor_right = 0.208984
-anchor_bottom = 0.386667
-rect_min_size = Vector2( 214, 232 )
+anchor_right = 0.175781
+anchor_bottom = 0.333333
+rect_min_size = Vector2( 180, 200 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": true
@@ -73,6 +73,8 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Foo"
 align = 1

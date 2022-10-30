@@ -1,5 +1,55 @@
-[gd_scene format=2]
+[gd_scene load_steps=5 format=2]
 
-[node name="GameUI" type="Control"]
+[ext_resource path="res://src/ui/MountableNode.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/ui/Composer.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/textures/icon.svg" type="Texture" id=3]
+[ext_resource path="res://src/ui/GameUI.gd" type="Script" id=4]
+
+[node name="GameUI" type="CanvasLayer"]
+script = ExtResource( 4 )
+
+[node name="HUD" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+mouse_filter = 2
+
+[node name="ComposerButton" type="Button" parent="HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -70.0
+margin_top = -70.0
+rect_min_size = Vector2( 70, 70 )
+mouse_default_cursor_shape = 2
+expand_icon = true
+
+[node name="TextureRect" type="TextureRect" parent="HUD/ComposerButton"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="Composer" parent="." instance=ExtResource( 1 )]
+scene = ExtResource( 2 )
+mount_point = NodePath("../GUI")
+
+[node name="GUI" type="Control" parent="."]
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+mouse_filter = 2
+
+[connection signal="pressed" from="HUD/ComposerButton" to="." method="_on_ComposerButton_pressed"]

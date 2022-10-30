@@ -8,8 +8,8 @@
 (define (export NodePath) player-path)
 (define onready player (get-node player-path))
 
-(define (_ready)
-  (set! player.velocity (Vector3 1 0 0)))
+(define (export NodePath) camera-path)
+(define onready camera (get-node camera-path))
 
 (define (_enter-tree)
   (set! Game.world self))

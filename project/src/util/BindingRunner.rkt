@@ -2,21 +2,27 @@
 
 (extends Node)
 
-#;#;
-(class HiPrinter
-  (define (run)
-    (print "Hello!!")
-    null))
+(define active true)
 
-(define (_ready)
-  (define evt (InputEventKey.new))
-  (set! (.-scancode evt) KEY_SPACE)
-  (.bind-key Game.keys evt (.new HiPrinter))
-  null)
+(define active-set {})
 
 (define (_unhandled-input evt)
-  (define key (InputKeys.evt->input-key evt))
-  (define binding (.lookup-key Game.keys evt))
-  (when (!= null binding)
-    (.apply binding (.resolve-value key)))
+  (when active
+    (define key (InputKeys.evt->input-key evt))
+    (when key
+      (define lock-type (.get-lock-type key))
+      (cond
+        [(not lock-type)
+         (.erase active-set (._map-key key))]
+        [else
+         (define binding (.lookup-key Game.keys evt))
+         (when (!= null binding)
+           (set! (ref active-set (._map-key key)) [binding key]))])))
   null)
+
+(define (_process _delta)
+  (when active
+    (for ([k active-set])
+      (match (ref active-set k)
+        [[(var binding) (var key)]
+         (.apply binding (.resolve-value key))]))))

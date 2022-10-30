@@ -2,34 +2,110 @@
 
 (extends Node)
 
-(class Cons
-  (define car)
-  (define cdr)
-  (define (_init ca cd)
-    (set! car ca)
-    (set! cdr cd)))
+(require "../../macros.rkt")
 
-(class Partial
+(begin-escape
+  (require (only-in racket/base define-syntax ...)
+           (for-syntax racket
+                       syntax/parse
+                       racket/syntax))
+  (define-syntax-rule (cached-type body ...)
+    (begin
+      (define type)
+      (define (get-type)
+        (when (== null type)
+          (set! type (begin body ...)))
+        type)))
+
+  (define-syntax-rule (text-preview name)
+    (define (create-preview)
+      (.create TextPreview name)))
+
+  (define-syntax (define-caps-val stx)
+    (syntax-parse stx
+      [(_ name:id value:expr)
+       (define name-str (~a (syntax-e #'name)))
+       (define caps-name (string->symbol (format "VAL_~a" (string-upcase name-str))))
+       (quasisyntax/loc stx
+         (define #,caps-name value))]))
+
+  (define-syntax (define-value stx)
+    (syntax-parse stx
+      [(_ (name:id arg:id)
+          #:class-name cn:id
+          #:type {~seq type:expr ...+}
+          #:preview preview:expr
+          {~optional {~seq #:apply body:expr ...+}})
+       (syntax/loc stx
+         (begin
+           (class cn
+             (extends LambdaValue)
+
+             (cached-type type ...)
+
+             (define (create-preview) preview)
+
+             {~?
+              (define (apply arg)
+                body ...)})
+           (define-caps-val name (.new cn))))]))
+
+  (define-syntax (define-construct stx)
+    (syntax-parse stx
+      [(_ (name:id args:id ...)
+          #:class-name class-name:id
+          #:short-name short-name:str
+          #:type type:expr
+          #:body body ...)
+       (define arity (length (syntax->list #'(args ...))))
+       (define ctor-name (format-id #'name "cons_~a" #'name))
+       (define ctor-name-str (symbol->string (syntax-e ctor-name)))
+       (quasisyntax/loc stx
+         (begin
+           (defrecord class-name (args ...)
+             (extends LambdaValue)
+             body ...)
+           (define (#,ctor-name args ...)
+             (.new class-name args ...))
+           (define-caps-val name
+             (Partial.new
+              short-name
+              type
+              #,arity
+              (funcref self #,ctor-name-str)
+              null))))]))
+
+  (define-syntax (define-pure stx)
+    (syntax-parse stx
+      [(_ (name:id args:id ...)
+          #:short-name short-name:str
+          #:type type:expr ...+
+          #:body
+          body ...+)
+       (quasisyntax/loc stx
+         (begin
+           (define (name args ...)
+             body ...)
+           (define-caps-val
+             name
+             (Partial.new
+              short-name
+              (begin type ...)
+              #,(length (syntax->list #'(args ...)))
+              (funcref self #,(symbol->string (syntax-e #'name)))
+              null))))])))
+
+(defrecord Cons (car cdr))
+
+(defrecord Partial
+  ([name : String]
+   [type : LambdaType]
+   [arity : int]
+   [func-ref : FuncRef]
+   p-args)
   (extends LambdaValue)
-
-  (define type : LambdaType)
-  (define name : String)
-  (define arity : int)
-  (define p-args)
-  (define func-ref : FuncRef)
-
-  (define (_init nm ty arty fref p-rgs)
-    (set! name nm)
-    (set! type ty)
-    (set! arity arty)
-    (set! func-ref fref)
-    (set! p-args p-rgs))
-
   (define (get-type) type)
-
-  (define (create-preview)
-    (.create TextPreview name))
-
+  (text-preview name)
   (define (apply x)
     (cond
       [(arity . <= . 1)
@@ -51,203 +127,156 @@
              func-ref
              (.new Cons x p-args))])))
 
-(define (wrap-num x) (LambdaWrapper.new x Types.TY_NUM))
-(define (wrap-vec x) (LambdaWrapper.new x Types.TY_VEC))
-
-(define (add a b) (wrap-num (+ (.-value a) (.-value b))))
-
-(define VAL_ADD
-  (Partial.new
-   "+"
-   (LambdaType.new
-    []
-    (Types.mono-bin-fun
-     Types.MON_NUM
-     Types.MON_NUM
-     Types.MON_NUM))
-   2
-   (funcref self "add")
-   null))
-
-(class Composed
-  (extends LambdaValue)
-
-  ;; λx.g(f x)
-  (define f)
-  (define g)
-
-  (define (_init fv gv)
-    (set! f fv)
-    (set! g gv))
-
-  (define ty)
-  (define (get-type)
-    (when (== null ty)
-      (define tcx (.new TypingCtx))
-      (define f-ty (.instantiate tcx (.get-type f)))
-      (define g-ty (.instantiate tcx (.get-type g)))
-      (define a (LambdaMonoVar.new (.newtype tcx)))
-      (define b (LambdaMonoVar.new (.newtype tcx)))
-      (define c (LambdaMonoVar.new (.newtype tcx)))
-      (.unify tcx null (Types.mono-fun a b) f-ty)
-      (.unify tcx null (Types.mono-fun b c) g-ty)
-      (define res (.compute-substs tcx))
-      (assert (.-is-ok res))
-      (set! ty (.generalise tcx (Types.mono-fun a c))))
-    ty)
-
-  (define (create-preview)
-    (.create TextPreview ">>''"))
-
-  (define (apply x)
-    (.apply g (.apply f x))))
-
-(define (compose f g) (.new Composed f g))
-
 (define TV_A (LambdaMonoVar.new 0))
 (define TV_B (LambdaMonoVar.new 1))
 (define TV_C (LambdaMonoVar.new 2))
 
-(define VAL_COMPOSE
-  (Partial.new
-   ">>"
-   (LambdaType.new
-    [0 1 2]
-    (Types.mono-bin-fun
-     (Types.mono-fun TV_A TV_B)
-     (Types.mono-fun TV_B TV_C)
-     (Types.mono-fun TV_A TV_C)))
-   2
-   (funcref self "compose")
-   null))
+(define (wrap-num x) (LambdaWrapper.new x Types.TY_NUM))
+(define (wrap-vec x) (LambdaWrapper.new x Types.TY_VEC))
 
-(class S
-  (extends LambdaValue)
+(define-pure (add a b)
+  #:short-name "+"
+  #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
+  #:body (wrap-num (+ (.-value a) (.-value b))))
 
-  (define f)
-  (define g)
+(define-pure (vec x y z)
+  #:short-name "vec"
+  #:type (LambdaType.new [] (Types.mono-fun Types.MON_NUM (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC)))
+  #:body (wrap-vec (Vector3 (.-value x) (.-value y) (.-value z))))
+(define-pure (addv a b) ;; sorry no type classes
+  #:short-name "+~"
+  #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_VEC Types.MON_VEC Types.MON_VEC))
+  #:body (wrap-vec (+ (.-value a) (.-value b))))
 
-  (define (_init fv gv)
-    (set! f fv)
-    (set! g gv))
+(begin-escape
+  (define-syntax-rule (define-compose name
+                        #:class-name class-name
+                        #:short-name short-name
+                        #:finished-name finished-name
+                        #:mono-ctor mono-ctor)
+    (define-construct (name f g) ;; λx.g(f x)
+      #:class-name class-name
+      #:short-name short-name
+      #:type
+      (LambdaType.new
+       [0 1 2]
+       (Types.mono-bin-fun
+        (mono-ctor TV_A TV_B)
+        (mono-ctor TV_B TV_C)
+        (mono-ctor TV_A TV_C)))
+      #:body
+      (cached-type
+       (define tcx (.new TypingCtx))
+       (define f-ty (.instantiate tcx (.get-type f)))
+       (define g-ty (.instantiate tcx (.get-type g)))
+       (define a (LambdaMonoVar.new (.newtype tcx)))
+       (define b (LambdaMonoVar.new (.newtype tcx)))
+       (define c (LambdaMonoVar.new (.newtype tcx)))
+       (.unify tcx null (mono-ctor a b) f-ty)
+       (.unify tcx null (mono-ctor b c) g-ty)
+       (define res (.compute-substs tcx))
+       (assert (.-is-ok res))
+       (.generalise tcx (mono-ctor a c)))
+      (text-preview finished-name)
+      (define (apply x) (.apply g (.apply f x))))))
 
-  ;; λf g x.(f x)(g x)
-  (define (create-preview)
-    (.create TextPreview "S''"))
+(define-compose compose
+  #:class-name Compose
+  #:short-name ">>"
+  #:finished-name ">>''"
+  #:mono-ctor Types.mono-fun)
 
-  (define ty)
-  (define (get-type)
-    (when (== null ty)
-      (define tcx (.new TypingCtx))
-      (define f-ty (.instantiate tcx (.get-type f)))
-      (define g-ty (.instantiate tcx (.get-type g)))
-      (define a-ty (LambdaMonoVar.new (.newtype tcx)))
-      (define b-ty (LambdaMonoVar.new (.newtype tcx)))
-      (define c-ty (LambdaMonoVar.new (.newtype tcx)))
-      (.unify tcx null f-ty (Types.mono-bin-fun a-ty b-ty c-ty))
-      (.unify tcx null g-ty (Types.mono-fun a-ty b-ty))
-      (define res (.compute-substs tcx))
-      (assert (.-is-ok res))
-      (set! ty (.generalise tcx (Types.mono-fun a-ty c-ty))))
-    ty)
+(define-compose composea
+  #:class-name ComposeA
+  #:short-name ">>>"
+  #:finished-name ">>>''"
+  #:mono-ctor Types.mono-action)
 
-  (define (apply x)
-    (.apply (.apply f x)
-            (.apply g x))))
-
-(define (s f g) (S.new f g))
-
-(define VAL_S
-  (Partial.new
-   "S"
-   (LambdaType.new
+(define-construct (s f g) ;; λf g x.(f x)(g x)
+  #:class-name S
+  #:short-name "S"
+  #:type
+  (LambdaType.new
     [0 1 2]
     (Types.mono-bin-fun
      (Types.mono-bin-fun TV_A TV_B TV_C)
      (Types.mono-fun TV_A TV_B)
      (Types.mono-fun TV_A TV_C)))
-   2
-   (funcref self "s")
-   null))
+  #:body
+  (text-preview "S''")
+  (cached-type
+   (define tcx (.new TypingCtx))
+   (define f-ty (.instantiate tcx (.get-type f)))
+   (define g-ty (.instantiate tcx (.get-type g)))
+   (define a-ty (LambdaMonoVar.new (.newtype tcx)))
+   (define b-ty (LambdaMonoVar.new (.newtype tcx)))
+   (define c-ty (LambdaMonoVar.new (.newtype tcx)))
+   (.unify tcx null f-ty (Types.mono-bin-fun a-ty b-ty c-ty))
+   (.unify tcx null g-ty (Types.mono-fun a-ty b-ty))
+   (define res (.compute-substs tcx))
+   (assert (.-is-ok res))
+   (.generalise tcx (Types.mono-fun a-ty c-ty)))
+  (define (apply x)
+    (.apply (.apply f x)
+            (.apply g x))))
+
+(define-construct (k value)
+  #:class-name K
+  #:short-name "K"
+  #:type (LambdaType.new [0 1] (Types.mono-bin-fun TV_A TV_B TV_A))
+  #:body
+  (cached-type
+   (define tcx (.new TypingCtx))
+   (.generalise tcx (Types.mono-fun Values.TV_A (.instantiate tcx (.get-type value)))))
+  (text-preview "K'")
+  (define (apply _x) value))
 
 (class Id
   (extends LambdaValue)
-
-  (define ty)
-  (define (get-type)
-    (when (== null ty)
-      (set! ty (LambdaType.new [0] (Types.mono-fun Values.TV_A Values.TV_A))))
-    ty)
-
-  (define (create-preview)
-    (.create TextPreview "I"))
-
+  (cached-type (LambdaType.new [0] (Types.mono-fun Values.TV_A Values.TV_A)))
+  (text-preview "I")
   (define (apply x) x))
-
 (define VAL_I (.new Id))
 
 (class Unit
   (extends LambdaValue)
-
-  (define (get-type)
-    Types.TY_UNIT)
-
-  (define (create-preview)
-    (.create TextPreview "()")))
-
+  (define (get-type) Types.TY_UNIT)
+  (text-preview "()"))
 (define VAL_UNIT (.new Unit))
 
 
 ;; ACTIONS
 
-(class Corrupt
-  (extends LambdaValue)
-
-  (define f)
-  (define type)
-  (define (_init fv)
-    (set! f fv))
-
-  (define (get-type)
-    (when (== null type)
-      (define pure-ty (.get-type f))
-      (define mono (.new LambdaMonoCtor Types.CTOR_ACTION pure-ty.mono.args))
-      (set! type (.new LambdaType pure-ty.type-vars mono)))
-    type)
-
-  (define (create-preview)
-    (.create TextPreview "f♭"))
-
+(define-construct (corrupt f)
+  #:class-name Corrupt
+  #:short-name "♭"
+  #:type
+  (LambdaType.new
+   [0 1]
+   (Types.mono-fun
+    (Types.mono-fun TV_A TV_B)
+    (Types.mono-action TV_A TV_B)))
+  #:body
+  (cached-type
+   (define pure-ty (.get-type f))
+   (define mono (.new LambdaMonoCtor Types.CTOR_ACTION pure-ty.mono.args))
+   (.new LambdaType pure-ty.type-vars mono))
+  (text-preview "f♭")
   (define (apply x)
     (.apply f x)))
 
-(define (corrupt x) (.new Corrupt x))
+(define-value (move vel)
+  #:class-name Move
+  #:type (LambdaType.new [] (Types.mono-action Types.MON_VEC Types.MON_UNIT))
+  #:preview (.create TextPreview "mv")
+  #:apply
+  (.user-move Game.world.player (.-value vel))
+  Values.VAL_UNIT)
 
-(define VAL_CORRUPT
-  (Partial.new
-   "♭"
-   (LambdaType.new
-    [0 1]
-    (Types.mono-fun
-     (Types.mono-fun TV_A TV_B)
-     (Types.mono-action TV_A TV_B)))
-   1
-   (funcref self "corrupt")
-   null))
-
-(define (move v)
-  (print "We shmoving " v)
-  VAL_UNIT)
-
-(define VAL_MOVE
-  (VAL_CORRUPT.apply
-   (Partial.new
-    "_"
-    (LambdaType.new
-     []
-     (Types.mono-fun
-      Types.MON_VEC
-      Types.MON_UNIT))
-    1
-    (funcref self "move")
-    null)))
+(define-value (prn x)
+  #:class-name Print
+  #:type (LambdaType.new [0] (Types.mono-action Values.TV_A Types.MON_UNIT))
+  #:preview (.create TextPreview "prn")
+  #:apply
+  (print (if ("value" . in . x) (.-value x) "λ?"))
+  Values.VAL_UNIT)

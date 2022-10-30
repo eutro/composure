@@ -7,6 +7,7 @@
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
 player_path = NodePath("PlayerPos/Player")
+camera_path = NodePath("PlayerPos/CameraAnchor/Camera")
 
 [node name="PlayerPos" type="Spatial" parent="."]
 
