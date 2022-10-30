@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Coffee_Table_2.obj-17abdf249efd8b7425e601b6720779e6.mesh"
+
+[deps]
+
+files=[ "res://.import/Coffee_Table_2.obj-17abdf249efd8b7425e601b6720779e6.mesh" ]
+
+source_file="res://assets/models/Coffee_Table_2.obj"
+dest_files=[ "res://.import/Coffee_Table_2.obj-17abdf249efd8b7425e601b6720779e6.mesh", "res://.import/Coffee_Table_2.obj-17abdf249efd8b7425e601b6720779e6.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286

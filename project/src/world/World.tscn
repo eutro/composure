@@ -2,26 +2,33 @@
 
 [ext_resource path="res://src/world/World.gd" type="Script" id=1]
 [ext_resource path="res://src/entities/player/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/world/Tile.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=3]
 
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
-player_path = NodePath("PlayerPos/Player")
-camera_path = NodePath("PlayerPos/CameraAnchor/Camera")
+player_path = NodePath("Player")
+camera_path = NodePath("Player/CameraAnchor/Camera")
 
-[node name="PlayerPos" type="Spatial" parent="."]
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource( 3 )
+cell_center_y = false
+data = {
+"cells": PoolIntArray( 65532, 0, 3, 65534, 0, 8, -65536, 0, 1441805, -4, 0, 1441805, -3, 0, 1441805, -2, 0, 1441805, -1, 0, 1441805, 65532, 1, 3, 65533, 1, 1048576, 65535, 1, 655362, -65536, 1, 1441805, -4, 1, 1441805, -3, 1, 1441805, -2, 1, 1441805, -1, 1, 1441805, 0, 2, 1441795, 65532, 2, 4, 65533, 2, 1441795, 65534, 2, 1441795, 65535, 2, 1441795, -65536, 2, 1441805, -4, 2, 1441805, -3, 2, 1441805, -2, 2, 1441805, -1, 2, 1441805, 65532, 65534, 3, -65536, 65534, 1441805, -4, 65534, 1441805, -3, 65534, 1441805, -2, 65534, 1441805, -1, 65534, 1441805, 65532, 65535, 3, 65533, 65535, 655372, -65536, 65535, 1441805, -4, 65535, 1441805, -3, 65535, 1441805, -2, 65535, 1441805, -1, 65535, 1441805 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, -1, 0 )
+}
 
-[node name="CameraAnchor" type="Spatial" parent="PlayerPos"]
+[node name="Player" parent="." instance=ExtResource( 2 )]
+
+[node name="CameraAnchor" type="Spatial" parent="Player"]
 transform = Transform( 0.707107, -0.454519, 0.541675, 0, 0.766044, 0.642788, -0.707107, -0.454519, 0.541675, 0, 0, 0 )
 
-[node name="Camera" type="Camera" parent="PlayerPos/CameraAnchor"]
+[node name="Camera" type="Camera" parent="Player/CameraAnchor"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8 )
 size = 8.88
 
-[node name="Player" parent="PlayerPos" instance=ExtResource( 2 )]
-
-[node name="OmniLight" type="OmniLight" parent="PlayerPos"]
+[node name="OmniLight" type="OmniLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.51667, 0 )
 omni_range = 20.764
-
-[node name="Tile" parent="." instance=ExtResource( 3 )]

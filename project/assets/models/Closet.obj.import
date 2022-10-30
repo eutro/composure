@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Closet.obj-3569093b7f4340fd174716b5f8e26cc8.mesh"
+
+[deps]
+
+files=[ "res://.import/Closet.obj-3569093b7f4340fd174716b5f8e26cc8.mesh" ]
+
+source_file="res://assets/models/Closet.obj"
+dest_files=[ "res://.import/Closet.obj-3569093b7f4340fd174716b5f8e26cc8.mesh", "res://.import/Closet.obj-3569093b7f4340fd174716b5f8e26cc8.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286
