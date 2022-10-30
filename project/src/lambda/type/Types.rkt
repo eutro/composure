@@ -2,19 +2,50 @@
 
 (extends Node)
 
+(begin-escape
+  (require (only-in racket/base define-syntax)
+           (for-syntax racket racket/syntax syntax/parse))
+  (define-syntax (define-type stx)
+    (syntax-parse stx
+      [(_ (code-name:id arg-name:id ...)
+          #:name name:str
+          {~optional {~and #:infix {~bind [infix #'true]}}})
+       (define arity (length (syntax->list #'(arg-name ...))))
+       (define upcase-name (string-upcase (symbol->string (syntax-e #'code-name))))
+       (define ctor-id (format-id stx "CTOR_~a" upcase-name))
+       (quasisyntax/loc stx
+         (begin
+           (define #,ctor-id := (TypeCtor.new name #,arity {~? infix false}))
+           #,(cond
+               [(= 0 arity)
+                (define mon-id (format-id stx "MON_~a" upcase-name))
+                (define ty-id (format-id stx "TY_~a" upcase-name))
+                (quasisyntax/loc stx
+                  (begin
+                    (define #,mon-id := (LambdaMonoCtor.new #,ctor-id []))
+                    (define #,ty-id := (LambdaType.new [] #,mon-id))))]
+               [else
+                (define mon-id (format-id stx "mono-~a" #'code-name))
+                (quasisyntax/loc stx
+                  (define (#,mon-id arg-name ...)
+                    (LambdaMonoCtor.new #,ctor-id [arg-name ...])))])))])))
+
 ;; Wrapper {
 ;;   value: T
 ;; }
-(define CTOR_NUM := (.new TypeCtor "Num" 0 false))
-(define CTOR_VEC := (.new TypeCtor "Vec" 0 false))
+(define-type (num) #:name "Num")
+(define-type (vec3) #:name "Vec3")
+(define-type (vec2) #:name "Vec2")
+(define-type (halfline) #;"T = {origin: Vec3; direction: Vec3}" #:name "Halfline"
+  )
 
 ;; Unit {}
-(define CTOR_UNIT := (.new TypeCtor "Unit" 0 false))
+(define-type (unit) #:name "Unit")
 
 ;; Fun<A, B> {
 ;;   apply(x: A): B
 ;; }
-(define CTOR_FUN := (.new TypeCtor "->" 2 true))
+(define-type (fun arg ret) #:name "->" #:infix)
 
 ;; Action<A, B> {
 ;;   type State: !Lambda
@@ -22,21 +53,13 @@
 ;;   step(x: A, s: State): B
 ;;   finish(s: State)
 ;; }
-(define CTOR_ACTION := (.new TypeCtor "~>" 2 true))
+(define-type (action arg ret) #:name "~>" #:infix)
 
-(define MON_NUM := (.new LambdaMonoCtor CTOR_NUM []))
-(define MON_VEC := (.new LambdaMonoCtor CTOR_VEC []))
-(define MON_UNIT := (.new LambdaMonoCtor CTOR_UNIT []))
-
-(define TY_NUM := (.new LambdaType [] MON_NUM))
-(define TY_VEC := (.new LambdaType [] MON_VEC))
-(define TY_UNIT := (.new LambdaType [] MON_UNIT))
-
-(define (mono-fun arg ret)
-  (.new LambdaMonoCtor CTOR_FUN [arg ret]))
-
-(define (mono-action arg ret)
-  (.new LambdaMonoCtor CTOR_ACTION [arg ret]))
+;; Pair<A, B> {
+;;   car: A
+;;   cdr: B
+;; }
+(define-type (pair lhs rhs) #:name ":" #:infix)
 
 (define (mono-bin-fun arg1 arg2 ret)
   (mono-fun arg1 (mono-fun arg2 ret)))

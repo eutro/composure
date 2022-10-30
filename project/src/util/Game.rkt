@@ -16,7 +16,9 @@
 (define (init-defs)
   (when (== null builtin-defs)
     (set! builtin-defs
-          [["Vector" Values.VAL_VEC]
+          [["Vector3" Values.VAL_VEC3]
+           ["Vector2" Values.VAL_VEC2]
+           ["Add2" Values.VAL_ADD2]
            ["Compose" Values.VAL_COMPOSE]
            ["ComposeA" Values.VAL_COMPOSEA]
            ["Constant" Values.VAL_K]

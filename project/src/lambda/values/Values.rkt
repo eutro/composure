@@ -131,28 +131,55 @@
 (define TV_C (LambdaMonoVar.new 2))
 
 (define (wrap-num x) (LambdaWrapper.new x Types.TY_NUM))
-(define (wrap-vec x) (LambdaWrapper.new x Types.TY_VEC))
+(define (wrap-vec3 x) (LambdaWrapper.new x Types.TY_VEC3))
+(define (wrap-vec2 x) (LambdaWrapper.new x Types.TY_VEC2))
+
+(define-pure (vec3 x y z)
+  #:short-name "v3"
+  #:type (LambdaType.new [] (Types.mono-fun Types.MON_NUM (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC3)))
+  #:body (wrap-vec3 (Vector3 (.-value x) (.-value y) (.-value z))))
+(define-pure (vec2 x y)
+  #:short-name "v2"
+  #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC2))
+  #:body (wrap-vec2 (Vector2 (.-value x) (.-value y))))
+
+;; sorry no type classes
+(define-pure (add3 a b)
+  #:short-name "+3"
+  #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_VEC3 Types.MON_VEC3))
+  #:body (wrap-vec3 (+ (.-value a) (.-value b))))
+
+(define-pure (add2 a b)
+  #:short-name "+2"
+  #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_VEC2 Types.MON_VEC2 Types.MON_VEC2))
+  #:body (wrap-vec2 (+ (.-value a) (.-value b))))
 
 (define-pure (add a b)
   #:short-name "+"
   #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
   #:body (wrap-num (+ (.-value a) (.-value b))))
 
-(define-pure (vec x y z)
-  #:short-name "vec"
-  #:type (LambdaType.new [] (Types.mono-fun Types.MON_NUM (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC)))
-  #:body (wrap-vec (Vector3 (.-value x) (.-value y) (.-value z))))
-(define-pure (addv a b) ;; sorry no type classes
-  #:short-name "+~"
-  #:type (LambdaType.new [] (Types.mono-bin-fun Types.MON_VEC Types.MON_VEC Types.MON_VEC))
-  #:body (wrap-vec (+ (.-value a) (.-value b))))
+(define-pure (cons a b)
+  #:short-name ":"
+  #:type (LambdaType.new [0 1] (Types.mono-bin-fun TV_A TV_B (Types.mono-pair TV_A TV_B)))
+  #:body
+  (LambdaWrapper.new
+   (Cons.new a b)
+   (let ([a-ty (.get-type a)]
+         [b-ty (.get-type b)]
+         [tcx (.new TypingCtx)])
+     (tcx.generalise
+      (Types.mono-pair
+       (.instantiate tcx a-ty)
+       (.instantiate tcx b-ty))))))
 
 (begin-escape
   (define-syntax-rule (define-compose name
                         #:class-name class-name
                         #:short-name short-name
                         #:finished-name finished-name
-                        #:mono-ctor mono-ctor)
+                        #:mono-ctor mono-ctor
+                        #:body body ...)
     (define-construct (name f g) ;; λx.g(f x)
       #:class-name class-name
       #:short-name short-name
@@ -177,19 +204,15 @@
        (assert (.-is-ok res))
        (.generalise tcx (mono-ctor a c)))
       (text-preview finished-name)
-      (define (apply x) (.apply g (.apply f x))))))
+      body ...)))
 
 (define-compose compose
   #:class-name Compose
   #:short-name ">>"
   #:finished-name ">>''"
-  #:mono-ctor Types.mono-fun)
-
-(define-compose composea
-  #:class-name ComposeA
-  #:short-name ">>>"
-  #:finished-name ">>>''"
-  #:mono-ctor Types.mono-action)
+  #:mono-ctor Types.mono-fun
+  #:body
+  (define (apply x) (.apply g (.apply f x))))
 
 (define-construct (s f g) ;; λf g x.(f x)(g x)
   #:class-name S
@@ -246,7 +269,20 @@
 
 ;; ACTIONS
 
-(define-construct (corrupt f)
+(define-compose composea
+  #:class-name ComposeA
+  #:short-name ">>>"
+  #:finished-name ">>>''"
+  #:mono-ctor Types.mono-action
+  #:body
+  (define (start) [(.start f) (.start g)])
+  (define (step x s)
+    (.step g (.step f x (ref s 0)) (ref s 1)))
+  (define (finish s)
+    (.finish f (ref s 0))
+    (.finish g (ref s 1))))
+
+(define-construct (corrupt f) ;; I think this is catchier than `arr`
   #:class-name Corrupt
   #:short-name "♭"
   #:type
@@ -261,19 +297,51 @@
    (define mono (.new LambdaMonoCtor Types.CTOR_ACTION pure-ty.mono.args))
    (.new LambdaType pure-ty.type-vars mono))
   (text-preview "f♭")
-  (define (apply x)
-    (.apply f x)))
+  (define (start) null)
+  (define (step x _s) (.apply f x))
+  (define (finish _s) null))
+
+(define-construct (passthrough f) ;; `first` is a really really bad name
+  #:class-name Passthrough
+  #:short-name "P"
+  #:type
+  (let ([tv-s (LambdaMonoVar.new (- (ord "s") (ord "a")))])
+    (LambdaType.new
+     [0 1 (.-no tv-s)]
+     (Types.mono-fun
+      (Types.mono-action TV_A TV_B)
+      (Types.mono-action (Types.mono-pair TV_A tv-s)
+                         (Types.mono-pair TV_B tv-s)))))
+  #:body
+  (cached-type
+   (define tcx (.new TypingCtx))
+   (define dir-ty (.get-type f))
+   (define tv-a (.newtype tcx))
+   (define tv-b (.newtype tcx))
+   (define tv-s (.newtype tcx))
+   (.unify tcx null
+           (Types.mono-action tv-a tv-b)
+           (.instantiate dir-ty))
+   (define s (.compute-substs tcx))
+   (assert (.-is-ok s))
+   (tcx.generalise
+    (Types.mono-action
+     (Types.mono-pair tv-a tv-s)
+     (Types.mono-pair tv-b tv-s))))
+  (define (start) (.start f))
+  (define (step x s) [(.step f (ref x 0) s) (ref x 1)])
+  (define (finish s) (.finish f s)))
 
 (define-action (move vel)
   #:class-name Move
-  #:type (LambdaType.new [] (Types.mono-action Types.MON_VEC Types.MON_UNIT))
+  #:type (LambdaType.new [] (Types.mono-action Types.MON_VEC2 Types.MON_UNIT))
   #:preview (.create TextPreview "mv")
   #:start () null
   #:step (x s)
-  (.user-move Game.world.player (.-value x))
+  (Game.world.player.user-move (.-value x))
   Values.VAL_UNIT
   #:finish (s)
-  (.user-move Game.world.player (Vector3 0 0 0))
+  (Game.world.player.user-move (Vector2 0 0))
   null)
 
 (define-action (prn x)
@@ -281,7 +349,29 @@
   #:type (LambdaType.new [0] (Types.mono-action Values.TV_A Types.MON_UNIT))
   #:preview (.create TextPreview "prn")
   #:start () null
-  #:step (x s)
+  #:step (x _s)
   (print (if ("value" . in . x) (.-value x) "λ?"))
   Values.VAL_UNIT
-  #:finish (s) null)
+  #:finish (_s) null)
+
+(define-action (get-mouse-posn _u)
+  #:class-name GetMousePosn
+  #:type (LambdaType.new [] (Types.mono-action Types.TY_UNIT Types.TY_VEC2))
+  #:preview (.create TextPreview "⨀")
+  #:start () null
+  #:step (x _s) (.get-mouse-position (Game.get-viewport))
+  #:finish (_s) null)
+
+(define-action (camera-project pos)
+  #:class-name CameraProject
+  #:type (LambdaType.new [] (Types.mono-action Types.TY_VEC2 Types.TY_HALFLINE))
+  #:preview (.create TextPreview "⨀")
+  #:start () null
+  #:step (pos _s)
+  (LambdaWrapper.new
+   {
+    "origin" (.project-ray-origin Game.world.camera pos.value)
+    "direction" (.project-ray-normal Game.world.camera pos.value)
+    }
+   Types.TY_HALFLINE)
+  #:finish (_s) null)

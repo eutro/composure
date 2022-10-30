@@ -15,7 +15,7 @@
     [(== key null)
      null]
     [(== binding null)
-     (.erase (._map-key key-map) key)]
+     (key-map.erase (._map-key key))]
     [else
      (set! (ref key-map (._map-key key)) binding)])
   null)

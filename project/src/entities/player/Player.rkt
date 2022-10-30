@@ -9,8 +9,7 @@
 (define velocity : Vector3 (Vector3 0 0 0))
 
 (define (user-move vel)
-  (set! velocity vel)
-  (set! (.-y velocity) 0)
+  (set! velocity (Vector3 vel.x 0 vel.y))
   (define mag (.length velocity))
   (when (> mag MAX_SPEED)
     (*set! velocity (/ MAX_SPEED mag))))

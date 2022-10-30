@@ -16,22 +16,10 @@
   (preload "MouseDisplay.tscn"))
 
 (define (_lambda-type)
-  Types.TY_VEC)
+  Types.TY_VEC2)
 
 (define (get-lock-type)
   (.-pressed event))
 
 (define (resolve-value)
-  (define pos-2d (.get-mouse-position (Game.get-viewport)))
-  (define drop-plane (Plane Vector3.UP 0))
-  (define pos-3d
-    (.intersects-ray
-     drop-plane
-     (.project-ray-origin Game.world.camera pos-2d)
-     (.project-ray-normal Game.world.camera pos-2d)))
-
-  (Values.wrap-vec
-   (if (== null pos-3d)
-       (Vector3 0 0 0)
-       (- pos-3d Game.world.player.translation) ;; TODO relative to player
-       )))
+  (Values.wrap-vec2 (.get-mouse-position (Game.get-viewport))))

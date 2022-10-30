@@ -26,7 +26,7 @@ editable = false
 margin_left = 54.0
 margin_right = 220.865
 margin_bottom = 50.0
-min_value = -99.0
-max_value = 99.0
+min_value = -999.0
+max_value = 999.0
 
 [connection signal="value_changed" from="HBox/Number" to="." method="_on_Number_value_changed"]
