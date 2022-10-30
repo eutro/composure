@@ -29,25 +29,24 @@
        (quasisyntax/loc stx
          (define #,caps-name value))]))
 
-  (define-syntax (define-value stx)
+  (define-syntax (define-action stx)
     (syntax-parse stx
       [(_ (name:id arg:id)
           #:class-name cn:id
           #:type {~seq type:expr ...+}
           #:preview preview:expr
-          {~optional {~seq #:apply body:expr ...+}})
+          #:start () start_:expr ...+
+          #:step (x:id s0:id) step_:expr ...+
+          #:finish (s1:id) finish_:expr ...+)
        (syntax/loc stx
          (begin
            (class cn
              (extends LambdaValue)
-
              (cached-type type ...)
-
              (define (create-preview) preview)
-
-             {~?
-              (define (apply arg)
-                body ...)})
+             (define (start) start_ ...)
+             (define (step x s0) step_ ...)
+             (define (finish s1) finish_ ...))
            (define-caps-val name (.new cn))))]))
 
   (define-syntax (define-construct stx)
@@ -265,18 +264,24 @@
   (define (apply x)
     (.apply f x)))
 
-(define-value (move vel)
+(define-action (move vel)
   #:class-name Move
   #:type (LambdaType.new [] (Types.mono-action Types.MON_VEC Types.MON_UNIT))
   #:preview (.create TextPreview "mv")
-  #:apply
-  (.user-move Game.world.player (.-value vel))
-  Values.VAL_UNIT)
+  #:start () null
+  #:step (x s)
+  (.user-move Game.world.player (.-value x))
+  Values.VAL_UNIT
+  #:finish (s)
+  (.user-move Game.world.player (Vector3 0 0 0))
+  null)
 
-(define-value (prn x)
+(define-action (prn x)
   #:class-name Print
   #:type (LambdaType.new [0] (Types.mono-action Values.TV_A Types.MON_UNIT))
   #:preview (.create TextPreview "prn")
-  #:apply
+  #:start () null
+  #:step (x s)
   (print (if ("value" . in . x) (.-value x) "λ?"))
-  Values.VAL_UNIT)
+  Values.VAL_UNIT
+  #:finish (s) null)

@@ -2,12 +2,26 @@
 
 (extends Node)
 
+;; Wrapper {
+;;   value: T
+;; }
 (define CTOR_NUM := (.new TypeCtor "Num" 0 false))
 (define CTOR_VEC := (.new TypeCtor "Vec" 0 false))
+
+;; Unit {}
 (define CTOR_UNIT := (.new TypeCtor "Unit" 0 false))
 
-(define CTOR_PAIR := (.new TypeCtor ":" 2 true))
+;; Fun<A, B> {
+;;   apply(x: A): B
+;; }
 (define CTOR_FUN := (.new TypeCtor "->" 2 true))
+
+;; Action<A, B> {
+;;   type State: !Lambda
+;;   start(): State
+;;   step(x: A, s: State): B
+;;   finish(s: State)
+;; }
 (define CTOR_ACTION := (.new TypeCtor "~>" 2 true))
 
 (define MON_NUM := (.new LambdaMonoCtor CTOR_NUM []))
@@ -26,9 +40,6 @@
 
 (define (mono-bin-fun arg1 arg2 ret)
   (mono-fun arg1 (mono-fun arg2 ret)))
-
-(define (mono-pair lhs rhs)
-  (.new LambdaMonoCtor CTOR_PAIR [lhs rhs]))
 
 (define (compute-application f-ty x-ty)
   (define tcx (.new TypingCtx))

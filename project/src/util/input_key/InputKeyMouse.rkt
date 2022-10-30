@@ -33,5 +33,5 @@
   (Values.wrap-vec
    (if (== null pos-3d)
        (Vector3 0 0 0)
-       (- pos-3d) ;; TODO relative to player
+       (- pos-3d Game.world.player.translation) ;; TODO relative to player
        )))
