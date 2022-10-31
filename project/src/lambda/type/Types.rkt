@@ -22,13 +22,13 @@
                 (define ty-id (format-id stx "TY_~a" upcase-name))
                 (quasisyntax/loc stx
                   (begin
-                    (define #,mon-id := (LambdaMonoCtor.new #,ctor-id []))
-                    (define #,ty-id := (LambdaType.new [] #,mon-id))))]
+                    (define #,mon-id := (MonoCtor.new #,ctor-id []))
+                    (define #,ty-id := (Type.new [] #,mon-id))))]
                [else
                 (define mon-id (format-id stx "mono-~a" #'code-name))
                 (quasisyntax/loc stx
                   (define (#,mon-id arg-name ...)
-                    (LambdaMonoCtor.new #,ctor-id [arg-name ...])))])))])))
+                    (MonoCtor.new #,ctor-id [arg-name ...])))])))])))
 
 ;; Wrapper {
 ;;   value: T
@@ -71,7 +71,7 @@
   (define tcx (.new TypingCtx))
   (define res-ty (.instantiate tcx f-ty))
   (for ([x-ty x-tys])
-    (define next-res (LambdaMonoVar.new (.newtype tcx)))
+    (define next-res (MonoVar.new (.newtype tcx)))
     (.unify tcx null (Types.mono-fun (.instantiate tcx x-ty) next-res) res-ty)
     (set! res-ty next-res))
   (define res (.compute-substs tcx))

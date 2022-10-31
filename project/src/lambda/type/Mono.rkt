@@ -2,7 +2,7 @@
 
 ;; Represents a monotype in the Hindley-Milner type system
 
-(class-name LambdaMono)
+(class-name Mono)
 
 (define (_collect-free-vars _vars)
   null)

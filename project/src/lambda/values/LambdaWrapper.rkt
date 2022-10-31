@@ -4,7 +4,7 @@
 (extends LambdaValue)
 
 (define value)
-(define type : LambdaType)
+(define type : Type)
 
 (define (_init vl ty)
   (set! value vl)

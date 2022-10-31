@@ -55,7 +55,7 @@
   (define input-type (._lambda-type key))
   (set! expected-type
         (.new
-         LambdaType [0]
+         Type [0]
          (Types.mono-action
           input-type.mono
           Values.TV_A)))

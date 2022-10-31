@@ -21,13 +21,13 @@
      (set! (ref var-types vr) t)
      t]))
 
-(define (unify term [expected : LambdaMono] [actual : LambdaMono])
+(define (unify term [expected : Mono] [actual : Mono])
   (.append unifications [term expected actual]))
 
 (define (apply-substs-0 term)
   (let loop ([t term])
     (cond
-      [(and (is t LambdaMonoVar)
+      [(and (is t MonoVar)
             (.has substitutions (.-no t)))
        (recur loop (.get substitutions (.-no t)))]
       [else t])))
@@ -35,14 +35,14 @@
 (define (apply-substs term)
   (fset! term apply-substs-0)
   (cond
-    [(is term LambdaMonoVar) term]
+    [(is term MonoVar) term]
     [else
      (define new-tys [])
      (for ([ty (.-args term)])
        (.append new-tys (apply-substs ty)))
      (if (== new-tys (.-args term))
          term
-         (.new LambdaMonoCtor (.-ctor term) new-tys))]))
+         (.new MonoCtor (.-ctor term) new-tys))]))
 
 (define (define-subst vr type)
   (fset! type apply-substs)
@@ -59,15 +59,15 @@
   #;(print "unifying " s0 " and " s1)
   (cond
     [(== s0 s1) null]
-    [(or (is s0 LambdaMonoVar)
-         (is s1 LambdaMonoVar))
-     (match (if (is s0 LambdaMonoVar)
+    [(or (is s0 MonoVar)
+         (is s1 MonoVar))
+     (match (if (is s0 MonoVar)
                 [s0 s1]
                 [s1 s0])
        [[(var vr) (var ty)] (define-subst (.-no vr) ty)])]
     [else
-     (assert (and (is s0 LambdaMonoCtor)
-                  (is s1 LambdaMonoCtor)))
+     (assert (and (is s0 MonoCtor)
+                  (is s1 MonoCtor)))
      (define c0 (.-ctor s0))
      (define a0 (.-args s0))
      (define c1 (.-ctor s1))
@@ -105,19 +105,19 @@
        (set! unifications [])
        (Result.new true null)])))
 
-(define (generalise [ty : LambdaMono]) : LambdaType
+(define (generalise [ty : Mono]) : Type
   (fset! ty apply-substs)
   (define fvs {})
   (._collect-free-vars ty fvs)
   (define params (.keys fvs))
   (.sort params)
-  (.new LambdaType params ty))
+  (.new Type params ty))
 
-(define (instantiate [ty : LambdaType]) : LambdaMono
+(define (instantiate [ty : Type]) : Mono
   (for ([tv (.-type-vars ty)])
     (fset! type-counter max (+ tv 1)))
   (for ([tv (.-type-vars ty)])
-    (set! (ref substitutions tv) (.new LambdaMonoVar (newtype))))
+    (set! (ref substitutions tv) (.new MonoVar (newtype))))
   (define substituted (apply-substs (.-mono ty)))
   (for ([tv (.-type-vars ty)])
     (.erase substitutions tv))

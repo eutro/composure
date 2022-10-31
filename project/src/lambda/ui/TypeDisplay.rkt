@@ -4,7 +4,7 @@
 
 (define type)
 
-(define (set-type [ty : LambdaType])
+(define (set-type [ty : Type])
   (set! type ty)
   (compute-children))
 

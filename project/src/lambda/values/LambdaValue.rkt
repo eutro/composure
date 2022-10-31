@@ -2,7 +2,7 @@
 
 (class-name LambdaValue)
 
-(define (get-type) : LambdaType
+(define (get-type) : Type
   null)
 
 (define (create-preview) : Control

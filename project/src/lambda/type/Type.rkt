@@ -3,10 +3,10 @@
 ;; Represents a polytype in the Hindley-Milner type system,
 ;; i.e. the types we actually care about and can assign to values
 
-(class-name LambdaType)
+(class-name Type)
 
 (define type-vars : Array #;[int] [])
-(define mono : LambdaMono mono)
+(define mono : Mono mono)
 
 (define (_init tvs mn)
   (set! type-vars tvs)
@@ -19,7 +19,7 @@
     [((len type-vars) . > . 0)
      (for ([tv type-vars])
        (+set! s " ")
-       (+set! s (LambdaMonoVar.name-for tv)))
+       (+set! s (MonoVar.name-for tv)))
      (+set! s " . ")
      (+set! s (.to-string mono))
      s]

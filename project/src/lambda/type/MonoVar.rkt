@@ -1,7 +1,7 @@
 #lang gdlisp
 
-(class-name LambdaMonoVar)
-(extends LambdaMono)
+(class-name MonoVar)
+(extends Mono)
 
 (define no : int)
 

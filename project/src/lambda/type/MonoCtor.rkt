@@ -1,10 +1,10 @@
 #lang gdlisp
 
-(class-name LambdaMonoCtor)
-(extends LambdaMono)
+(class-name MonoCtor)
+(extends Mono)
 
 (define ctor : TypeCtor)
-(define args : Array #;[LambdaMono] [])
+(define args : Array #;[Mono] [])
 
 (define (_init ct ag)
   (set! ctor ct)
