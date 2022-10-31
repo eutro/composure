@@ -28,8 +28,6 @@
     (fset! e-inst.visible not)))
 
 (define (_ready)
-  (.init-defs Game)
-
   (define custom-entries (add-entry-list "Custom" Game.user-defs true))
   (define i 0)
   (for ([entry custom-entries])

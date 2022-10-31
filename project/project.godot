@@ -85,6 +85,11 @@ _global_script_classes=[ {
 "path": "res://src/lambda/type/Type.gd"
 }, {
 "base": "Reference",
+"class": "TypeClass",
+"language": "GDScript",
+"path": "res://src/lambda/type/TypeClass.gd"
+}, {
+"base": "Reference",
 "class": "TypeCtor",
 "language": "GDScript",
 "path": "res://src/lambda/type/TypeCtor.gd"
@@ -110,6 +115,7 @@ _global_script_class_icons={
 "Result": "",
 "TextPreview": "",
 "Type": "",
+"TypeClass": "",
 "TypeCtor": "",
 "TypingCtx": ""
 }

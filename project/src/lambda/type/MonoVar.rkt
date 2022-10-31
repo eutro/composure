@@ -9,7 +9,8 @@
   (set! no i))
 
 (define (_collect-free-vars vars)
-  (set! (ref vars no) true))
+  (when (not (.has vars no))
+    (set! (ref vars no) {})))
 
 (define const ABC_COUNT 26)
 

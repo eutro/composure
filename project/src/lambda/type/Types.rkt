@@ -9,13 +9,15 @@
     (syntax-parse stx
       [(_ (code-name:id arg-name:id ...)
           #:name name:str
-          {~optional {~and #:infix {~bind [infix #'true]}}})
+          {~optional {~and #:infix {~bind [infix #'true]}}}
+          {~optional {~seq #:classes tc:expr ...}})
        (define arity (length (syntax->list #'(arg-name ...))))
        (define upcase-name (string-upcase (symbol->string (syntax-e #'code-name))))
        (define ctor-id (format-id stx "CTOR_~a" upcase-name))
        (quasisyntax/loc stx
          (begin
-           (define #,ctor-id := (TypeCtor.new name #,arity {~? infix false}))
+           (define #,ctor-id :=
+             (TypeCtor.new name #,arity {~? infix false} {{~? {~@ {~@ tc true} ...}}}))
            #,(cond
                [(= 0 arity)
                 (define mon-id (format-id stx "MON_~a" upcase-name))
@@ -30,12 +32,17 @@
                   (define (#,mon-id arg-name ...)
                     (MonoCtor.new #,ctor-id [arg-name ...])))])))])))
 
+(define TC_ADD (TypeClass.new "Add"))
+(define TC_SUB (TypeClass.new "Sub"))
+(define TC_MUL (TypeClass.new "Mul"))
+(define TC_VEC (TypeClass.new "Vec"))
+
 ;; Wrapper {
 ;;   value: T
 ;; }
-(define-type (num) #:name "Num")
-(define-type (vec3) #:name "Vec3")
-(define-type (vec2) #:name "Vec2")
+(define-type (num) #:name "Num" #:classes TC_ADD TC_SUB TC_MUL)
+(define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_VEC)
+(define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_VEC)
 (define-type (halfline) #;"T = {origin: Vec3; direction: Vec3}" #:name "Halfline")
 (define-type (plane) #;"T = {normal: Vec3; distance: Num}" #:name "Plane")
 

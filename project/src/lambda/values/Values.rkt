@@ -199,38 +199,36 @@
   #:type (Type.new [] (Types.mono-fun Types.MON_NUM (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC3)))
   #:body (wrap-vec3 (Vector3 x.value y.value z.value)))
 
-;; sorry no type classes
 (define-pure (add a b)
-  #:category "Maths" #:name "Add Num"
+  #:category "Maths" #:name "Add"
   #:short-name "+"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
-  #:body (wrap-num (+ a.value b.value)))
-(define-pure (add2 a b)
-  #:category "Maths" #:name "Add Vec2"
-  #:short-name "+2"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC2 Types.MON_VEC2 Types.MON_VEC2))
-  #:body (wrap-vec2 (+ a.value b.value)))
-(define-pure (add3 a b)
-  #:category "Maths" #:name "Add Vec3"
-  #:short-name "+3"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_VEC3 Types.MON_VEC3))
-  #:body (wrap-vec3 (+ a.value b.value)))
+  #:type (Type.new {0 {Types.TC_ADD true}} (Types.mono-bin-fun TV_A TV_A TV_A))
+  #:body (LambdaWrapper.new (+ a.value b.value) (.get-type a)))
+
+
+(define-pure (sub a b)
+  #:category "Maths" #:name "Sub"
+  #:short-name "-"
+  #:type (Type.new {0 {Types.TC_SUB true}} (Types.mono-bin-fun TV_A TV_A TV_A))
+  #:body (LambdaWrapper.new (- a.value b.value) (.get-type a)))
 
 (define-pure (mul a b)
-  #:category "Maths" #:name "Mul Num"
+  #:category "Maths" #:name "Mul"
   #:short-name "*"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
-  #:body (wrap-num (* a.value b.value)))
-(define-pure (scale2 a b)
-  #:category "Maths" #:name "Scale Vec2"
-  #:short-name "*2"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_VEC2 Types.MON_VEC2))
-  #:body (wrap-vec2 (* a.value b.value)))
-(define-pure (scale3 a b)
-  #:category "Maths" #:name "Scale Vec3"
-  #:short-name "*3"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_VEC3 Types.MON_VEC3))
-  #:body (wrap-vec3 (* a.value b.value)))
+  #:type (Type.new {0 {Types.TC_MUL true}} (Types.mono-bin-fun TV_A TV_A TV_A))
+  #:body (LambdaWrapper.new (* a.value b.value) (.get-type a)))
+
+(define-pure (scale a b)
+  #:category "Maths" #:name "Scale Vector"
+  #:short-name "*."
+  #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-bin-fun Types.MON_NUM TV_A TV_A))
+  #:body (LambdaWrapper.new (* a.value b.value) (.get-type b)))
+
+(define-pure (dot a b)
+  #:category "Maths" #:name "Dot Product"
+  #:short-name "⋅"
+  #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-bin-fun TV_A TV_A Types.MON_NUM))
+  #:body (wrap-num (.dot a.value b.value)))
 
 (define-pure (project-xz vec)
   #:category "Maths" #:name "Project XZ"
@@ -401,7 +399,7 @@
   (cached-type
    (define pure-ty (.get-type f))
    (define mono (.new MonoCtor Types.CTOR_ACTION pure-ty.mono.args))
-   (.new Type pure-ty.type-vars mono))
+   (.with-mono pure-ty mono))
   (text-preview "f♭")
   (define (start) null)
   (define (step x _s) (.apply f x))

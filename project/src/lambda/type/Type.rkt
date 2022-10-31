@@ -5,22 +5,48 @@
 
 (class-name Type)
 
-(define type-vars : Array #;[int] [])
+(define type-vars : Dictionary #;{int {TypeClass true}})
 (define mono : Mono mono)
 
 (define (_init tvs mn)
+  (when (is tvs Array)
+    (define new-tvs {})
+    (for ([tv tvs])
+      (set! (ref new-tvs tv) {}))
+    (set! tvs new-tvs))
   (set! type-vars tvs)
   (set! mono mn))
 
+(define (with-mono mono)
+  (.new (load "res://src/lambda/type/Type.gd")
+        type-vars
+        mono))
+
+(define static (str-constraint cnstr)
+  (+ (.to-string (ref cnstr 1))
+     " "
+     (MonoVar.name-for (ref cnstr 0))))
+
 (define (_to-string)
-  (.to-string mono) ;; Haskell-style
-  #;
-  (cond
-    [((len type-vars) . > . 0)
-     (for ([tv type-vars])
-       (+set! s " ")
-       (+set! s (MonoVar.name-for tv)))
-     (+set! s " . ")
-     (+set! s (.to-string mono))
-     s]
-    [else (.to-string mono)]))
+   ;; Haskell-style
+  (define has-constraints false)
+  (define cnstrs [])
+  (define tvs type-vars)
+  (for ([tv tvs])
+    (for ([cnstr (ref tvs tv)])
+      (.append cnstrs [tv cnstr])))
+  (define mono-str (.to-string mono))
+  (match (len cnstrs)
+    [0 mono-str]
+    [1 (+ (str-constraint (ref cnstrs 0))
+          " => "
+          mono-str)]
+    [_
+     (define s "(")
+     (+set! s (str-constraint (ref cnstrs 0)))
+     (for ([i (range 1 (len cnstrs))])
+       (+set! s ", ")
+       (+set! s (str-constraint (ref cnstrs i))))
+     (+set! s ") => ")
+     (+set! s mono-str)
+     s]))

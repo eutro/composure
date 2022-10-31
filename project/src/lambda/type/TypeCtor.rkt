@@ -1,12 +1,10 @@
 #lang gdlisp
 
 (class-name TypeCtor)
+(require "../../macros.rkt")
 
-(define name : String)
-(define arity : int)
-(define infix : bool)
-
-(define (_init nm art infx)
-  (set! name nm)
-  (set! arity art)
-  (set! infix infx))
+(splice-record
+ ([name : String]
+  [arity : int]
+  [infix : bool]
+  [type-classes : Dictionary #;{TypeClass true}]))

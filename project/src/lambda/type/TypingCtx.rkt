@@ -2,24 +2,15 @@
 
 (class-name TypingCtx)
 
-(define var-types {})
 (define type-counter 0)
 (define unifications [])
 (define substitutions {})
+(define constraints : Dictionary #;{int {TypeClass true}} {})
 
 (define (newtype)
   (define t type-counter)
   (+set! type-counter 1)
   t)
-
-(define (lookup-var [vr : String])
-  (cond
-    [(in vr var-types)
-     (ref var-types vr)]
-    [else
-     (define t (newtype))
-     (set! (ref var-types vr) t)
-     t]))
 
 (define (unify term [expected : Mono] [actual : Mono])
   (.append unifications [term expected actual]))
@@ -50,7 +41,21 @@
   (._collect-free-vars type free-vars)
   (cond
     [(.has free-vars vr) "cannot create infinite type"]
-    [else (set! (ref substitutions vr) type)]))
+    [else
+     (set! (ref substitutions vr) type)
+     (when (.has constraints vr)
+       (cond
+         [(is type MonoVar)
+          (define cnstrs (.get constraints type.no {}))
+          (set! (ref constraints type.no) cnstrs)
+          (.merge cnstrs (ref constraints vr))
+          null]
+         [else
+          (define ctor type.ctor)
+          (for ([tc (ref constraints vr)])
+            (when (not (.has ctor.type-classes tc))
+              (#%gdscript "return " (!expr (+ "type " (str type) " does not implement " (str tc))))))
+          null]))]))
 
 (define (run-unification expected actual)
   ;; returns null if ok, a string error message otherwise
@@ -109,15 +114,21 @@
   (fset! ty apply-substs)
   (define fvs {})
   (._collect-free-vars ty fvs)
-  (define params (.keys fvs))
-  (.sort params)
-  (.new Type params ty))
+  (for ([fv fvs])
+    (.merge (ref fvs fv) (.get constraints fv {})))
+  (.new Type fvs ty))
 
 (define (instantiate [ty : Type]) : Mono
   (for ([tv (.-type-vars ty)])
     (fset! type-counter max (+ tv 1)))
+
   (for ([tv (.-type-vars ty)])
-    (set! (ref substitutions tv) (.new MonoVar (newtype))))
+    (define nt (newtype))
+    (define cnstrs {})
+    (set! (ref substitutions tv) (.new MonoVar nt))
+    (set! (ref constraints nt) cnstrs)
+    (.merge cnstrs (ref ty.type-vars tv)))
+
   (define substituted (apply-substs (.-mono ty)))
   (for ([tv (.-type-vars ty)])
     (.erase substitutions tv))
