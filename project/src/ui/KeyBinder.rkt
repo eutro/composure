@@ -20,14 +20,23 @@
   (grab-focus)
   null)
 
+(define (setup-key key)
+  (when key
+    (set! awaiting-input false)
+    (.show (get-node button-path))
+    (set-current-key key)))
+
 (define (_gui-input evt)
   (when awaiting-input
-    (define key (InputKeys.evt->input-key evt))
-    (when key
-      (set! awaiting-input false)
-      (.show (get-node button-path))
-      (set-current-key key)
-      (accept-event))))
+    (setup-key (InputKeys.evt->input-key evt))
+    (accept-event)))
+
+(define (_process _delta)
+  (when awaiting-input
+    (define grouped (InputKeys.collect-grouped))
+    (when ((len grouped) . > . 0)
+      (setup-key (ref grouped 0)))
+    (accept-event)))
 
 (define (set-current-key key)
   (set! current-key key)

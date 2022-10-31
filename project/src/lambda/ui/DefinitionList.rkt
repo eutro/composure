@@ -17,6 +17,7 @@
     (define e-inst (.instance (preload "DefinitionEntry.tscn")))
     (set! e-inst.entry entry)
     (set! e-inst.editable editable)
+    (.hide e-inst)
     (.add-child list-node e-inst)
     (.append e-insts e-inst))
 

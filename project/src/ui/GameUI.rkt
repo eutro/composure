@@ -5,7 +5,7 @@
 (signal gui-changed #;showing)
 
 (define (is-gui-showing)
-  (.-mounted $Composer))
+  (!= null (.-mounted $Composer)))
 
 (define (_on_ComposerButton_pressed)
   (.toggle-mount $Composer)

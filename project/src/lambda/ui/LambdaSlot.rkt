@@ -26,7 +26,10 @@
     (when (!= null new-term)
       (set! preview (.create-preview new-term))
       (add-child preview)
-      (set! hint_tooltip (.to-string (.get-type new-term))))
+      (set! hint-tooltip (.to-string (.get-type new-term)))
+      (for ([line (.get-tooltip new-term)])
+        (+set! hint-tooltip "\n")
+        (+set! hint-tooltip line)))
 
     (set! term new-term)
     (emit-signal "term_changed" term)))

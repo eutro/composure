@@ -1,13 +1,11 @@
 #lang gdlisp
 
 (class-name InputKeyKeyboard)
+(require "../../macros.rkt")
 
 (extends InputKeyBase)
 
-(define event : InputEventKey)
-
-(define (_init evt)
-  (set! event evt))
+(splice-record ([event : InputEventKey]))
 
 (define (_map-key)
   ["Key" (.get-scancode-with-modifiers event)])

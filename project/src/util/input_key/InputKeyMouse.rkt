@@ -1,13 +1,11 @@
 #lang gdlisp
 
 (class-name InputKeyMouse)
+(require "../../macros.rkt")
 
 (extends InputKeyBase)
 
-(define event : InputEventMouseButton)
-
-(define (_init evt)
-  (set! event evt))
+(splice-record ([event : InputEventMouseButton]))
 
 (define (_map-key)
   ["Mouse" (.-button-index event)])
@@ -22,12 +20,12 @@
   (.-pressed event))
 
 (define static (normalise-pos pos)
-  (define vp (Game.get-viewport))
-  (* 2 (- (/ pos vp.size) (Vector2 0.5 0.5))))
+  (define vpr (.get-visible-rect (Game.get-viewport)))
+  (* 2 (- (/ pos vpr.size) (Vector2 0.5 0.5))))
 
 (define static (denormalise-pos pos)
-  (define vp (Game.get-viewport))
-  (* (+ (/ pos 2) (Vector2 0.5 0.5)) vp.size))
+  (define vpr (.get-visible-rect (Game.get-viewport)))
+  (* (+ (/ pos 2) (Vector2 0.5 0.5)) vpr.size))
 
 (define (resolve-value)
   (Values.wrap-vec2 (normalise-pos (.get-mouse-position (Game.get-viewport)))))

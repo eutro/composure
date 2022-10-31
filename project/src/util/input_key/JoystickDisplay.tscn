@@ -1,0 +1,54 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/util/input_key/JoystickDisplay.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/controller/controller.svg" type="Texture" id=2]
+[ext_resource path="res://assets/textures/controller/leftcon.svg" type="Texture" id=3]
+[ext_resource path="res://assets/textures/controller/rightcon.svg" type="Texture" id=4]
+
+[node name="JoystickDisplay" type="Control"]
+anchor_right = 0.195312
+anchor_bottom = 0.333333
+rect_min_size = Vector2( 200, 200 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="Controller" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 6
+
+[node name="Cons" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Left" type="TextureRect" parent="Cons"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 6
+
+[node name="Right" type="TextureRect" parent="Cons"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -22.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "Foo"
+align = 1
+valign = 1

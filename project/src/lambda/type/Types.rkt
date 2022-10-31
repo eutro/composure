@@ -43,7 +43,7 @@
 (define-type (num) #:name "Num" #:classes TC_ADD TC_SUB TC_MUL)
 (define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_VEC)
 (define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_VEC)
-(define-type (halfline) #;"T = {origin: Vec3; direction: Vec3}" #:name "Halfline")
+(define-type (ray) #;"T = {origin: Vec3; direction: Vec3}" #:name "Ray")
 (define-type (plane) #;"T = {normal: Vec3; distance: Num}" #:name "Plane")
 
 ;; Unit {}
@@ -79,7 +79,7 @@
   (define res-ty (.instantiate tcx f-ty))
   (for ([x-ty x-tys])
     (define next-res (MonoVar.new (.newtype tcx)))
-    (.unify tcx null (Types.mono-fun (.instantiate tcx x-ty) next-res) res-ty)
+    (.unify tcx null (mono-fun (.instantiate tcx x-ty) next-res) res-ty)
     (set! res-ty next-res))
   (define res (.compute-substs tcx))
   (if (.-is-ok res)

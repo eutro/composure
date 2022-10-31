@@ -13,3 +13,5 @@ script = ExtResource( 4 )
 [node name="World" parent="BindingRunner" instance=ExtResource( 2 )]
 
 [node name="GameUI" parent="BindingRunner" instance=ExtResource( 3 )]
+
+[connection signal="gui_changed" from="BindingRunner/GameUI" to="." method="_on_GameUI_gui_changed"]
