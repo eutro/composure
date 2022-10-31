@@ -24,3 +24,7 @@ anchor_bottom = 0.0
 margin_left = 154.0
 margin_right = 204.0
 margin_bottom = 50.0
+
+[connection signal="text_changed" from="Name" to="." method="_on_Name_text_changed"]
+[connection signal="text_entered" from="Name" to="." method="_on_Name_text_entered"]
+[connection signal="term_changed" from="Value" to="." method="_on_Value_term_changed"]

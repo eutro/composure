@@ -36,8 +36,8 @@
 (define-type (num) #:name "Num")
 (define-type (vec3) #:name "Vec3")
 (define-type (vec2) #:name "Vec2")
-(define-type (halfline) #;"T = {origin: Vec3; direction: Vec3}" #:name "Halfline"
-  )
+(define-type (halfline) #;"T = {origin: Vec3; direction: Vec3}" #:name "Halfline")
+(define-type (plane) #;"T = {normal: Vec3; distance: Num}" #:name "Plane")
 
 ;; Unit {}
 (define-type (unit) #:name "Unit")
@@ -65,12 +65,16 @@
   (mono-fun arg1 (mono-fun arg2 ret)))
 
 (define (compute-application f-ty x-ty)
+  (compute-applications f-ty [x-ty]))
+
+(define (compute-applications f-ty x-tys)
   (define tcx (.new TypingCtx))
-  (define fun-ty (.instantiate tcx f-ty))
-  (define arg-ty (.instantiate tcx x-ty))
-  (define ret-ty (.new LambdaMonoVar (.newtype tcx)))
-  (.unify tcx null (Types.mono-fun arg-ty ret-ty) fun-ty)
+  (define res-ty (.instantiate tcx f-ty))
+  (for ([x-ty x-tys])
+    (define next-res (LambdaMonoVar.new (.newtype tcx)))
+    (.unify tcx null (Types.mono-fun (.instantiate tcx x-ty) next-res) res-ty)
+    (set! res-ty next-res))
   (define res (.compute-substs tcx))
   (if (.-is-ok res)
-      (.new Result true (.generalise tcx ret-ty))
+      (.new Result true (.generalise tcx res-ty))
       res))
