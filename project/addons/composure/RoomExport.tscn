@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/composure/RoomExport.gd" type="Script" id=1]
+
+[node name="RoomExport" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+Room = "res://src/world/gen/rooms/Room.gd"
+RoomScene = "res://src/world/gen/rooms/RoomScene.gd"
+
+[node name="Button" type="Button" parent="."]
+anchor_right = 1.0
+margin_bottom = 46.251
+text = "Export as Room"
+
+[node name="NotGridmap" type="AcceptDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -76.0
+margin_top = -44.5
+margin_right = 76.0
+margin_bottom = 44.5
+dialog_text = "Not a RoomScene"
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

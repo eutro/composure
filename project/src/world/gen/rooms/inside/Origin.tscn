@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
+[ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
+[ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
+
+[node name="Origin" type="Spatial"]
+script = ExtResource( 2 )
+gridmap = NodePath("GridMap")
+anchors = NodePath("Anchors")
+entities = NodePath("Entities")
+edge_items = [ 3, 4, 14 ]
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource( 1 )
+cell_center_y = false
+data = {
+"cells": PoolIntArray( 0, 0, 655367, 3, 0, 1441806, 65533, 0, 1441806, 65535, 0, 655361, 131071, 0, 17, -65536, 0, 13, -65535, 0, 13, -65534, 0, 13, -2, 0, 13, -1, 0, 13, 0, 1, 1441806, 1, 1, 1441806, 2, 1, 1048585, 3, 1, 1441806, 65533, 1, 1441806, 65534, 1, 1441806, 65535, 1, 1441806, -65534, 1, 655373, 1, 2, 1441806, 2, 2, 1441806, 3, 2, 1441806, 0, 65533, 1441806, 1, 65533, 1441806, 65533, 65533, 1441806, 65534, 65533, 1441806, 65535, 65533, 1441806, 0, 65534, 655360, 1, 65534, 1441806, 2, 65534, 1441806, 3, 65534, 1441806, 65533, 65534, 1441806, 65534, 65534, 655372, -65536, 65534, 13, -2, 65534, 655373, -1, 65534, 13, 65533, 65535, 1441806, -65536, 65535, 13, -65535, 65535, 13, -65534, 65535, 13, -65533, 65535, 655373, -2, 65535, 13, -1, 65535, 13 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 2, 0 )
+}
+
+[node name="Anchors" type="Spatial" parent="."]
+
+[node name="Anchor" parent="Anchors" instance=ExtResource( 3 )]
+transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.99614, 0, -1.04553 )
+
+[node name="Entities" type="Spatial" parent="."]
+
+[node name="Lamp" type="OmniLight" parent="Entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.48285, 3.20416, -2.47796 )
+omni_range = 7.842
+
+[node name="Light" type="OmniLight" parent="Entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.88554, 4.06942, 0 )
+omni_range = 6.51259

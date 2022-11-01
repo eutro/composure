@@ -1,0 +1,49 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://src/world/gen/Room.gd" type="Script" id=1]
+
+[sub_resource type="PackedScene" id=1]
+_bundled = {
+"conn_count": 0,
+"conns": PoolIntArray(  ),
+"editable_instances": [  ],
+"names": PoolStringArray( "Entities", "Spatial", "OmniLight", "transform", "omni_range" ),
+"node_count": 2,
+"node_paths": [  ],
+"nodes": PoolIntArray( -1, -1, 1, 0, -1, 0, 0, 0, 0, 2, 2, -1, 2, 3, 0, 4, 1, 0 ),
+"variants": [ Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.936998, 3.44741, 1.16829 ), 6.59181 ],
+"version": 2
+}
+
+[resource]
+script = ExtResource( 1 )
+edges = [ Vector2( 2, 0 ), Vector2( 2, 1 ), Vector2( -2, 1 ), Vector2( 2, 2 ), Vector2( -2, 2 ), Vector2( 2, -2 ), Vector2( -2, -2 ), Vector2( 2, -1 ), Vector2( -2, -1 ) ]
+anchors = [ [ Vector2( 0, -2 ), 1, Vector2( 0, -1 ) ], [ Vector2( -2, 0 ), 0, Vector2( -1, 0 ) ], [ Vector2( 0, 2 ), 1, Vector2( 0, 1 ) ] ]
+tiles = {
+Vector3( -2, -1, 0 ): [ 13, 0 ],
+Vector3( -2, 0, -2 ): [ 14, 0 ],
+Vector3( -2, 0, -1 ): [ 14, 0 ],
+Vector3( -2, 0, 1 ): [ 14, 0 ],
+Vector3( -2, 0, 2 ): [ 14, 0 ],
+Vector3( -1, -1, -2 ): [ 13, 0 ],
+Vector3( -1, -1, -1 ): [ 13, 0 ],
+Vector3( -1, -1, 0 ): [ 13, 0 ],
+Vector3( -1, -1, 1 ): [ 13, 0 ],
+Vector3( -1, -1, 2 ): [ 13, 0 ],
+Vector3( 0, -1, -2 ): [ 13, 0 ],
+Vector3( 0, -1, -1 ): [ 13, 0 ],
+Vector3( 0, -1, 0 ): [ 13, 0 ],
+Vector3( 0, -1, 1 ): [ 13, 0 ],
+Vector3( 0, -1, 2 ): [ 13, 0 ],
+Vector3( 1, -1, -2 ): [ 13, 0 ],
+Vector3( 1, -1, -1 ): [ 13, 0 ],
+Vector3( 1, -1, 0 ): [ 13, 0 ],
+Vector3( 1, -1, 1 ): [ 13, 0 ],
+Vector3( 1, -1, 2 ): [ 13, 0 ],
+Vector3( 2, 0, -2 ): [ 14, 0 ],
+Vector3( 2, 0, -1 ): [ 14, 0 ],
+Vector3( 2, 0, 0 ): [ 14, 0 ],
+Vector3( 2, 0, 1 ): [ 14, 0 ],
+Vector3( 2, 0, 2 ): [ 14, 0 ]
+}
+entities = SubResource( 1 )

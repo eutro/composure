@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://assets/materials/Palette.material" type="Material" id=1]
 [ext_resource path="res://assets/models/Bed_Single.obj" type="ArrayMesh" id=2]
@@ -15,11 +15,18 @@
 [ext_resource path="res://assets/models/Coffee_Table_2.obj" type="ArrayMesh" id=13]
 [ext_resource path="res://assets/models/Lamp2.obj" type="ArrayMesh" id=14]
 [ext_resource path="res://assets/models/FloorTile.obj" type="ArrayMesh" id=15]
+[ext_resource path="res://assets/models/WallSolid.obj" type="ArrayMesh" id=16]
+[ext_resource path="res://assets/models/Trashcan_Small2.obj" type="ArrayMesh" id=17]
+[ext_resource path="res://assets/models/ShortCloset.obj" type="ArrayMesh" id=18]
+[ext_resource path="res://assets/models/Shelf_Small1.obj" type="ArrayMesh" id=19]
+[ext_resource path="res://assets/models/Shelf_Small2.obj" type="ArrayMesh" id=20]
+[ext_resource path="res://assets/models/Drawer_5.obj" type="ArrayMesh" id=21]
 
 [node name="Inside" type="Spatial"]
 
 [node name="Bed_Single" type="MeshInstance" parent="."]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0, 0 )
+visible = false
 mesh = ExtResource( 2 )
 material/0 = ExtResource( 1 )
 
@@ -30,7 +37,7 @@ mesh = ExtResource( 3 )
 material/0 = ExtResource( 1 )
 
 [node name="Drawer_1" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.441013 )
 visible = false
 mesh = ExtResource( 4 )
 skeleton = NodePath("../Table_RoundLarge")
@@ -47,29 +54,29 @@ mesh = ExtResource( 6 )
 material/0 = ExtResource( 1 )
 
 [node name="BookCaseBooks" type="MeshInstance" parent="."]
-transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 )
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.570529, 0, 0 )
 visible = false
 mesh = ExtResource( 7 )
 material/0 = ExtResource( 1 )
 
 [node name="BookCaseLargeBooks" type="MeshInstance" parent="."]
-transform = Transform( -8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 1, 0, 0 )
+transform = Transform( -8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 1, 0, 0.584868 )
 visible = false
 mesh = ExtResource( 8 )
 material/0 = ExtResource( 1 )
 
 [node name="Bookshelf" type="MeshInstance" parent="."]
-transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0 )
-visible = false
+transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, -0.737172 )
 mesh = ExtResource( 9 )
 material/0 = ExtResource( 1 )
 
 [node name="Carpet_Round" type="MeshInstance" parent="."]
+visible = false
 mesh = ExtResource( 10 )
 material/0 = ExtResource( 1 )
 
 [node name="Closet2" type="MeshInstance" parent="."]
-transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0 )
+transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, -0.317278, 0, 0 )
 visible = false
 mesh = ExtResource( 11 )
 material/0 = ExtResource( 1 )
@@ -87,7 +94,7 @@ mesh = ExtResource( 13 )
 material/0 = ExtResource( 1 )
 
 [node name="Lamp2" type="MeshInstance" parent="."]
-transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0 )
+transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0.404294, 0, -0.408643 )
 visible = false
 mesh = ExtResource( 14 )
 skeleton = NodePath("")
@@ -95,5 +102,43 @@ material/0 = ExtResource( 1 )
 
 [node name="FloorCarpet" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.99, 0, 0, 0, 1, 0, 0, 0 )
+visible = false
 mesh = ExtResource( 15 )
+material/0 = ExtResource( 1 )
+
+[node name="WallSolid" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.99, 0, 0, 0, 1, 0, 0, 0 )
+visible = false
+mesh = ExtResource( 16 )
+skeleton = NodePath("../FloorCarpet")
+material/0 = ExtResource( 1 )
+
+[node name="Trashcan_Small2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.461875, 0, 0.236205 )
+visible = false
+mesh = ExtResource( 17 )
+material/0 = ExtResource( 1 )
+
+[node name="ShortCloset" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.568754 )
+visible = false
+mesh = ExtResource( 18 )
+material/0 = ExtResource( 1 )
+
+[node name="Shelf_Small1" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.422509, 0.722039 )
+visible = false
+mesh = ExtResource( 19 )
+material/0 = ExtResource( 1 )
+
+[node name="Shelf_Small2" type="MeshInstance" parent="."]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0.444428 )
+visible = false
+mesh = ExtResource( 20 )
+material/0 = ExtResource( 1 )
+
+[node name="Drawer5" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.432025 )
+visible = false
+mesh = ExtResource( 21 )
 material/0 = ExtResource( 1 )

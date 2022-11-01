@@ -8,11 +8,29 @@
 
 (define velocity : Vector3 (Vector3 0 0 0))
 
-(define (user-move vel)
-  (set! velocity (Vector3 vel.x 0 vel.y))
-  (define mag (.length velocity))
-  (when (> mag MAX_SPEED)
-    (*set! velocity (/ MAX_SPEED mag))))
+(define (unnan x)
+  (if (is-nan x) 0 x))
+
+(define (user-move vel last-vel)
+  (+set! velocity
+         (Vector3 (- (unnan vel.x) (unnan last-vel.x))
+                  0
+                  (- (unnan vel.y) (unnan last-vel.y))))
+  (define len-sqr (.length-squared vel))
+  (when (or (is-inf len-sqr)
+            (is-nan len-sqr)
+            (len-sqr . < . 0.1))
+    (set! velocity (Vector3 0 0 0)))
+  null)
+
+(define (get-position)
+  global-transform.origin)
+
+(define (cap-vel vel)
+  (define mag (.length vel))
+  (if (> mag MAX_SPEED)
+      (* vel (/ MAX_SPEED mag))
+      vel))
 
 (define (_physics-process delta)
   (define speed (.length velocity))
@@ -20,8 +38,9 @@
     [(> speed 0)
      (set! (ref at "parameters/Motion/blend_amount")
            (/ speed MAX_SPEED))
-     (look-at (+ translation velocity) Vector3.UP)
-     (move-and-slide velocity)]
+     (define vel (cap-vel velocity))
+     (look-at (+ translation vel) Vector3.UP)
+     (move-and-slide vel)]
     [else
      (set! (ref at "parameters/Motion/blend_amount") 0)])
   null)

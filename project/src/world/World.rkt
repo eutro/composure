@@ -14,6 +14,9 @@
 (define (_enter-tree)
   (set! Game.world self))
 
+(define (_ready)
+  (.init $Env/EnvInside))
+
 (define (_exit-tree)
   (when (== Game.world self)
     (set! Game.world null))

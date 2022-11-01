@@ -239,7 +239,6 @@
   #:type (Type.new {0 {Types.TC_ADD true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (+ a.value b.value) (.get-type a)))
 
-
 (define-pure (sub a b)
   #:category "Maths" #:name "Sub"
   #:description ["Subtracts two numbers or vectors"]
@@ -254,6 +253,14 @@
   #:type (Type.new {0 {Types.TC_MUL true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (* a.value b.value) (.get-type a)))
 
+(define-pure (div a b)
+  #:category "Maths" #:name "Div"
+  #:description ["Divide two numbers or vectors (elementwise)"
+                 "Dividing by zero"]
+  #:short-name "/"
+  #:type (Type.new {0 {Types.TC_DIV true}} (Types.mono-bin-fun TV_A TV_A TV_A))
+  #:body (LambdaWrapper.new (* a.value b.value) (.get-type a)))
+
 (define-pure (scale a b)
   #:category "Maths" #:name "Scale Vector"
   #:description ["Scales a vector by a number"]
@@ -261,12 +268,34 @@
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-bin-fun Types.MON_NUM TV_A TV_A))
   #:body (LambdaWrapper.new (* a.value b.value) (.get-type b)))
 
+(define-pure (magnitude v)
+  #:category "Maths" #:name "Vector Magnitude"
+  #:description ["Gets the magnitude of a vector"]
+  #:short-name "||"
+  #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-fun TV_A Types.MON_NUM))
+  #:body (wrap-num (.length v.value)))
+
+(define-pure (normalise v)
+  #:category "Maths" #:name "Normalise"
+  #:description ["Normalise a vector"]
+  #:short-name "||||"
+  #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-fun TV_A TV_A))
+  #:body (wrap-num (.normalized v.value)))
+
 (define-pure (dot a b)
   #:category "Maths" #:name "Dot Product"
   #:description ["Computes the dot product of two vectors"]
   #:short-name "⋅"
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-bin-fun TV_A TV_A Types.MON_NUM))
   #:body (wrap-num (.dot a.value b.value)))
+
+(define-pure (cross a b)
+  #:category "Maths" #:name "Cross Product"
+  #:description ["Computes the cross product of two 3D vectors"
+                 "Note: Space is right-handed"]
+  #:short-name "×"
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_VEC3 Types.MON_VEC3))
+  #:body (wrap-num (.cross a.value b.value)))
 
 (define-pure (project-xz vec)
   #:category "Maths" #:name "Project XZ"
@@ -439,6 +468,58 @@
     (.finish a1 (ref s 0))
     (.finish a1 (ref s 1))))
 
+(define-construct (flip f b)
+  #:category "Combinators" #:name "Flip"
+  #:description ["Flips the arguments of a binary function"]
+  #:class-name Flip
+  #:short-name "F"
+  #:type
+  (Type.new
+   [0 1 2]
+   (Types.mono-fun
+    (Types.mono-bin-fun TV_A TV_B TV_C)
+    (Types.mono-bin-fun TV_B TV_A TV_C)))
+  #:body
+  (text-preview "F''")
+  (cached-type (Values.auto-type Values.VAL_FLIP [f b]))
+  (define (apply a)
+    (.apply (.apply f a) b)))
+
+(define-construct (uncurry f)
+  #:category "Combinators" #:name "Uncurry"
+  #:description ["Converts a binary function into a unary function"
+                 "accepting a pair as its argument"]
+  #:class-name Uncurry
+  #:short-name "UCr"
+  #:type
+  (Type.new
+   [0 1 2]
+   (Types.mono-fun
+    (Types.mono-bin-fun TV_A TV_B TV_C)
+    (Types.mono-fun (Types.mono-pair TV_A TV_B) TV_C)))
+  #:body
+  (text-preview "UCr'")
+  (cached-type (Values.auto-type Values.VAL_UNCURRY [f]))
+  (define (apply pair)
+    (.apply (.apply f pair.car) pair.cdr)))
+
+(define-construct (curry f a)
+  #:category "Combinators" #:name "Curry"
+  #:description ["Converts a unary function of a pair to a binary function"]
+  #:class-name Curry
+  #:short-name "Cr"
+  #:type
+  (Type.new
+   [0 1 2]
+   (Types.mono-fun
+    (Types.mono-fun (Types.mono-pair TV_A TV_B) TV_C)
+    (Types.mono-bin-fun TV_A TV_B TV_C)))
+  #:body
+  (text-preview "Cr''")
+  (cached-type (Values.auto-type Values.VAL_CURRY [f a]))
+  (define (apply b)
+    (.apply f (Cons.new a b))))
+
 (define-construct (s f g) ;; λf g x.(f x)(g x)
   #:category "Combinators" #:name "S Combinator"
   #:class-name S
@@ -502,12 +583,15 @@
   #:class-name Move
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_UNIT))
   #:preview (.create TextPreview "mv")
-  #:start () null
+  #:start () [(Vector2 0 0)]
   #:step (x s)
-  (Game.world.player.user-move (.-value x))
+  (define last-move (ref s 0))
+  (define cur-move x.value)
+  (set! (ref s 0) cur-move)
+  (Game.world.player.user-move cur-move last-move)
   Values.VAL_UNIT
   #:finish (s)
-  (Game.world.player.user-move (Vector2 0 0))
+  (Game.world.player.user-move (Vector2 0 0) (ref s 0))
   null)
 
 (define-action (prn x)
@@ -529,7 +613,7 @@
   #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_VEC3))
   #:preview (.create TextPreview "@p")
   #:start () null
-  #:step (_x _s) (Values.wrap-vec3 Game.world.player.transform.origin)
+  #:step (_x _s) (Values.wrap-vec3 (.get-position Game.world.player))
   #:finish (_s) null)
 
 (define-action (get-mouse-posn _u)

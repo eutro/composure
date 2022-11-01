@@ -35,14 +35,15 @@
 (define TC_ADD (TypeClass.new "Add"))
 (define TC_SUB (TypeClass.new "Sub"))
 (define TC_MUL (TypeClass.new "Mul"))
+(define TC_DIV (TypeClass.new "Div"))
 (define TC_VEC (TypeClass.new "Vec"))
 
 ;; Wrapper {
 ;;   value: T
 ;; }
-(define-type (num) #:name "Num" #:classes TC_ADD TC_SUB TC_MUL)
-(define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_VEC)
-(define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_VEC)
+(define-type (num) #:name "Num" #:classes TC_ADD TC_SUB TC_MUL TC_DIV)
+(define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC)
+(define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC)
 (define-type (ray) #;"T = {origin: Vec3; direction: Vec3}" #:name "Ray")
 (define-type (plane) #;"T = {normal: Vec3; distance: Num}" #:name "Plane")
 

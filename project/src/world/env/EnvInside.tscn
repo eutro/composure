@@ -1,0 +1,22 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
+[ext_resource path="res://src/world/env/EnvInside.gd" type="Script" id=2]
+[ext_resource path="res://src/world/gen/rooms/inside/Origin.tres" type="Resource" id=3]
+[ext_resource path="res://src/world/gen/rooms/inside/FirstCorridor.tres" type="Resource" id=4]
+[ext_resource path="res://src/world/gen/rooms/inside/Corridor.tres" type="Resource" id=5]
+
+[node name="EnvInside" type="Spatial"]
+script = ExtResource( 2 )
+rooms = {
+"corridor": ExtResource( 5 ),
+"first_corridor": ExtResource( 4 ),
+"origin": ExtResource( 3 )
+}
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource( 1 )
+cell_center_y = false
+__meta__ = {
+"_editor_clip_": 0
+}
