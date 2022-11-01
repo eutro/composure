@@ -1,7 +1,8 @@
 #lang gdlisp
 
 (class-name RoomPlacer)
-(require "../../macros.rkt")
+(require "../../macros.rkt"
+         threading)
 
 (defrecord Anchor
   ([pos : Vector2]
@@ -122,4 +123,7 @@
       (define xf-dir (project-xz (xf.basis.xform (unproject-xz anchor.dir))))
       (set! (ref node.anchors (Anchor.new xf-pos anchor.type xf-dir))
             true)))
-  (.add-child gridmap (.instance room.entities)))
+  (define entities (.instance room.entities))
+  (fset! entities.transform.basis ~> (* xf.basis _))
+  (fset! entities.transform.origin + (* gridmap.cell-size xf.origin))
+  (.add-child gridmap entities))

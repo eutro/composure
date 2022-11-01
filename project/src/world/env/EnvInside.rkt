@@ -42,5 +42,17 @@
    rooms.origin
    null))
 
+(define (export String) save-to-file)
+
 (define (_physics-process _delta)
-  (ensure-neighbours))
+  (ensure-neighbours)
+  (when (!= null save-to-file)
+    (define pck (.new PackedScene))
+    (.pack pck self)
+    (walk-children self)
+    (ResourceSaver.save save-to-file pck)))
+
+(define (walk-children node)
+  (for ([child (.get-children node)])
+    (set! child.owner self)
+    (walk-children child)))

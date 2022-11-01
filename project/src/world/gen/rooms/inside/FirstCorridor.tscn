@@ -39,4 +39,4 @@ type = 1
 
 [node name="OmniLight" type="OmniLight" parent="Entities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.936998, 3.44741, 1.16829 )
-omni_range = 6.59181
+omni_range = 9.95766
