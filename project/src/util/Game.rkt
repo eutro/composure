@@ -4,6 +4,7 @@
 
 (define keys : KeyBinder (.new KeyBinder))
 (define world null)
+(define ui null)
 
 (define user-defs
   [["" null]

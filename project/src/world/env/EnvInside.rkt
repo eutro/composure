@@ -6,6 +6,8 @@
 (define onready placer (RoomPlacer.new gridmap))
 (require threading)
 
+(define (export NodePath) player)
+
 (define (export Dictionary) rooms)
 
 (define onready anchor-types : Array #;[[RoomSet]]
@@ -19,13 +21,16 @@
      [1.0])]
    ;; 2
    [(RoomPlacer.RoomSet.new
-     [rooms.corridor]
+     [rooms.room1 rooms.room2]
+     [0.5 0.5])
+    (RoomPlacer.RoomSet.new
+     [rooms.roomtiny]
      [1.0])]])
 
 (define (ensure-neighbours)
   (define node
-    (~> Game.world.player
-        .get-position
+    (~> (get-node player)
+        .-global-translation
         gridmap.world-to-map
         placer.project-xz
         placer.get-node-at))
@@ -42,10 +47,14 @@
    rooms.origin
    null))
 
+(define (_physics-process _delta)
+  (maybe-dbg-save)
+  (ensure-neighbours)
+  null)
+
 (define (export String) save-to-file)
 
-(define (_physics-process _delta)
-  (ensure-neighbours)
+(define (maybe-dbg-save)
   (when (!= null save-to-file)
     (define pck (.new PackedScene))
     (.pack pck self)

@@ -2,7 +2,8 @@
 
 (extends Node)
 
-(require "../../macros.rkt")
+(require "../../macros.rkt"
+         threading)
 
 (begin-escape
   (require (only-in racket/base
@@ -163,7 +164,11 @@
   (assert (.-is-ok res))
   (.-value res))
 
-(defrecord Cons (car cdr))
+(defrecord Cons (car cdr)
+  (define (_to-string)
+    (+ (str car)
+       " : "
+       (str cdr))))
 
 (defrecord Partial
   ([name : String]
@@ -326,15 +331,16 @@
 (define-pure (intersect-plane plane ray)
   #:category "Maths" #:name "Intersect Plane"
   #:description ["Finds the intersection of a plane and a ray"
-                 "Returns (0, 0, 0) if they do not intersect"]
+                 "Returns Nothing if they do not intersect"]
   #:short-name "i"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_PLANE Types.MON_RAY Types.MON_VEC3))
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_PLANE Types.MON_RAY (Types.mono-maybe Types.MON_VEC3)))
   #:body
   (let ([value (.intersects-ray plane.value ray.value.origin ray.value.direction)])
-    (wrap-vec3
+    (LambdaWrapper.new
      (if (== null value)
-         (Vector3 0 0 0)
-         value))))
+         null
+         (wrap-vec3 value))
+     (Type.new [] (Types.mono-maybe Types.MON_VEC3)))))
 
 (begin-escape
   (define-syntax (define-compose stx)
@@ -466,7 +472,7 @@
     (.apply (.apply f b) c))
   (define (finish s)
     (.finish a1 (ref s 0))
-    (.finish a1 (ref s 1))))
+    (.finish a2 (ref s 1))))
 
 (define-construct (flip f b)
   #:category "Combinators" #:name "Flip"
@@ -598,22 +604,20 @@
   #:category "Actions" #:name "Print"
   #:description ["Show the value on screen, and return it"]
   #:class-name Print
-  #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_UNIT))
+  #:type (Type.new [0] (Types.mono-action Values.TV_A Values.TV_A))
   #:preview (.create TextPreview "prn")
-  #:start () null
-  #:step (x _s)
-  (print (if (is x LambdaWrapper) x.value "<λ>"))
-  x
-  #:finish (_s) null)
+  #:start () (Game.ui.add-printer)
+  #:step (x s) (s.set-text (str x)) x
+  #:finish (s) (.queue-free s) null)
 
 (define-action (get-player-posn _u)
   #:category "Actions" #:name "Player Position"
-  #:description ["Get the position of the player in the world"]
+  #:description ["Get the eye position of the player in the world"]
   #:class-name GetPlayerPosn
   #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_VEC3))
   #:preview (.create TextPreview "@p")
   #:start () null
-  #:step (_x _s) (Values.wrap-vec3 (.get-position Game.world.player))
+  #:step (_x _s) (Values.wrap-vec3 Game.world.camera.target.global-translation)
   #:finish (_s) null)
 
 (define-action (get-mouse-posn _u)
@@ -651,21 +655,19 @@
 
 (define-action (psctxzprtp vec) ;; Project Screen Coordinate to XZ Plane Relative to Player
   #:category "Actions" #:name "PSCtXZPRtP"
-  #:description ["Project a screen coordinate to the XZ plane (floor), relative to the player"]
+  #:description ["Project a screen coordinate to the XZ plane at eye height, relative to the player"]
   #:class-name PSCtXZPRtP
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_VEC2))
   #:preview (.create TextPreview ":)")
   #:start () null
   #:step (vec _s)
   (define denorm (InputKeyMouse.denormalise-pos vec.value))
-  (define plane (Plane Vector3.UP 0))
-  (define intersection
-    (.intersects-ray
-     plane
-     (Game.world.camera.project-ray-origin denorm)
-     (Game.world.camera.project-ray-normal denorm)))
+  (define plane (Plane Vector3.UP Game.world.camera.target.global-translation.y))
+  (define ray-origin (Game.world.camera.project-ray-origin denorm))
+  (define ray-normal (Game.world.camera.project-ray-normal denorm))
+  (define intersection (.intersects-ray plane ray-origin ray-normal))
   (when (== null intersection)
-    (set! intersection (Vector3 0 0 0)))
+    (set! intersection (+ ray-origin (* ray-normal 100))))
   (-set! intersection Game.world.player.transform.origin)
   (Values.wrap-vec2 (Vector2 intersection.x intersection.z))
   #:finish (_s) null)
@@ -692,5 +694,55 @@
   (text-preview "()"))
 (define-global-val unit (.new Unit)
   #:category "Misc" #:name "Unit")
+
+(define-pure (unmaybe mb ifabs ifpres)
+  #:category "Misc" #:name "Unmaybe"
+  #:description ["Matches on a maybe value, applying the function if present, or returning the default value"]
+  #:short-name "!M"
+  #:type
+  (Type.new
+   [0 1]
+   (Types.mono-fun
+    (Types.mono-maybe TV_A)
+    (Types.mono-bin-fun
+     TV_B
+     (Types.mono-fun TV_A TV_B)
+     TV_B)))
+  #:body
+  (if (== null mb.value)
+      ifabs
+      (ifpres.apply mb.value)))
+
+(define-pure (unray ray f)
+  #:category "Misc" #:name "Unray"
+  #:description ["Deconstructs a ray, applying the function to the origin and direction, in that order"]
+  #:short-name "!R"
+  #:type
+  (Type.new
+   [0]
+   (Types.mono-bin-fun
+    Types.MON_RAY
+    (Types.mono-bin-fun Types.MON_VEC3 Types.MON_VEC3 TV_A)
+    TV_A))
+  #:body
+  (~> f
+      (.apply (Values.wrap-vec3 ray.value.origin))
+      (.apply (Values.wrap-vec3 ray.value.direction))))
+
+(define-pure (unplane plane f)
+  #:category "Misc" #:name "Unplane"
+  #:description ["Deconstructs a plane, applying the function to the normal and distance, in that order"]
+  #:short-name "!Π"
+  #:type
+  (Type.new
+   [0]
+   (Types.mono-bin-fun
+    Types.MON_PLANE
+    (Types.mono-bin-fun Types.MON_VEC3 Types.MON_NUM TV_A)
+    TV_A))
+  #:body
+  (~> f
+      (.apply (Values.wrap-vec3 plane.value.normal))
+      (.apply (Values.wrap-num plane.value.d))))
 
 (emit-categories! "Maths" "Combinators" "Actions" "Misc")

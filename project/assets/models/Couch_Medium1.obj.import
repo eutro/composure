@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Couch_Medium1.obj-58a1b3c509232674fa6fd5c33d06c632.mesh"
+
+[deps]
+
+files=[ "res://.import/Couch_Medium1.obj-58a1b3c509232674fa6fd5c33d06c632.mesh" ]
+
+source_file="res://assets/models/Couch_Medium1.obj"
+dest_files=[ "res://.import/Couch_Medium1.obj-58a1b3c509232674fa6fd5c33d06c632.mesh", "res://.import/Couch_Medium1.obj-58a1b3c509232674fa6fd5c33d06c632.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286

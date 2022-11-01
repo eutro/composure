@@ -8,18 +8,19 @@
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
 player_path = NodePath("Player")
-camera_path = NodePath("GameCamera/Camera")
+camera_path = NodePath("GameCamera")
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 
-[node name="OmniLight" type="OmniLight" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.51667, 0 )
-omni_range = 20.764
+[node name="CameraTarget" type="Spatial" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.39172, 0 )
 
 [node name="Env" type="Spatial" parent="."]
 
 [node name="EnvInside" parent="Env" instance=ExtResource( 3 )]
+player = NodePath("../../Player")
 
 [node name="GameCamera" parent="." instance=ExtResource( 4 )]
-transform = Transform( 0.866025, -0.469846, 0.17101, 0, 0.34202, 0.939693, -0.5, -0.813798, 0.296198, 0, 0, 0 )
-target_path = NodePath("../Player")
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3371, 7.58458, 1.52087 )
+current = true
+target_path = NodePath("../Player/CameraTarget")

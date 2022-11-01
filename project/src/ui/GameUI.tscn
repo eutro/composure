@@ -1,12 +1,14 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/ui/MountableNode.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/ui/Composer.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/textures/icon.svg" type="Texture" id=3]
 [ext_resource path="res://src/ui/GameUI.gd" type="Script" id=4]
+[ext_resource path="res://src/ui/ValuePrinter.tscn" type="PackedScene" id=5]
 
 [node name="GameUI" type="CanvasLayer"]
 script = ExtResource( 4 )
+Printer = ExtResource( 5 )
 
 [node name="HUD" type="Control" parent="."]
 anchor_right = 1.0
@@ -40,6 +42,11 @@ mouse_default_cursor_shape = 2
 texture = ExtResource( 3 )
 expand = true
 stretch_mode = 6
+
+[node name="Printers" type="VBoxContainer" parent="HUD"]
+anchor_bottom = 1.0
+margin_right = 343.0
+alignment = 2
 
 [node name="Composer" parent="." instance=ExtResource( 1 )]
 scene = ExtResource( 2 )

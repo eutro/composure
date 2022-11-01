@@ -45,7 +45,10 @@
 (define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC)
 (define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC)
 (define-type (ray) #;"T = {origin: Vec3; direction: Vec3}" #:name "Ray")
-(define-type (plane) #;"T = {normal: Vec3; distance: Num}" #:name "Plane")
+(define-type (plane) #:name "Plane")
+
+;; Option { value: X (nullable) }
+(define-type (maybe x) #:name "Maybe")
 
 ;; Unit {}
 (define-type (unit) #:name "Unit")

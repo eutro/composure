@@ -2,6 +2,7 @@
 
 tool
 (extends Spatial)
+(require threading)
 
 (define (export NodePath) gridmap)
 (define (export NodePath) anchors)
@@ -41,7 +42,7 @@ tool
     (#%gdscript "return null"))
 
   ;; this is a weird hack, but here I'm going to pack this,
-  ;; instance it, and harvest the node from that
+  ;; instance it, and harvest the nodes from that
   (define self-packed (PackedScene.new))
   (define err (.pack self-packed self))
   (when (!= OK err)
@@ -49,7 +50,7 @@ tool
     (#%gdscript "return null"))
 
   (define self-dup (.instance self-packed))
-  (define entities-packed (.pack-entities self-dup entities))
+  (define entities-packed (.pack-entities self-dup anchors))
   (.free self-dup)
   entities-packed)
 
@@ -59,26 +60,33 @@ tool
   (define ret {})
   (for ([tile tiles])
     (define x (int tile.x))
-    (define y (int tile.y))
+    #;(define y (int tile.y))
     (define z (int tile.z))
-    (set! (ref ret tile)
+    (set! (ref ret (Vector2 x z)) true
+          #;
           [(gm.get-cell-item x y z)
            (gm.get-cell-item-orientation x y z)]))
-  ret)
+  (.keys ret))
 
-(define (pack-entities e-path)
+(define (pack-entities anchors)
   (define pck (PackedScene.new))
-  (define entities (get-node e-path))
-  (walk-children entities entities)
-  (define err (.pack pck entities))
+  (remove-child (get-node anchors))
+  (walk-children self self)
+  (define err (.pack pck self))
   (cond
-    [(== OK err) pck]
+    [(== OK err)
+     (define inst (.instance pck))
+     (print "Inst tree:")
+     (.print-tree inst)
+     (.free inst)
+     pck]
     [else
      (push-error (+ "Failed to pack entities: " (str err)))
      null]))
 
 (define (walk-children new-owner node)
-  (when (== node.owner self)
+  (when (or (== node.owner self)
+            (== node.owner null))
     (when (!= node new-owner)
       (set! node.owner new-owner))
     (for ([child (.get-children node)])

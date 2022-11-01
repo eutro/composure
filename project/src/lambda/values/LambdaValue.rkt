@@ -15,4 +15,6 @@
 
 (define (create-preview) : Control
   ;; create a preview for this term
-  (.create TextPreview "λ?"))
+  (.create TextPreview (str self)))
+
+(define (_to-string) "λ?")

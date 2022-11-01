@@ -5,25 +5,27 @@
 [ext_resource path="res://src/entities/player/Player.gd" type="Script" id=3]
 [ext_resource path="res://assets/materials/Palette.material" type="Material" id=4]
 
-[sub_resource type="AnimationNodeAnimation" id=2]
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "Walk"
 
-[sub_resource type="AnimationNodeAnimation" id=3]
+[sub_resource type="AnimationNodeAnimation" id=9]
 animation = "Idle"
 
-[sub_resource type="AnimationNodeBlend2" id=4]
+[sub_resource type="AnimationNodeBlend2" id=10]
 
-[sub_resource type="AnimationNodeBlendTree" id=1]
+[sub_resource type="AnimationNodeBlendTree" id=11]
 graph_offset = Vector2( -566.839, -10.3495 )
-nodes/Animation/node = SubResource( 3 )
+nodes/Animation/node = SubResource( 9 )
 nodes/Animation/position = Vector2( -160, 40 )
-"nodes/Animation 2/node" = SubResource( 2 )
+"nodes/Animation 2/node" = SubResource( 8 )
 "nodes/Animation 2/position" = Vector2( -160, 220 )
-nodes/Motion/node = SubResource( 4 )
+nodes/Motion/node = SubResource( 10 )
 nodes/Motion/position = Vector2( 40, 80 )
 node_connections = [ "output", 0, "Motion", "Motion", 0, "Animation", "Motion", 1, "Animation 2" ]
 
 [sub_resource type="CapsuleShape" id=5]
+radius = 0.61471
+height = 1.71039
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 3 )
@@ -35,7 +37,7 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0
 material/0 = ExtResource( 4 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource( 1 )
+tree_root = SubResource( 11 )
 anim_player = NodePath("../Model/AnimationPlayer")
 active = true
 parameters/Motion/blend_amount = 0.0

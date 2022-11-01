@@ -14,3 +14,6 @@
 
 (define (create-preview)
   (.create TextPreview (str value)))
+
+(define (_to-string)
+  (str value))
