@@ -1,0 +1,2 @@
+﻿license: Freeware
+link: https://www.fontspace.com/latin-modern-math-font-f86521

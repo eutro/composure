@@ -4,20 +4,29 @@
 
 (begin-escape
   (require (only-in racket/base define-syntax)
-           (for-syntax racket racket/syntax syntax/parse))
+           (for-syntax racket racket/syntax syntax/parse gdlisp/utils))
   (define-syntax (define-type stx)
     (syntax-parse stx
       [(_ (code-name:id arg-name:id ...)
           #:name name:str
           {~optional {~and #:infix {~bind [infix #'true]}}}
-          {~optional {~seq #:classes tc:expr ...}})
+          {~optional {~seq #:classes tc:expr ...}}
+          #:fmt (v:id) fmt-body:expr ...)
        (define arity (length (syntax->list #'(arg-name ...))))
-       (define upcase-name (string-upcase (symbol->string (syntax-e #'code-name))))
+       (define code-name-str (mangle (symbol->string (syntax-e #'code-name))))
+       (define upcase-name (string-upcase code-name-str))
        (define ctor-id (format-id stx "CTOR_~a" upcase-name))
+       (define fmt-id (format-id stx "fmt_~a" code-name-str))
+       (define fmt-str (symbol->string (syntax-e fmt-id)))
        (quasisyntax/loc stx
          (begin
+           (define (#,fmt-id v) fmt-body ...)
            (define #,ctor-id :=
-             (TypeCtor.new name #,arity {~? infix false} {{~? {~@ {~@ tc true} ...}}}))
+             (TypeCtor.new name
+                           #,arity
+                           {~? infix false}
+                           {{~? {~@ {~@ tc true} ...}}}
+                           (funcref self #,fmt-str)))
            #,(cond
                [(= 0 arity)
                 (define mon-id (format-id stx "MON_~a" upcase-name))
@@ -41,22 +50,23 @@
 ;; Wrapper {
 ;;   value: T
 ;; }
-(define-type (num) #:name "Num" #:classes TC_ADD TC_SUB TC_MUL TC_DIV)
-(define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC)
-(define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC)
-(define-type (ray) #;"T = {origin: Vec3; direction: Vec3}" #:name "Ray")
-(define-type (plane) #:name "Plane")
+(define-type (num) #:name "Num" #:classes TC_ADD TC_SUB TC_MUL TC_DIV #:fmt (v) (TextPreview.create (str v)))
+(define-type (bool) #:name "Bool" #:classes #:fmt (v) (TextPreview.create (if v "⊤" "⊥")))
+(define-type (vec3) #:name "Vec3" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC #:fmt (v) (VectorPreview.create v))
+(define-type (vec2) #:name "Vec2" #:classes TC_ADD TC_SUB TC_MUL TC_DIV TC_VEC #:fmt (v) (VectorPreview.create v))
+(define-type (ray) #;"T = {origin: Vec3; direction: Vec3}" #:name "Ray" #:fmt (v) (TextPreview.create "Ray"))
+(define-type (plane) #:name "Plane" #:fmt (v) (TextPreview.create "Pln"))
 
 ;; Option { value: X (nullable) }
-(define-type (maybe x) #:name "Maybe")
+(define-type (maybe x) #:name "Maybe" #:fmt (v) (if (== null v) (TextPreview.create "Nil") (.create-preview v)))
 
 ;; Unit {}
-(define-type (unit) #:name "Unit")
+(define-type (unit) #:name "Unit" #:fmt (_v) null)
 
 ;; Fun<A, B> {
 ;;   apply(x: A): B
 ;; }
-(define-type (fun arg ret) #:name "->" #:infix)
+(define-type (fun arg ret) #:name "->" #:infix #:fmt (_v) null)
 
 ;; Action<A, B> {
 ;;   type State: !Lambda
@@ -64,13 +74,13 @@
 ;;   step(x: A, s: State): B
 ;;   finish(s: State)
 ;; }
-(define-type (action arg ret) #:name "~>" #:infix)
+(define-type (action arg ret) #:name "~>" #:infix #:fmt (_v) null)
 
 ;; Pair<A, B> {
 ;;   car: A
 ;;   cdr: B
 ;; }
-(define-type (pair lhs rhs) #:name ":" #:infix)
+(define-type (pair lhs rhs) #:name ":" #:infix #:fmt (v) (TextPreview.create "Pair"))
 
 (define (mono-bin-fun arg1 arg2 ret)
   (mono-fun arg1 (mono-fun arg2 ret)))

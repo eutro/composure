@@ -6,12 +6,18 @@
 (define world null)
 (define ui null)
 
-(define user-defs
-  [["" null]
-   ["" null]
-   ["" null]
-   ["" null]
-   ["" null]])
+(begin-escape
+  (require (only-in racket/base define-syntax)
+           (for-syntax racket syntax/parse))
+  (define-syntax (repeat stx)
+    (syntax-parse stx
+      [(_ n:integer expr)
+       (with-syntax ([(repetitions ...)
+                      (for/list ([i (in-range (syntax-e #'n))])
+                        #'expr)])
+         (syntax/loc stx [repetitions ...]))])))
+
+(define user-defs (repeat 100 ["" null]))
 
 (signal copy-source-changed)
 (define copy-src)

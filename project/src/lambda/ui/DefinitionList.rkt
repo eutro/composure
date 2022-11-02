@@ -36,37 +36,9 @@
     (+set! i 1))
 
   (for ([category Values.CATEGORIES])
-    (add-entry-list category (ref Values.CATEGORIES category) false))
-
-  (for ([child (.get-children list-node)])
-    (connect-for-focus child child)))
-
-(define (connect-for-focus node imm-child)
-  (when (!= (.get node "focus_mode") FOCUS_NONE)
-    (.connect node "focus_entered" self "_on_Node_focused" [imm-child] CONNECT_REFERENCE_COUNTED))
-  (for ([child (.get-children node)])
-    (when (is child Control)
-      (connect-for-focus child imm-child))))
+    (add-entry-list category (ref Values.CATEGORIES category) false)))
 
 (define (_on_Entry_entry_changed name value custom-idx)
   (define user-entry (ref Game.user-defs custom-idx))
   (set! (ref user-entry 0) name)
   (set! (ref user-entry 1) value))
-
-(define (_on_Node_focused node)
-  (define scroll-pos scroll-node.scroll-vertical)
-  (define rect-pos node.rect-position.y)
-  (define min-visible scroll-pos)
-  (define max-visible (- (+ scroll-pos scroll-node.rect-size.y)
-                         node.rect-size.y))
-
-  (define is-in-bounds
-    (and (min-visible . <= . rect-pos)
-         (rect-pos . <= . max-visible)))
-
-  (when (not is-in-bounds)
-    (define scroll-delta
-      (if (rect-pos . < . min-visible)
-          (- rect-pos min-visible)
-          (- rect-pos max-visible)))
-    (+set! scroll-node.scroll-vertical scroll-delta)))

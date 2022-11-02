@@ -1,7 +1,11 @@
-[gd_resource type="Theme" load_steps=40 format=2]
+[gd_resource type="Theme" load_steps=49 format=2]
 
 [ext_resource path="res://assets/themes/FlatUI/UIpack_vector.svg" type="Texture" id=1]
 [ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Bold.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-BoldItalic.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Italic.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Thin.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="DynamicFont" id=23]
 use_mipmaps = true
@@ -158,6 +162,29 @@ margin_bottom = 13.9025
 expand_margin_top = 10.0
 expand_margin_bottom = 10.0
 
+[sub_resource type="DynamicFont" id=39]
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=43]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=40]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=41]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=42]
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 2 )
+
 [sub_resource type="StyleBoxTexture" id=38]
 texture = ExtResource( 1 )
 region_rect = Rect2( 0, 310, 100, 100 )
@@ -182,7 +209,7 @@ margin_right = 13.3469
 margin_top = 13.3469
 margin_bottom = 11.2935
 
-[sub_resource type="Image" id=39]
+[sub_resource type="Image" id=44]
 data = {
 "data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
 "format": "LumAlpha8",
@@ -194,7 +221,7 @@ data = {
 [sub_resource type="ImageTexture" id=36]
 flags = 4
 flags = 4
-image = SubResource( 39 )
+image = SubResource( 44 )
 size = Vector2( 16, 16 )
 
 [sub_resource type="StyleBoxTexture" id=37]
@@ -327,6 +354,23 @@ PopupMenu/styles/labeled_separator_right = null
 PopupMenu/styles/panel = SubResource( 30 )
 PopupMenu/styles/panel_disabled = null
 PopupMenu/styles/separator = null
+RichTextLabel/colors/default_color = Color( 0, 0, 0, 1 )
+RichTextLabel/colors/font_color_selected = Color( 0, 0, 0, 1 )
+RichTextLabel/colors/font_color_shadow = Color( 0, 0, 0, 1 )
+RichTextLabel/colors/selection_color = Color( 0, 0, 0, 1 )
+RichTextLabel/constants/line_separation = 0
+RichTextLabel/constants/shadow_as_outline = 0
+RichTextLabel/constants/shadow_offset_x = 0
+RichTextLabel/constants/shadow_offset_y = 0
+RichTextLabel/constants/table_hseparation = 0
+RichTextLabel/constants/table_vseparation = 0
+RichTextLabel/fonts/bold_font = SubResource( 39 )
+RichTextLabel/fonts/bold_italics_font = SubResource( 43 )
+RichTextLabel/fonts/italics_font = SubResource( 40 )
+RichTextLabel/fonts/mono_font = SubResource( 41 )
+RichTextLabel/fonts/normal_font = SubResource( 42 )
+RichTextLabel/styles/focus = null
+RichTextLabel/styles/normal = null
 TabContainer/colors/font_color_bg = Color( 0.19, 0.19, 0.19, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.1, 0.1, 0.1, 0.2 )
 TabContainer/colors/font_color_fg = Color( 0.06, 0.06, 0.06, 1 )

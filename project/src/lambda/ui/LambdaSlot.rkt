@@ -7,6 +7,7 @@
 
 (define (export bool) editable true)
 (define (export bool) remove-on-drag true)
+(define (export bool) play-sound true)
 
 (signal term_changed #;term)
 
@@ -49,24 +50,32 @@
   (and editable (is data LambdaValue) (_check-term data)))
 
 (define (drop-data _posn data)
-  (set-term data))
+  (set-term data)
+  (play-sound))
+
+(define (play-sound)
+  (when play-sound
+    (.play $Sound)))
 
 (define (_gui-input evt)
   (cond
-    [(.is-action evt "ui_pick")
+    [(and (.is-action evt "ui_pick") evt.pressed)
      (Game.set-copy-source (get-path))
      (.show $Selected)
      (.connect Game "copy_source_changed" self "_on_Game_deselect")
      (.connect self "tree_exited" self "_on_tree_exited")
+     (play-sound)
      (accept-event)]
-    [(and editable (.is-action evt "ui_drop"))
+    [(and editable (.is-action evt "ui_drop") evt.pressed)
      (when (!= null Game.copy-src)
        (define node (get-node-or-null Game.copy-src))
        (when (!= null node)
          (set-term (.-term node))
+         (play-sound)
          (accept-event)))]
-    [(and editable (.is-action evt "ui_delete"))
+    [(and editable (.is-action evt "ui_delete") evt.pressed)
      (set-term null)
+     (play-sound)
      (accept-event)])
   null)
 

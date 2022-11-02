@@ -13,7 +13,7 @@
 (define (get-type) type)
 
 (define (create-preview)
-  (.create TextPreview (str value)))
+  (type.mono.ctor.create-preview value))
 
 (define (_to-string)
   (str value))

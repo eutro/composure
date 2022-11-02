@@ -82,7 +82,7 @@
     (syntax-parse stx
       [(_ (name:id arg:id)
           {~optional category:category-clause}
-          {~optional {~seq #:description [desc:str ...]}}
+          {~optional {~seq #:description [desc:expr ...]}}
           #:class-name cn:id
           #:type {~seq type:expr ...+}
           #:preview preview:expr
@@ -105,7 +105,7 @@
     (syntax-parse stx
       [(_ (name:id args:id ...)
           {~optional category:category-clause}
-          {~optional {~seq #:description [desc:str ...]}}
+          {~optional {~seq #:description [desc:expr ...]}}
           #:class-name class-name:id
           #:short-name short-name:str
           #:type type:expr
@@ -135,7 +135,7 @@
     (syntax-parse stx
       [(_ (name:id args:id ...)
           {~optional category:category-clause}
-          {~optional {~seq #:description [desc:str ...]}}
+          {~optional {~seq #:description [desc:expr ...]}}
           #:short-name short-name:str
           #:type type:expr ...+
           #:body
@@ -223,20 +223,6 @@
 
 (reset-categories!)
 
-(define-pure (vec2 x y)
-  #:category "Maths" #:name "Vector2"
-  #:description ["Vector2 x y : Constructs a 2D vector from components"]
-  #:short-name "v2"
-  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC2))
-  #:body (wrap-vec2 (Vector2 x.value y.value)))
-(define-pure (vec3 x y z)
-  #:category "Maths" #:name "Vector3"
-  #:description ["Vector3 x y z : Constructs a 3D vector from components"
-                 "Note: Y is considered \"up\""]
-  #:short-name "v3"
-  #:type (Type.new [] (Types.mono-fun Types.MON_NUM (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC3)))
-  #:body (wrap-vec3 (Vector3 x.value y.value z.value)))
-
 (define-pure (add a b)
   #:category "Maths" #:name "Add"
   #:description ["Adds two numbers or vectors"]
@@ -245,26 +231,71 @@
   #:body (LambdaWrapper.new (+ a.value b.value) (.get-type a)))
 
 (define-pure (sub a b)
-  #:category "Maths" #:name "Sub"
+  #:category "Maths" #:name "Subtract"
   #:description ["Subtracts two numbers or vectors"]
   #:short-name "-"
   #:type (Type.new {0 {Types.TC_SUB true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (- a.value b.value) (.get-type a)))
 
 (define-pure (mul a b)
-  #:category "Maths" #:name "Mul"
+  #:category "Maths" #:name "Multiply"
   #:description ["Multiplies two numbers or vectors (elementwise)"]
   #:short-name "*"
   #:type (Type.new {0 {Types.TC_MUL true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (* a.value b.value) (.get-type a)))
 
+(define (zero-div a x)
+  (match (typeof x)
+    [(or TYPE_INT TYPE_REAL) (if (!= x 0) (/ a x) 0)]
+    [TYPE_VECTOR2 (Vector2 (zero-div a.x x.x) (zero-div a.y x.y))]
+    [TYPE_VECTOR3 (Vector3 (zero-div a.x x.x) (zero-div a.y x.y) (zero-div a.z x.z))]
+    [_ (push-error "What the genuine fuck")]))
+
 (define-pure (div a b)
-  #:category "Maths" #:name "Div"
-  #:description ["Divide two numbers or vectors (elementwise)"
-                 "Dividing by zero"]
+  #:category "Maths" #:name "Divide"
+  #:description ["Divides two numbers or vectors (elementwise)"
+                 "Dividing by zero results in zero in all cases"]
   #:short-name "/"
   #:type (Type.new {0 {Types.TC_DIV true}} (Types.mono-bin-fun TV_A TV_A TV_A))
-  #:body (LambdaWrapper.new (* a.value b.value) (.get-type a)))
+  #:body (LambdaWrapper.new (zero-div a.value b.value) (.get-type a)))
+
+(begin-escape
+  (define-syntax (emit-ops stx)
+    (syntax-parse stx
+      [(_ (name:id op:id {~optional opname:id} uname:str) ...)
+       (with-syntax* ([(op-str ...)
+                       (for/list ([o (in-syntax #'({~? opname op} ...))])
+                         (datum->syntax stx (symbol->string (syntax-e o))))]
+                      [(desc ...)
+                       (for/list ([unm (in-syntax #'(uname ...))]
+                                  [opstr (in-syntax #'(op-str ...))])
+                         (datum->syntax
+                          stx
+                          (string-append (syntax-e opstr)
+                                         " a b : Returns true if a is "
+                                         (string-downcase (syntax-e unm))
+                                         " b")))])
+         (syntax/loc stx
+           (begin
+             (define-pure (name a b)
+               #:category "Maths" #:name uname
+               #:description [desc]
+               #:short-name op-str
+               #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_BOOL))
+               #:body (LambdaWrapper.new (op a.value b.value) Types.TY_BOOL))
+             ...)))])))
+(emit-ops [lt < "Less than"]
+          [gt > "Greater than"]
+          [le <= "Less or Equal to"]
+          [ge >= "Greater or Equal to"]
+          [eq is_equal_approx == "Equal to"])
+
+(define-pure (_not x)
+  #:category "Misc" #:name "Not"
+  #:description ["Returns the inverse of a boolean"]
+  #:short-name "not"
+  #:type (Type.new [] (Types.mono-fun Types.MON_BOOL Types.MON_BOOL))
+  #:body (LambdaWrapper.new (not x.value) Types.MON_BOOL))
 
 (define-pure (scale a b)
   #:category "Maths" #:name "Scale Vector"
@@ -276,14 +307,14 @@
 (define-pure (magnitude v)
   #:category "Maths" #:name "Vector Magnitude"
   #:description ["Gets the magnitude of a vector"]
-  #:short-name "||"
+  #:short-name "|u|"
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-fun TV_A Types.MON_NUM))
   #:body (wrap-num (.length v.value)))
 
 (define-pure (normalise v)
   #:category "Maths" #:name "Normalise"
   #:description ["Normalise a vector"]
-  #:short-name "||||"
+  #:short-name "û"
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-fun TV_A TV_A))
   #:body (wrap-num (.normalized v.value)))
 
@@ -321,12 +352,33 @@
   #:type (Type.new [] (Types.mono-fun Types.MON_VEC3 Types.MON_VEC2))
   #:body (wrap-vec2 (Vector2 vec.value.y vec.value.z)))
 
+(define-pure (vec2 x y)
+  #:category "Maths" #:name "Vector2"
+  #:description ["Vector2 x y : Constructs a 2D vector from components"]
+  #:short-name "v2"
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC2))
+  #:body (wrap-vec2 (Vector2 x.value y.value)))
+(define-pure (vec3 x y z)
+  #:category "Maths" #:name "Vector3"
+  #:description ["Vector3 x y z : Constructs a 3D vector from components"
+                 "Note: Y is considered \"up\""]
+  #:short-name "v3"
+  #:type (Type.new [] (Types.mono-fun Types.MON_NUM (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC3)))
+  #:body (wrap-vec3 (Vector3 x.value y.value z.value)))
+
 (define-pure (plane normal distance)
   #:category "Maths" #:name "Plane"
   #:description ["Plane n d : Constructs a plane with normal n, d away from the origin"]
   #:short-name "Π"
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_NUM Types.MON_PLANE))
   #:body (LambdaWrapper.new (Plane (.normalized (.-value normal)) (.-value distance)) Types.TY_PLANE))
+
+(define-pure (ray origin direction)
+  #:category "Maths" #:name "Ray"
+  #:description ["Ray o d : Constructs a ray with origin o and direction d"]
+  #:short-name "R"
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_VEC3 Types.MON_RAY))
+  #:body (LambdaWrapper.new {"origin" origin.value "direction" direction.value} Types.TY_RAY))
 
 (define-pure (intersect-plane plane ray)
   #:category "Maths" #:name "Intersect Plane"
@@ -384,20 +436,22 @@
 
 (define-compose compose
   #:category "Combinators" #:name "Compose"
-  #:description ["Composes two functions, from left to right"]
+  #:description ["Composes two functions, from left to right"
+                 "Note: This is in the opposite direction to ∘"]
   #:class-name Compose
   #:short-name ">>"
-  #:finished-name ">>''"
+  #:finished-name "g∘f"
   #:mono-ctor Types.mono-fun
   #:body
   (define (apply x) (.apply g (.apply f x))))
 
 (define-compose composea
   #:category "Combinators" #:name "Compose Actions"
-  #:description ["Composes two actions, from left to right"]
+  #:description ["Composes two actions, from left to right"
+                 "Note: This is in the opposite direction to ∘"]
   #:class-name ComposeA
   #:short-name ">>>"
-  #:finished-name ">>>''"
+  #:finished-name "g♯∘f"
   #:mono-ctor Types.mono-action
   #:body
   (define (start) [(.start f) (.start g)])
@@ -411,7 +465,7 @@
   #:category "Combinators" #:name "Corrupt"
   #:description ["Creates an action from a pure function"]
   #:class-name Corrupt
-  #:short-name "♭"
+  #:short-name "η"
   #:type
   (Type.new
    [0 1]
@@ -423,7 +477,7 @@
    (define pure-ty (.get-type f))
    (define mono (.new MonoCtor Types.CTOR_ACTION pure-ty.mono.args))
    (.with-mono pure-ty mono))
-  (text-preview "f♭")
+  (text-preview "η∘f")
   (define (start) null)
   (define (step x _s) (.apply f x))
   (define (finish _s) null))
@@ -496,7 +550,7 @@
   #:description ["Converts a binary function into a unary function"
                  "accepting a pair as its argument"]
   #:class-name Uncurry
-  #:short-name "UCr"
+  #:short-name "!Cur"
   #:type
   (Type.new
    [0 1 2]
@@ -504,16 +558,17 @@
     (Types.mono-bin-fun TV_A TV_B TV_C)
     (Types.mono-fun (Types.mono-pair TV_A TV_B) TV_C)))
   #:body
-  (text-preview "UCr'")
+  (text-preview "!Cur'")
   (cached-type (Values.auto-type Values.VAL_UNCURRY [f]))
-  (define (apply pair)
+  (define (apply v)
+    (define pair v.value)
     (.apply (.apply f pair.car) pair.cdr)))
 
 (define-construct (curry f a)
   #:category "Combinators" #:name "Curry"
   #:description ["Converts a unary function of a pair to a binary function"]
   #:class-name Curry
-  #:short-name "Cr"
+  #:short-name "Cur"
   #:type
   (Type.new
    [0 1 2]
@@ -521,10 +576,10 @@
     (Types.mono-fun (Types.mono-pair TV_A TV_B) TV_C)
     (Types.mono-bin-fun TV_A TV_B TV_C)))
   #:body
-  (text-preview "Cr''")
+  (text-preview "Cur''")
+  (define pair-ty)
   (cached-type (Values.auto-type Values.VAL_CURRY [f a]))
-  (define (apply b)
-    (.apply f (Cons.new a b))))
+  (define (apply b) (.apply f (.apply (Values.VAL_CONS.apply a) b))))
 
 (define-construct (s f g) ;; λf g x.(f x)(g x)
   #:category "Combinators" #:name "S Combinator"
@@ -641,7 +696,7 @@
                  "top left is (-1, -1) and bottom right is (1, 1)"]
   #:class-name CameraProject
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_RAY))
-  #:preview (.create TextPreview "⨀")
+  #:preview (.create TextPreview "↑")
   #:start () null
   #:step (pos _s)
   (define denorm-pos (InputKeyMouse.denormalise-pos pos.value))
@@ -694,6 +749,21 @@
   (text-preview "()"))
 (define-global-val unit (.new Unit)
   #:category "Misc" #:name "Unit")
+
+(define-global-val _true (LambdaWrapper.new true Types.TY_BOOL)
+  #:category "Misc" #:name "True")
+(define-global-val _false (LambdaWrapper.new false Types.TY_BOOL)
+  #:category "Misc" #:name "False")
+
+(define-pure (select pred thenv elsev)
+  #:category "Misc" #:name "Select"
+  #:description ["Select p x y : Matches on a boolean p, returning x if true,"
+                 "or y otherwise"
+                 "Note: Values are not lazy, if you want to delay computation"
+                 "you must use functions"]
+  #:short-name "sel"
+  #:type (Type.new [0] (Types.mono-fun Types.MON_BOOL (Types.mono-bin-fun TV_A TV_A TV_A)))
+  #:body (if pred.value thenv elsev))
 
 (define-pure (unmaybe mb ifabs ifpres)
   #:category "Misc" #:name "Unmaybe"

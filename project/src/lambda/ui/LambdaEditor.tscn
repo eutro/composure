@@ -102,34 +102,4 @@ margin_top = 108.0
 margin_right = 254.0
 margin_bottom = 138.0
 
-[node name="HBoxContainer" type="VBoxContainer" parent="."]
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 0.885
-margin_left = -49.9999
-rect_min_size = Vector2( 50, 0 )
-__meta__ = {
-"_edit_use_anchors_": true
-}
-
-[node name="LambdaSlot" parent="HBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 50.0
-margin_bottom = 50.0
-
-[node name="LambdaSlot2" parent="HBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 54.0
-margin_right = 50.0
-margin_bottom = 104.0
-
-[node name="LambdaSlot3" parent="HBoxContainer" instance=ExtResource( 4 )]
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 108.0
-margin_right = 50.0
-margin_bottom = 158.0
-
 [editable path="AppCombinator"]

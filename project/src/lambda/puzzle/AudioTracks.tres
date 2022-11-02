@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=7 format=2]
+
+[ext_resource path="res://src/lambda/puzzle/AudioTracks.gd" type="Script" id=1]
+[ext_resource path="res://assets/audio/music/rest.ogg" type="AudioStream" id=2]
+[ext_resource path="res://assets/audio/music/first.ogg" type="AudioStream" id=3]
+[ext_resource path="res://assets/audio/music/transience.ogg" type="AudioStream" id=4]
+[ext_resource path="res://assets/audio/music/persistence.ogg" type="AudioStream" id=5]
+[ext_resource path="res://assets/audio/music/red_tears.ogg" type="AudioStream" id=6]
+
+[resource]
+script = ExtResource( 1 )
+tracks = {
+"first": ExtResource( 3 ),
+"persistence": ExtResource( 5 ),
+"red_tears": ExtResource( 6 ),
+"rest": ExtResource( 2 ),
+"transience": ExtResource( 4 )
+}

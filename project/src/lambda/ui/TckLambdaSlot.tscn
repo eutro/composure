@@ -5,5 +5,3 @@
 
 [node name="TckLambdaSlot" instance=ExtResource( 1 )]
 script = ExtResource( 2 )
-editable = null
-remove_on_drag = null
