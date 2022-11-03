@@ -53,9 +53,15 @@
   (set-term data)
   (play-sound))
 
+(define is-ignoring false)
+(define (ignore-next-sound)
+  (set! is-ignoring true))
+
 (define (play-sound)
   (when play-sound
-    (.play $Sound)))
+    (cond
+      [is-ignoring (set! is-ignoring false)]
+      [else (.play $Sound)])))
 
 (define (_gui-input evt)
   (cond
@@ -88,6 +94,7 @@
   (Game.set-copy-source null))
 
 (define (_on-LambdaSlot-focus-entered)
+  (play-sound)
   (.show $Focus))
 
 (define (_on-LambdaSlot-focus-exited)

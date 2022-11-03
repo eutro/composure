@@ -6,5 +6,7 @@
 
 (define (_ready)
   (when (!= null initial-focus)
-    (.call-deferred (get-node initial-focus) "grab_focus"))
+    (define initial (get-node initial-focus))
+    (.ignore-next-sound initial)
+    (.call-deferred initial "grab_focus"))
   null)

@@ -160,6 +160,8 @@ _global_script_class_icons={
 
 config/name="Composure"
 run/main_scene="res://src/Main.tscn"
+boot_splash/image="res://assets/textures/splash.png"
+boot_splash/bg_color=Color( 0.121569, 0.160784, 0.4, 1 )
 
 [autoload]
 

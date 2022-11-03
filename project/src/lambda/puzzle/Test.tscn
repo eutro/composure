@@ -1,24 +1,28 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://src/lambda/puzzle/Test.gd" type="Script" id=1]
 [ext_resource path="res://src/lambda/puzzle/PuzzleMenu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/ui/Composer.tscn" type="PackedScene" id=3]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+func _ready():
+	return get_node(\"%Puzzle\").init(Puzzles.tutorial_puzzle)
+
+"
 
 [node name="Test" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 1 )
+script = SubResource( 1 )
 
-[node name="Composer" parent="." instance=ExtResource( 3 )]
-
-[node name="Puzzle" parent="Composer/HBoxContainer/TabContainer" index="0" instance=ExtResource( 2 )]
+[node name="Composer@HBoxContainer@TabContainer@Puzzle" parent="." instance=ExtResource( 2 )]
 unique_name_in_owner = true
 margin_left = 12.3202
 margin_top = 59.3469
 margin_right = -13.3469
 margin_bottom = -11.2935
 
-[node name="Combinator" parent="Composer/HBoxContainer/TabContainer" index="1"]
-visible = false
+[node name="Composer" parent="." instance=ExtResource( 3 )]
 
 [editable path="Composer"]

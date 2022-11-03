@@ -7,7 +7,8 @@
 [ext_resource path="res://src/entities/InteractionPanel.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CylinderShape" id=1]
-radius = 1.5
+height = 3.15967
+radius = 1.77252
 
 [node name="Interactible" type="Spatial"]
 script = ExtResource( 1 )
@@ -19,7 +20,6 @@ collision_mask = 2
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="InteractArea"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 shape = SubResource( 1 )
 
 [node name="RandomFact" parent="." instance=ExtResource( 2 )]
@@ -30,4 +30,3 @@ value_name = "Foo"
 units = "Bars"
 
 [node name="ViewportDisplay" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.891799, 0 )

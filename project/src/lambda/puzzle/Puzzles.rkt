@@ -46,8 +46,13 @@
 (define-puzzle tutorial-puzzle
   #:description "What is the value of 2 + 2?"
   #:type Types.TY_NUM
-  #:track tracks.persistence
-  #:check (v) (Result.new (== v.value 4) "Incorrect answer"))
+  #:track tracks.first ;; so true!
+  #:check (v)
+  (Result.new
+   (== v.value 4)
+   (if (== v.value 5)
+       "One think only please"
+       "Incorrect answer")))
 
 (define-puzzle sort-0
   #:description "What is the minimum of 2 and 3?"

@@ -27,6 +27,7 @@
      " "
      (MonoVar.name-for (ref cnstr 0))))
 
+;; NB: Ɓ is replaced with ligatured =>
 (define (_to-string)
    ;; Haskell-style
   (define has-constraints false)
@@ -39,7 +40,7 @@
   (match (len cnstrs)
     [0 mono-str]
     [1 (+ (str-constraint (ref cnstrs 0))
-          " => "
+          " Ɓ "
           mono-str)]
     [_
      (define s "(")
@@ -47,6 +48,6 @@
      (for ([i (range 1 (len cnstrs))])
        (+set! s ", ")
        (+set! s (str-constraint (ref cnstrs i))))
-     (+set! s ") => ")
+     (+set! s ") Ɓ ")
      (+set! s mono-str)
      s]))

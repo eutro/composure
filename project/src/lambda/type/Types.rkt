@@ -63,10 +63,12 @@
 ;; Unit {}
 (define-type (unit) #:name "Unit" #:fmt (_v) null)
 
+;; NB: I've edited the game's version of JBMono to map these characters to their ligatured characters...
+
 ;; Fun<A, B> {
 ;;   apply(x: A): B
 ;; }
-(define-type (fun arg ret) #:name "->" #:infix #:fmt (_v) null)
+(define-type (fun arg ret) #:name "ƀ" #;-> #:infix #:fmt (_v) null)
 
 ;; Action<A, B> {
 ;;   type State: !Lambda
@@ -74,7 +76,7 @@
 ;;   step(x: A, s: State): B
 ;;   finish(s: State)
 ;; }
-(define-type (action arg ret) #:name "~>" #:infix #:fmt (_v) null)
+(define-type (action arg ret) #:name "Ƃ" #;~> #:infix #:fmt (_v) null)
 
 ;; Pair<A, B> {
 ;;   car: A
