@@ -15,7 +15,7 @@ jobs:
 
       - uses: Bogdanp/setup-racket@v1.9
         with:
-          version: latest
+          version: 8.6
       
       - name: Install Package
         run: raco pkg install --auto
