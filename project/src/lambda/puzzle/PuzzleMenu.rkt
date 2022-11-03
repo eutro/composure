@@ -11,6 +11,8 @@
   (set! puzzle puzzle-in)
   (setup))
 
+(define (get-slot) $TckLambdaSlot)
+
 (define (setup)
   (.set-type $TckLambdaSlot puzzle.expected-type)
   (.set-text $TypeHint (str puzzle.expected-type))
@@ -18,7 +20,7 @@
   (Game.play-track puzzle.track))
 
 (define (_on-TckLambdaSlot-term-changed term)
-  (.set-text $Error "")
+  (.set-bbcode $Error "")
   (when (!= null term)
     (define res (.call-func puzzle.check term))
     (cond
@@ -27,7 +29,7 @@
        (.play $Success)
        (emit-signal "puzzle_passed")]
       [else
-       (.set-text $Error res.value)
+       (.set-bbcode $Error (+ "[center]" res.value "[/center]"))
        (.play $Failure)
        (emit-signal "puzzle_failed")]))
   null)

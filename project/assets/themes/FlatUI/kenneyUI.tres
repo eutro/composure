@@ -1,11 +1,12 @@
-[gd_resource type="Theme" load_steps=49 format=2]
+[gd_resource type="Theme" load_steps=50 format=2]
 
 [ext_resource path="res://assets/themes/FlatUI/UIpack_vector.svg" type="Texture" id=1]
 [ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular-Arrow.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Bold.ttf" type="DynamicFontData" id=3]
-[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-BoldItalic.ttf" type="DynamicFontData" id=4]
-[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Italic.ttf" type="DynamicFontData" id=5]
-[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Thin.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/fonts/latin-modern-math-font/LatinmodernmathRegular-z8EBa.otf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-Light.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-BoldItalic.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-LightItalic.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="DynamicFont" id=23]
 use_mipmaps = true
@@ -162,28 +163,28 @@ margin_bottom = 13.9025
 expand_margin_top = 10.0
 expand_margin_bottom = 10.0
 
-[sub_resource type="DynamicFont" id=39]
+[sub_resource type="DynamicFont" id=44]
 font_data = ExtResource( 3 )
 
 [sub_resource type="DynamicFont" id=43]
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 4 )
+font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=40]
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 5 )
+font_data = ExtResource( 7 )
 
 [sub_resource type="DynamicFont" id=41]
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 6 )
+font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=42]
+[sub_resource type="DynamicFont" id=45]
 use_mipmaps = true
 use_filter = true
-font_data = ExtResource( 2 )
+font_data = ExtResource( 5 )
 
 [sub_resource type="StyleBoxTexture" id=38]
 texture = ExtResource( 1 )
@@ -209,7 +210,7 @@ margin_right = 13.3469
 margin_top = 13.3469
 margin_bottom = 11.2935
 
-[sub_resource type="Image" id=44]
+[sub_resource type="Image" id=46]
 data = {
 "data": PoolByteArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ),
 "format": "LumAlpha8",
@@ -221,7 +222,7 @@ data = {
 [sub_resource type="ImageTexture" id=36]
 flags = 4
 flags = 4
-image = SubResource( 44 )
+image = SubResource( 46 )
 size = Vector2( 16, 16 )
 
 [sub_resource type="StyleBoxTexture" id=37]
@@ -364,11 +365,11 @@ RichTextLabel/constants/shadow_offset_x = 0
 RichTextLabel/constants/shadow_offset_y = 0
 RichTextLabel/constants/table_hseparation = 0
 RichTextLabel/constants/table_vseparation = 0
-RichTextLabel/fonts/bold_font = SubResource( 39 )
+RichTextLabel/fonts/bold_font = SubResource( 44 )
 RichTextLabel/fonts/bold_italics_font = SubResource( 43 )
 RichTextLabel/fonts/italics_font = SubResource( 40 )
 RichTextLabel/fonts/mono_font = SubResource( 41 )
-RichTextLabel/fonts/normal_font = SubResource( 42 )
+RichTextLabel/fonts/normal_font = SubResource( 45 )
 RichTextLabel/styles/focus = null
 RichTextLabel/styles/normal = null
 TabContainer/colors/font_color_bg = Color( 0.19, 0.19, 0.19, 1 )

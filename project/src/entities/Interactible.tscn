@@ -1,8 +1,6 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/entities/Interactible.gd" type="Script" id=1]
-[ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/entities/ViewportDisplay.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/entities/InteractArea.gd" type="Script" id=4]
 [ext_resource path="res://src/entities/InteractionPanel.tscn" type="PackedScene" id=5]
 
@@ -22,11 +20,8 @@ script = ExtResource( 4 )
 [node name="CollisionShape" type="CollisionShape" parent="InteractArea"]
 shape = SubResource( 1 )
 
-[node name="RandomFact" parent="." instance=ExtResource( 2 )]
-min_value = 10.0
-max_value = 100.0
-step = 1.0
-value_name = "Foo"
-units = "Bars"
+[node name="Panel" parent="." instance=ExtResource( 5 )]
+transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 
-[node name="ViewportDisplay" parent="." instance=ExtResource( 3 )]
+[connection signal="area_entered" from="InteractArea" to="." method="_on_InteractArea_area_entered"]
+[connection signal="area_exited" from="InteractArea" to="." method="_on_InteractArea_area_exited"]

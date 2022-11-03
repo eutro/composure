@@ -18,3 +18,9 @@
   (.create TextPreview (str self)))
 
 (define (_to-string) "λ?")
+
+(define (apply-a xs)
+  (define val self)
+  (for ([x xs])
+    (fset! val .apply x))
+  val)

@@ -1,18 +1,27 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/themes/FlatUI/kenneyUI-red.tres" type="Theme" id=1]
-[ext_resource path="res://src/entities/ViewportDisplay.gd" type="Script" id=2]
+
+[sub_resource type="GDScript" id=2]
+script/source = "extends Spatial
+export(NodePath) var root_path
+
+func get_root():
+	return get_node(root_path)
+
+"
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
 
 [node name="ViewportDisplay" type="Spatial"]
-script = ExtResource( 2 )
+script = SubResource( 2 )
 root_path = NodePath("Viewport/Root")
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 512, 512 )
 transparent_bg = true
+fxaa = true
 hdr = false
 usage = 0
 render_target_v_flip = true

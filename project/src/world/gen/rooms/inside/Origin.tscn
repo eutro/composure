@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
 [ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
 
 [node name="Origin" type="Spatial"]
 script = ExtResource( 2 )
@@ -34,3 +36,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.66369, -0.738813 )
 light_color = Color( 0.901961, 0.847059, 0.729412, 1 )
 light_energy = 0.5
 omni_range = 10.64
+
+[node name="Puzzle" parent="Entities" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92009, 1.83893, 3.25012 )
+obj_name = "Closet"
+category = "Arithmetic"
+fact_path = NodePath("RandomFact")
+
+[node name="RandomFact" parent="Entities/Puzzle" instance=ExtResource( 5 )]
+min_value = 2.0
+max_value = 5.0
+step = 1.0
+value_name = "Unironed"
+units = " Shirts"

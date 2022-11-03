@@ -16,6 +16,8 @@
 (define (_check-term term)
   true)
 
+(define (get-term) term)
+
 (define (set-term new-term)
   (when (_check-term new-term)
     (when (!= null preview)

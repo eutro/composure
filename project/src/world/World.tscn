@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/world/World.gd" type="Script" id=1]
 [ext_resource path="res://src/entities/player/Player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/world/env/EnvInside.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/world/GameCamera.tscn" type="PackedScene" id=4]
-[ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=5]
 
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
@@ -26,5 +25,3 @@ player = NodePath("../../Player")
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -4, 3, 0 )
 current = true
 target_path = NodePath("../Player/CameraTarget")
-
-[node name="Puzzle" parent="." instance=ExtResource( 5 )]

@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
 [ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
 
 [node name="Room1" type="Spatial"]
 script = ExtResource( 2 )
@@ -41,3 +43,28 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.47431, 5.66369, -3.22935 )
 light_color = Color( 0.901961, 0.847059, 0.729412, 1 )
 light_energy = 0.5
 omni_range = 10.64
+
+[node name="ClosetPuzzle" parent="Entities" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.99492, 1.12475, 1.64812 )
+obj_name = "Small Closet"
+category = "Arithmetic"
+fact_path = NodePath("RandomFact")
+
+[node name="RandomFact" parent="Entities/ClosetPuzzle" instance=ExtResource( 5 )]
+min_value = 5.0
+max_value = 10.0
+step = 1.0
+value_name = "Boots"
+units = " Pairs"
+
+[node name="BookCasePuzzle" parent="Entities" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5329, 1.5344, -5.99437 )
+obj_name = "Large Bookcase"
+category = "Sorting"
+fact_path = NodePath("RandomFact")
+
+[node name="RandomFact" parent="Entities/BookCasePuzzle" instance=ExtResource( 5 )]
+min_value = 50.0
+max_value = 100.0
+step = 1.0
+value_name = "Swaps Required"

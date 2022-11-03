@@ -8,7 +8,7 @@
 
 (define const TARGET_DISTANCE 4)
 (define const POS_Y 4)
-(define const TRACK_SPEED 4)
+(define const TRACK_SPEED 6)
 
 (define collision-exceptions [])
 

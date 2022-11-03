@@ -1,6 +1,4 @@
-# Composure
-
-![](./project/assets/textures/title.svg)
+# ![Composure](./project/assets/textures/title.svg)
 
 Compose your thoughts and functions. You'll be alright.
 

@@ -583,6 +583,8 @@
 
 (define-construct (s f g) ;; λf g x.(f x)(g x)
   #:category "Combinators" #:name "S Combinator"
+  #:description ["S f g x : Applies f of x to g of x"
+                 "Lambda form: λf.λg.λx.(f x)(g x)"]
   #:class-name S
   #:short-name "S"
   #:type
@@ -601,7 +603,8 @@
 
 (define-construct (k value)
   #:category "Combinators" #:name "Constant"
-  #:description ["Creates a function that always returns the given value"]
+  #:description ["Creates a function that always returns the given value"
+                 "Lambda form: λx.λy.x"]
   #:class-name K
   #:short-name "K"
   #:type (Type.new [0 1] (Types.mono-bin-fun TV_A TV_B TV_A))
@@ -720,20 +723,20 @@
 
 (define-action (psctxzprtp vec) ;; Project Screen Coordinate to XZ Plane Relative to Player
   #:category "Actions" #:name "PSCtXZPRtP"
-  #:description ["Project a screen coordinate to the XZ plane at eye height, relative to the player"]
+  #:description ["Project a screen coordinate to the XZ plane (floor) relative to the player"]
   #:class-name PSCtXZPRtP
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_VEC2))
   #:preview (.create TextPreview ":)")
   #:start () null
   #:step (vec _s)
   (define denorm (InputKeyMouse.denormalise-pos vec.value))
-  (define plane (Plane Vector3.UP Game.world.camera.target.global-translation.y))
+  (define plane (Plane Vector3.UP 0))
   (define ray-origin (Game.world.camera.project-ray-origin denorm))
   (define ray-normal (Game.world.camera.project-ray-normal denorm))
   (define intersection (.intersects-ray plane ray-origin ray-normal))
   (when (== null intersection)
     (set! intersection (+ ray-origin (* ray-normal 100))))
-  (-set! intersection Game.world.player.transform.origin)
+  (-set! intersection Game.world.player.global-translation)
   (Values.wrap-vec2 (Vector2 intersection.x intersection.z))
   #:finish (_s) null)
 

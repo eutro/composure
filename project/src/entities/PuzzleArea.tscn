@@ -8,6 +8,7 @@
 [node name="Puzzle" type="Spatial"]
 script = ExtResource( 2 )
 PuzzleMenu = ExtResource( 4 )
+obj_name = "Object"
 
 [node name="Interactible" parent="." instance=ExtResource( 1 )]
 

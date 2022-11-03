@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
 [ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
 
 [node name="Room1" type="Spatial"]
 script = ExtResource( 2 )
@@ -35,3 +37,16 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.8055, 5.66369, -2.91084 )
 light_color = Color( 0.901961, 0.847059, 0.729412, 1 )
 light_energy = 0.5
 omni_range = 10.64
+
+[node name="Puzzle" parent="Entities" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5257, 1.64619, -4.06564 )
+obj_name = "Bookcase"
+category = "Sorting"
+fact_path = NodePath("RandomFact")
+
+[node name="RandomFact" parent="Entities/Puzzle" instance=ExtResource( 5 )]
+min_value = 60.0
+max_value = 90.0
+step = 0.1
+value_name = "Romance Books"
+units = "%"

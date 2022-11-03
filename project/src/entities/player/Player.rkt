@@ -4,7 +4,9 @@
 
 (define onready at $AnimationTree)
 
-(define MAX_SPEED 2)
+(define MAX_SPEED 6)
+
+(define RUN_THRESHOLD 4)
 
 (define velocity : Vector3 (Vector3 0 0 0))
 
@@ -47,11 +49,13 @@
   (define speed (.length velocity))
   (cond
     [(> speed 0)
-     (set! (ref at "parameters/Motion/blend_amount")
-           (/ speed MAX_SPEED))
      (define vel (cap-vel velocity))
      (look-at (+ translation vel) Vector3.UP)
-     (move-and-slide vel)]
+     (set! speed (.length (move-and-slide vel)))
+     (set! (ref at "parameters/Motion/blend_amount")
+           (/ (min speed RUN_THRESHOLD) RUN_THRESHOLD))
+     (set! (ref at "parameters/Run/blend_amount")
+           (/ (max (- speed RUN_THRESHOLD) 0) (- MAX_SPEED RUN_THRESHOLD)))]
     [else
      (set! (ref at "parameters/Motion/blend_amount") 0)])
   null)

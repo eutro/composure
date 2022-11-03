@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/models/Player.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/util/SetAPToLoop.tscn" type="PackedScene" id=2]
@@ -12,23 +12,37 @@ height = 1.71039
 [sub_resource type="CylinderShape" id=12]
 radius = 4.93437
 
-[sub_resource type="AnimationNodeAnimation" id=8]
-animation = "Walk"
-
 [sub_resource type="AnimationNodeAnimation" id=9]
 animation = "Idle"
 
 [sub_resource type="AnimationNodeBlend2" id=10]
 
+[sub_resource type="AnimationNodeBlend2" id=14]
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "Run"
+
+[sub_resource type="AnimationNodeTimeScale" id=15]
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "Walk"
+
 [sub_resource type="AnimationNodeBlendTree" id=11]
-graph_offset = Vector2( -566.839, -10.3495 )
-nodes/Animation/node = SubResource( 9 )
-nodes/Animation/position = Vector2( -160, 40 )
-"nodes/Animation 2/node" = SubResource( 8 )
-"nodes/Animation 2/position" = Vector2( -160, 220 )
+graph_offset = Vector2( -466.406, 73.1906 )
+nodes/IdleA/node = SubResource( 9 )
+nodes/IdleA/position = Vector2( -160, 40 )
 nodes/Motion/node = SubResource( 10 )
-nodes/Motion/position = Vector2( 40, 80 )
-node_connections = [ "output", 0, "Motion", "Motion", 0, "Animation", "Motion", 1, "Animation 2" ]
+nodes/Motion/position = Vector2( 360, 120 )
+nodes/Run/node = SubResource( 14 )
+nodes/Run/position = Vector2( 100, 240 )
+nodes/RunA/node = SubResource( 13 )
+nodes/RunA/position = Vector2( -140, 440 )
+nodes/TimeScale/node = SubResource( 15 )
+nodes/TimeScale/position = Vector2( -160, 240 )
+nodes/WalkA/node = SubResource( 8 )
+nodes/WalkA/position = Vector2( -440, 220 )
+nodes/output/position = Vector2( 580, 160 )
+node_connections = [ "output", 0, "Motion", "Motion", 0, "IdleA", "Motion", 1, "Run", "Run", 0, "TimeScale", "Run", 1, "RunA", "TimeScale", 0, "WalkA" ]
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 3 )
@@ -49,10 +63,12 @@ shape = SubResource( 12 )
 tree_root = SubResource( 11 )
 anim_player = NodePath("../Model/AnimationPlayer")
 active = true
-parameters/Motion/blend_amount = 0.0
+parameters/Motion/blend_amount = 1.0
+parameters/Run/blend_amount = 1.0
+parameters/TimeScale/scale = 2.0
 
 [node name="SetAPToLoop" parent="." instance=ExtResource( 2 )]
-animations = [ "Idle", "Walk" ]
+animations = [ "Idle", "Walk", "Run" ]
 player_path = NodePath("../Model/AnimationPlayer")
 
 [node name="Model" parent="." instance=ExtResource( 1 )]

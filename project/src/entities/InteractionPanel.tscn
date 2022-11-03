@@ -1,39 +1,51 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/textures/misc.svg" type="Texture" id=1]
 [ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-Bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-Regular.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://src/entities/InteractionPanel.gd" type="Script" id=7]
 
 [sub_resource type="AtlasTexture" id=1]
-flags = 4
+flags = 23
 atlas = ExtResource( 1 )
 region = Rect2( 1200, 0, 400, 400 )
 
-[sub_resource type="DynamicFont" id=2]
-size = 32
+[sub_resource type="DynamicFont" id=3]
+size = 24
 font_data = ExtResource( 2 )
 
-[node name="InteractionPanel" type="Control"]
-anchor_right = 0.195312
-anchor_bottom = 0.333333
-margin_right = 312.0
-margin_bottom = 312.0
-__meta__ = {
-"_edit_use_anchors_": true
-}
+[sub_resource type="DynamicFont" id=2]
+size = 24
+font_data = ExtResource( 6 )
 
-[node name="TextureRect" type="TextureRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 200, 200 )
+[node name="InteractionPanel" type="Spatial"]
+script = ExtResource( 7 )
+
+[node name="TextureRect" type="Sprite3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0 )
+billboard = 2
+no_depth_test = true
 texture = SubResource( 1 )
-expand = true
 
-[node name="Title" type="Label" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 53.0
-margin_top = 56.0
-margin_right = -37.0
-margin_bottom = -408.0
-custom_fonts/font = SubResource( 2 )
-text = "How"
+[node name="Title" type="Label3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.53178, 0 )
+offset = Vector2( -150, 0 )
+billboard = 2
+no_depth_test = true
+modulate = Color( 0, 0, 0, 1 )
+text = "Foo"
+font = SubResource( 3 )
+horizontal_alignment = 0
+vertical_alignment = 0
+
+[node name="Text" type="Label3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.16466, 0 )
+offset = Vector2( -150, 0 )
+billboard = 2
+no_depth_test = true
+modulate = Color( 0, 0, 0, 1 )
+text = "Foo
+Bar: 10 Baz"
+font = SubResource( 2 )
+horizontal_alignment = 0
+vertical_alignment = 0

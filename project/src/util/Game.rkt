@@ -19,6 +19,8 @@
 
 (define user-defs (repeat 100 ["" null]))
 
+(define puzzle-progress (Puzzles.init-progress))
+
 (signal copy-source-changed)
 (define copy-src)
 (define (set-copy-source src)
