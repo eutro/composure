@@ -12,8 +12,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - uses: Bogdanp/setup-racket@v1.9
-      - with:
+        with:
           version: latest
       
       - name: Install Package
