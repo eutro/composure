@@ -77,10 +77,6 @@ bbcode_text = "Haha funny puzzle text"
 text = "Haha funny puzzle text"
 fit_content_height = true
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
-autoplay = true
-bus = "Music"
-
 [node name="Success" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 bus = "SFX"

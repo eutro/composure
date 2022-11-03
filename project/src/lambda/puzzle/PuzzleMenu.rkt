@@ -15,9 +15,7 @@
   (.set-type $TckLambdaSlot puzzle.expected-type)
   (.set-text $TypeHint (str puzzle.expected-type))
   (.set-bbcode (get-node "%PuzzleText") puzzle.description)
-  (.set-stream $Music puzzle.track)
-  (when (is-inside-tree)
-    (.play $Music)))
+  (Game.play-track puzzle.track))
 
 (define (_on-TckLambdaSlot-term-changed term)
   (.set-text $Error "")

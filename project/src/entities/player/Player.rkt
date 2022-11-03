@@ -23,6 +23,17 @@
     (set! velocity (Vector3 0 0 0)))
   null)
 
+(define (compare-distance a b)
+  (< (global-translation.distance-squared-to a.global-translation)
+     (global-translation.distance-squared-to b.global-translation)))
+
+(define (interact-nearest)
+  (define areas (.get-overlapping-areas $InteractionChecker))
+  (when (not (.empty areas))
+    (.sort-custom areas self "compare-distance")
+    (define nearest-area (ref areas 0))
+    (.interact nearest-area)))
+
 (define (get-position)
   global-transform.origin)
 

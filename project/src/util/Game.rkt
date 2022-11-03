@@ -25,3 +25,15 @@
   (set! copy-src src)
   (emit-signal "copy_source_changed")
   null)
+
+(define (play-track stream)
+  (define music (.get-node ui "Music"))
+  (when (!= stream music.stream)
+    (.stop music)
+    (when (!= null stream)
+      (.set-stream music stream)
+      (.play music)))
+  null)
+
+(define (_ready)
+  (randomize))

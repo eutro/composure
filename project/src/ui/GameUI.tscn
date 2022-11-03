@@ -59,4 +59,8 @@ anchor_right = 0.9
 anchor_bottom = 0.9
 mouse_filter = 2
 
+[node name="Music" type="AudioStreamPlayer" parent="."]
+autoplay = true
+bus = "Music"
+
 [connection signal="pressed" from="HUD/ComposerButton" to="." method="_on_ComposerButton_pressed"]

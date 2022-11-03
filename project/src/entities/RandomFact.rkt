@@ -11,7 +11,6 @@
 (define value)
 
 (define (_ready)
-  (randomize)
   (generate))
 
 (define (generate)

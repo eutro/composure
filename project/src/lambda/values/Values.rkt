@@ -655,6 +655,16 @@
   (Game.world.player.user-move (Vector2 0 0) (ref s 0))
   null)
 
+(define-action (interact _u)
+  #:category "Actions" #:name "Interact"
+  #:description ["Interact with the closest interactible object in range upon release"]
+  #:class-name Interact
+  #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_UNIT))
+  #:preview (.create TextPreview "itrct")
+  #:start () null
+  #:step (_x _s) Values.VAL_UNIT
+  #:finish (_s) (Game.world.player.interact-nearest) null)
+
 (define-action (prn x)
   #:category "Actions" #:name "Print"
   #:description ["Show the value on screen, and return it"]

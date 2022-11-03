@@ -9,8 +9,23 @@
 (define (_ready)
   (set! Game.ui self))
 
+(define (get-gui)
+  (.-mounted $Composer))
+
+(define (gui-changed)
+  (emit-signal "gui-changed" (is-gui-showing)))
+
+(define (mount-gui)
+  (.mount $Composer)
+  (emit-signal "gui_changed" true)
+  (get-gui))
+
+(define (unmount-gui)
+  (.unmount $Composer)
+  (emit-signal "gui_changed" false))
+
 (define (is-gui-showing)
-  (!= null (.-mounted $Composer)))
+  (!= null (get-gui)))
 
 (define (_on_ComposerButton_pressed)
   (.toggle-mount $Composer)

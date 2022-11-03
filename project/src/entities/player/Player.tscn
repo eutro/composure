@@ -1,9 +1,16 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/models/Player.glb" type="PackedScene" id=1]
 [ext_resource path="res://src/util/SetAPToLoop.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/entities/player/Player.gd" type="Script" id=3]
 [ext_resource path="res://assets/materials/Palette.material" type="Material" id=4]
+
+[sub_resource type="CapsuleShape" id=5]
+radius = 0.61471
+height = 1.71039
+
+[sub_resource type="CylinderShape" id=12]
+radius = 4.93437
 
 [sub_resource type="AnimationNodeAnimation" id=8]
 animation = "Walk"
@@ -23,18 +30,20 @@ nodes/Motion/node = SubResource( 10 )
 nodes/Motion/position = Vector2( 40, 80 )
 node_connections = [ "output", 0, "Motion", "Motion", 0, "Animation", "Motion", 1, "Animation 2" ]
 
-[sub_resource type="CapsuleShape" id=5]
-radius = 0.61471
-height = 1.71039
-
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 3 )
 
-[node name="Model" parent="." instance=ExtResource( 1 )]
+[node name="Shape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.5, 0 )
+shape = SubResource( 5 )
 
-[node name="Body" parent="Model/CharacterArmature/Skeleton" index="0"]
-transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
-material/0 = ExtResource( 4 )
+[node name="InteractionChecker" type="Area" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="InteractionShape" type="CollisionShape" parent="InteractionChecker"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.80292, 0 )
+shape = SubResource( 12 )
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 11 )
@@ -46,8 +55,10 @@ parameters/Motion/blend_amount = 0.0
 animations = [ "Idle", "Walk" ]
 player_path = NodePath("../Model/AnimationPlayer")
 
-[node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.5, 0 )
-shape = SubResource( 5 )
+[node name="Model" parent="." instance=ExtResource( 1 )]
+
+[node name="Body" parent="Model/CharacterArmature/Skeleton" index="0"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+material/0 = ExtResource( 4 )
 
 [editable path="Model"]
