@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: Bogdanp/setup-racket@v1.9
+        with:
+          version: 8.6
+      
+      - name: Install Package
+        run: raco pkg install --auto
+
+      - name: Compile GDLisp
+        run: raco gdlisp ./project
