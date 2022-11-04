@@ -1,32 +1,12 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/env/EnvInside.gd" type="Script" id=2]
-[ext_resource path="res://src/world/gen/rooms/inside/Origin.tres" type="Resource" id=3]
-[ext_resource path="res://src/world/gen/rooms/inside/FirstCorridor.tres" type="Resource" id=4]
-[ext_resource path="res://src/world/gen/rooms/inside/Corridor.tres" type="Resource" id=5]
-[ext_resource path="res://src/world/gen/rooms/inside/Room1.tres" type="Resource" id=6]
 [ext_resource path="res://src/world/env/EnvInsideWorldEnv.tres" type="Environment" id=7]
-[ext_resource path="res://src/world/gen/rooms/inside/Room2.tres" type="Resource" id=8]
-[ext_resource path="res://src/world/gen/rooms/inside/RoomTiny.tres" type="Resource" id=9]
 
 [node name="EnvInside" type="Spatial"]
 script = ExtResource( 2 )
-rooms = {
-"corridor": ExtResource( 5 ),
-"first_corridor": ExtResource( 4 ),
-"origin": ExtResource( 3 ),
-"room1": ExtResource( 6 ),
-"room2": ExtResource( 8 ),
-"roomtiny": ExtResource( 9 )
-}
 
-[node name="GridMap" type="GridMap" parent="."]
-mesh_library = ExtResource( 1 )
-cell_center_y = false
-__meta__ = {
-"_editor_clip_": 0
-}
+[node name="GenRoot" type="Spatial" parent="."]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource( 7 )

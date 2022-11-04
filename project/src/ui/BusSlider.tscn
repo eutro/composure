@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/ui/BusSlider.gd" type="Script" id=1]
+
+[node name="BusSlider" type="HSlider"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+max_value = 1.0
+step = 0.01
+script = ExtResource( 1 )
+
+[connection signal="value_changed" from="." to="." method="_on_BusSlider_value_changed"]

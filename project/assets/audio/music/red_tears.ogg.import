@@ -11,5 +11,5 @@ dest_files=[ "res://.import/red_tears.ogg-b11ae44f3bb8e8202a9adab10c1083f7.oggst
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

@@ -84,6 +84,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/lambda/ui/ctors/NumberCombinator.gd"
 }, {
+"base": "Spatial",
+"class": "RandomTile",
+"language": "GDScript",
+"path": "res://src/world/gen/RandomTile.gd"
+}, {
 "base": "Reference",
 "class": "Result",
 "language": "GDScript",
@@ -145,6 +150,7 @@ _global_script_class_icons={
 "MonoCtor": "",
 "MonoVar": "",
 "NumberCombinator": "",
+"RandomTile": "",
 "Result": "",
 "RoomPlacer": "",
 "SpritePreview": "",
@@ -159,9 +165,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Composure"
-run/main_scene="res://src/Main.tscn"
+config/description="Compose your thoughts and functions. You'll be alright."
+run/main_scene="res://src/root/Main.tscn"
 boot_splash/image="res://assets/textures/splash.png"
 boot_splash/bg_color=Color( 0.121569, 0.160784, 0.4, 1 )
+config/icon="res://assets/textures/icon.svg"
+config/macos_native_icon="res://assets/textures/icon.icns"
+config/windows_native_icon="res://assets/textures/icon.ico"
 
 [autoload]
 

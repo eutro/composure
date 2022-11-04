@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/root/InGame.gd" type="Script" id=1]
+[ext_resource path="res://src/util/BindingRunner.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/world/World.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/ui/GameUI.tscn" type="PackedScene" id=4]
+
+[node name="InGame" type="Node"]
+script = ExtResource( 1 )
+
+[node name="BindingRunner" parent="." instance=ExtResource( 2 )]
+
+[node name="World" parent="BindingRunner" instance=ExtResource( 3 )]
+
+[node name="GameUI" parent="BindingRunner" instance=ExtResource( 4 )]
+
+[connection signal="gui_changed" from="BindingRunner/GameUI" to="." method="_on_GameUI_gui_changed"]

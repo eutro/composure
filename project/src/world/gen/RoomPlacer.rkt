@@ -39,7 +39,9 @@
    ;; and I CBA to implement a Fenwick tree
    [chances : Array #;[float]]))
 
-(splice-record ([gridmap : GridMap]))
+(splice-record
+ ([common-parent : Node]
+  [cell-size : float]))
 
 ;; there's um, a lot of `double` equality going on here,
 ;; in theory they're all just integers so it should be fine(tm)
@@ -63,7 +65,7 @@
     (define r 0.0)
     (for ([i (range (len set.rooms))])
       (when (not (.has exclusions i))
-        (define c (ref set.chances r))
+        (define c (ref set.chances i))
         (+set! r (/ c chance-sum))
         (when (x . <= . r)
           (define success
@@ -83,8 +85,10 @@
 (define (try-place-room
          [anchor : Anchor]
          [room : CRoom])
-  (for ([raw room.anchors])
-    (define room-anchor (parse-raw-anchor raw))
+  (define idcs (range (len room.anchors)))
+  (.shuffle idcs)
+  (for ([i idcs])
+    (define room-anchor (parse-raw-anchor (ref room.anchors i)))
     (when (== room-anchor.type anchor.type)
       (when (try-place-room-with-anchor anchor room room-anchor)
         (#%gdscript "return true"))))
@@ -120,53 +124,10 @@
   (force-place-room xf room room-anchor)
   true)
 
-#;#;
-;; from Godot source
-(define const ortho-bases
-  [(Basis (Vector3 1 0 0) (Vector3 0 1 0) (Vector3 0 0 1))
-   (Basis (Vector3 0 -1 0) (Vector3 1 0 0) (Vector3 0 0 1))
-   (Basis (Vector3 -1 0 0) (Vector3 0 -1 0) (Vector3 0 0 1))
-   (Basis (Vector3 0 1 0) (Vector3 -1 0 0) (Vector3 0 0 1))
-   (Basis (Vector3 1 0 0) (Vector3 0 0 -1) (Vector3 0 1 0))
-   (Basis (Vector3 0 0 1) (Vector3 1 0 0) (Vector3 0 1 0))
-   (Basis (Vector3 -1 0 0) (Vector3 0 0 1) (Vector3 0 1 0))
-   (Basis (Vector3 0 0 -1) (Vector3 -1 0 0) (Vector3 0 1 0))
-   (Basis (Vector3 1 0 0) (Vector3 0 -1 0) (Vector3 0 0 -1))
-   (Basis (Vector3 0 1 0) (Vector3 1 0 0) (Vector3 0 0 -1))
-   (Basis (Vector3 -1 0 0) (Vector3 0 1 0) (Vector3 0 0 -1))
-   (Basis (Vector3 0 -1 0) (Vector3 -1 0 0) (Vector3 0 0 -1))
-   (Basis (Vector3 1 0 0) (Vector3 0 0 1) (Vector3 0 -1 0))
-   (Basis (Vector3 0 0 -1) (Vector3 1 0 0) (Vector3 0 -1 0))
-   (Basis (Vector3 -1 0 0) (Vector3 0 0 -1) (Vector3 0 -1 0))
-   (Basis (Vector3 0 0 1) (Vector3 -1 0 0) (Vector3 0 -1 0))
-   (Basis (Vector3 0 0 1) (Vector3 0 1 0) (Vector3 -1 0 0))
-   (Basis (Vector3 0 -1 0) (Vector3 0 0 1) (Vector3 -1 0 0))
-   (Basis (Vector3 0 0 -1) (Vector3 0 -1 0) (Vector3 -1 0 0))
-   (Basis (Vector3 0 1 0) (Vector3 0 0 -1) (Vector3 -1 0 0))
-   (Basis (Vector3 0 0 1) (Vector3 0 -1 0) (Vector3 1 0 0))
-   (Basis (Vector3 0 1 0) (Vector3 0 0 1) (Vector3 1 0 0))
-   (Basis (Vector3 0 0 -1) (Vector3 0 1 0) (Vector3 1 0 0))
-   (Basis (Vector3 0 -1 0) (Vector3 0 0 -1) (Vector3 1 0 0))])
-
-(define (xf-ori xf ori)
-  (define ori-as-basis (ref ortho-bases ori))
-  (define new-basis (* xf.basis ori-as-basis))
-  (.get-orthogonal-index new-basis))
-
 (define (force-place-room [xf : Transform] [room : CRoom] maybe-anchor)
   (define node (RoomNode.new {}))
   (for ([raw-pos room.tiles])
     (define pos (xf-pos2d xf raw-pos))
-    #;
-    (match (ref room.tiles raw-pos)
-      [[(var item) (var ori)]
-       (.set-cell-item
-        gridmap
-        (int (floor pos.x))
-        (int (floor pos.y))
-        (int (floor pos.z))
-        item
-        (xf-ori xf ori))])
     (set! (ref occupied pos) node))
   (for ([raw-anchor room.anchors])
     (define anchor (parse-raw-anchor raw-anchor))
@@ -178,5 +139,5 @@
             true)))
   (define entities (.instance room.entities))
   (fset! entities.transform.basis ~> (* xf.basis _))
-  (fset! entities.transform.origin + (* gridmap.cell-size xf.origin))
-  (.add-child gridmap entities))
+  (fset! entities.transform.origin + (* cell-size xf.origin))
+  (.add-child common-parent entities))

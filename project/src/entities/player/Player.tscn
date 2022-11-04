@@ -5,9 +5,9 @@
 [ext_resource path="res://src/entities/player/Player.gd" type="Script" id=3]
 [ext_resource path="res://assets/materials/Palette.material" type="Material" id=4]
 
-[sub_resource type="CapsuleShape" id=5]
-radius = 0.61471
-height = 1.71039
+[sub_resource type="CylinderShape" id=16]
+height = 3.0
+radius = 0.7
 
 [sub_resource type="CylinderShape" id=12]
 radius = 4.93437
@@ -28,7 +28,7 @@ animation = "Run"
 animation = "Walk"
 
 [sub_resource type="AnimationNodeBlendTree" id=11]
-graph_offset = Vector2( -466.406, 73.1906 )
+graph_offset = Vector2( -272.953, 203.745 )
 nodes/IdleA/node = SubResource( 9 )
 nodes/IdleA/position = Vector2( -160, 40 )
 nodes/Motion/node = SubResource( 10 )
@@ -42,14 +42,14 @@ nodes/TimeScale/position = Vector2( -160, 240 )
 nodes/WalkA/node = SubResource( 8 )
 nodes/WalkA/position = Vector2( -440, 220 )
 nodes/output/position = Vector2( 580, 160 )
-node_connections = [ "output", 0, "Motion", "Motion", 0, "IdleA", "Motion", 1, "Run", "Run", 0, "TimeScale", "Run", 1, "RunA", "TimeScale", 0, "WalkA" ]
+node_connections = [ "output", 0, "Motion", "TimeScale", 0, "WalkA", "Run", 0, "TimeScale", "Run", 1, "RunA", "Motion", 0, "IdleA", "Motion", 1, "Run" ]
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 3 )
 
 [node name="Shape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.5, 0 )
-shape = SubResource( 5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0 )
+shape = SubResource( 16 )
 
 [node name="InteractionChecker" type="Area" parent="."]
 collision_layer = 2
@@ -63,8 +63,8 @@ shape = SubResource( 12 )
 tree_root = SubResource( 11 )
 anim_player = NodePath("../Model/AnimationPlayer")
 active = true
-parameters/Motion/blend_amount = 1.0
-parameters/Run/blend_amount = 1.0
+parameters/Motion/blend_amount = 0.0
+parameters/Run/blend_amount = 0.0
 parameters/TimeScale/scale = 2.0
 
 [node name="SetAPToLoop" parent="." instance=ExtResource( 2 )]

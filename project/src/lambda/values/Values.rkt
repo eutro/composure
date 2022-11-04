@@ -437,7 +437,7 @@
 (define-compose compose
   #:category "Combinators" #:name "Compose"
   #:description ["Composes two functions, from left to right"
-                 "Note: This is in the opposite direction to ∘"]
+                 "Note: This is in the opposite direction to [code]∘[/code]"]
   #:class-name Compose
   #:short-name ">>"
   #:finished-name "g∘f"
@@ -448,7 +448,7 @@
 (define-compose composea
   #:category "Combinators" #:name "Compose Actions"
   #:description ["Composes two actions, from left to right"
-                 "Note: This is in the opposite direction to ∘"]
+                 "Note: This is in the opposite direction to [code]∘[/code]"]
   #:class-name ComposeA
   #:short-name ">>>"
   #:finished-name "g♯∘f"
@@ -547,8 +547,7 @@
 
 (define-construct (uncurry f)
   #:category "Combinators" #:name "Uncurry"
-  #:description ["Converts a binary function into a unary function"
-                 "accepting a pair as its argument"]
+  #:description ["Converts a binary function into a unary function accepting a pair as its argument"]
   #:class-name Uncurry
   #:short-name "!Cur"
   #:type
@@ -691,10 +690,8 @@
 (define-action (get-mouse-posn _u)
   #:category "Actions" #:name "Mouse Position"
   #:description ["Get the position of the mouse on the screen"
-                 "Note: the center of the screen is (0, 0),"
-                 "top left is (-1, -1) and bottom right is (1, 1)"
-                 "It is possible to get values greater than 1"
-                 "by moving the mouse out of the window"]
+                 "Note: the center of the screen is (0, 0), top left is (-1, -1) and bottom right is (1, 1)"
+                 "It is possible to get values greater than 1 by moving the mouse out of the window"]
   #:class-name GetMousePosn
   #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_VEC2))
   #:preview (.create TextPreview "@m")
@@ -705,8 +702,7 @@
 (define-action (camera-project pos)
   #:category "Actions" #:name "Camera Project"
   #:description ["Get the projection from the camera of a position on the screen"
-                 "Note: the center of the screen is (0, 0),"
-                 "top left is (-1, -1) and bottom right is (1, 1)"]
+                 "Note: the center of the screen is (0, 0), top left is (-1, -1) and bottom right is (1, 1)"]
   #:class-name CameraProject
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_RAY))
   #:preview (.create TextPreview "↑")
@@ -770,10 +766,8 @@
 
 (define-pure (select pred thenv elsev)
   #:category "Misc" #:name "Select"
-  #:description ["Select p x y : Matches on a boolean p, returning x if true,"
-                 "or y otherwise"
-                 "Note: Values are not lazy, if you want to delay computation"
-                 "you must use functions"]
+  #:description ["Select p x y : Matches on a boolean p, returning x if true, or y otherwise"
+                 "Note: Values are not lazy, if you want to delay computation you must use functions"]
   #:short-name "sel"
   #:type (Type.new [0] (Types.mono-fun Types.MON_BOOL (Types.mono-bin-fun TV_A TV_A TV_A)))
   #:body (if pred.value thenv elsev))

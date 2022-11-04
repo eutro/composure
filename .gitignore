@@ -1,4 +1,5 @@
 compiled/
+export/
 *~
 
 # I'm not keeping compiler output in git, that would destroy diffs.

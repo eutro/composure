@@ -1,0 +1,99 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/themes/FlatUI/UIpack_vector.svg" type="Texture" id=1]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-Bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://src/ui/BusSlider.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/ui/Settings.gd" type="Script" id=4]
+
+[sub_resource type="StyleBoxTexture" id=19]
+texture = ExtResource( 1 )
+region_rect = Rect2( 1, 310, 100, 100 )
+margin_left = 12.3202
+margin_right = 13.3469
+margin_top = 13.3469
+margin_bottom = 11.2935
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 2 )
+
+[node name="Settings" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 4 )
+
+[node name="PN" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 19 )
+
+[node name="Settings" type="Label" parent="PN"]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 1014.0
+margin_bottom = 55.0
+custom_fonts/font = SubResource( 1 )
+text = "Settings"
+
+[node name="VB" type="VBoxContainer" parent="PN"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 67.0
+margin_right = -20.0
+margin_bottom = -86.0
+custom_constants/separation = 10
+alignment = 1
+
+[node name="MasterLbl" type="Label" parent="PN/VB"]
+margin_top = 102.0
+margin_right = 984.0
+margin_bottom = 124.0
+text = "Master Volume"
+
+[node name="MasterSld" parent="PN/VB" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 134.0
+margin_right = 984.0
+margin_bottom = 176.0
+
+[node name="MusicLbl" type="Label" parent="PN/VB"]
+margin_top = 186.0
+margin_right = 984.0
+margin_bottom = 208.0
+text = "Music Volume"
+
+[node name="MusicSld" parent="PN/VB" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 218.0
+margin_right = 984.0
+margin_bottom = 260.0
+bus = 2
+
+[node name="FxLbl" type="Label" parent="PN/VB"]
+margin_top = 270.0
+margin_right = 984.0
+margin_bottom = 292.0
+text = "Sound Effect Volume"
+
+[node name="FxSld" parent="PN/VB" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 302.0
+margin_right = 984.0
+margin_bottom = 344.0
+bus = 1
+
+[node name="Close" type="Button" parent="PN"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -65.0
+margin_right = -10.0
+margin_bottom = -18.749
+text = "Close"
+
+[connection signal="pressed" from="PN/Close" to="." method="_on_Close_pressed"]

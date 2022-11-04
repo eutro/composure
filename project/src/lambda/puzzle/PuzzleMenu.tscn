@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/lambda/ui/TckLambdaSlot.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/lambda/puzzle/PuzzleMenu.gd" type="Script" id=2]
 [ext_resource path="res://assets/materials/Confetti.material" type="Material" id=3]
 [ext_resource path="res://assets/audio/sfx/success.ogg" type="AudioStream" id=4]
 [ext_resource path="res://assets/audio/sfx/failure.ogg" type="AudioStream" id=5]
+[ext_resource path="res://assets/fonts/JetBrainsMono-2.242/fonts/ttf/JetBrainsMono-Regular-Arrow.ttf" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 6 )
 
 [node name="PuzzleMenu" type="Control"]
 anchor_right = 1.0
@@ -37,6 +41,7 @@ anchor_left = 0.113281
 anchor_top = 0.735
 anchor_right = 0.888672
 anchor_bottom = 0.776667
+custom_fonts/font = SubResource( 2 )
 text = "haha xd"
 align = 1
 __meta__ = {
@@ -69,7 +74,7 @@ __meta__ = {
 
 [node name="PuzzleText" type="RichTextLabel" parent="VBoxContainer"]
 unique_name_in_owner = true
-margin_top = 157.0
+margin_top = 156.0
 margin_right = 614.0
 margin_bottom = 180.0
 mouse_filter = 1

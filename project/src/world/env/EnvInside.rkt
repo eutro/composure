@@ -2,13 +2,29 @@
 
 (extends Spatial)
 
-(define onready gridmap $GridMap)
-(define onready placer (RoomPlacer.new gridmap))
+(define onready gen-root $GenRoot)
+
+(define const CELL_SIZE 2)
+
+(define onready placer (RoomPlacer.new gen-root CELL_SIZE))
 (require threading)
 
 (define (export NodePath) player)
 
-(define (export Dictionary) rooms)
+(define onready rooms
+  {
+   "origin" (preload "../gen/rooms/inside/Origin.tres")
+
+   "first_corridor" (preload "../gen/rooms/inside/FirstCorridor.tres")
+
+   "corridor" (preload "../gen/rooms/inside/Corridor.tres")
+   "corridor2" (preload "../gen/rooms/inside/Corridor2.tres")
+   "corridor3" (preload "../gen/rooms/inside/Corridor3.tres")
+   "corridor4" (preload "../gen/rooms/inside/Corridor4.tres")
+
+   "room1" (preload "../gen/rooms/inside/Room1.tres")
+   "room2" (preload "../gen/rooms/inside/Room2.tres")
+   "roomtiny" (preload "../gen/rooms/inside/RoomTiny.tres")})
 
 (define onready anchor-types : Array #;[[RoomSet]]
   [;; 0
@@ -17,7 +33,10 @@
      [1.0])]
    ;; 1
    [(RoomPlacer.RoomSet.new
-     [rooms.corridor]
+     [rooms.corridor rooms.corridor4 rooms.corridor2]
+     [0.1 0.05 0.85])
+    (RoomPlacer.RoomSet.new
+     [rooms.corridor3]
      [1.0])]
    ;; 2
    [(RoomPlacer.RoomSet.new
@@ -31,7 +50,7 @@
   (define node
     (~> (get-node player)
         .-global-translation
-        gridmap.world-to-map
+        (/ CELL_SIZE)
         placer.project-xz
         placer.get-node-at))
   (when (!= node null) ;; nothing we can do otherwise
@@ -55,7 +74,8 @@
 (define (export String) save-to-file)
 
 (define (maybe-dbg-save)
-  (when (!= null save-to-file)
+  (when (and (!= null save-to-file)
+             (not (.empty save-to-file)))
     (define pck (.new PackedScene))
     (.pack pck self)
     (walk-children self)

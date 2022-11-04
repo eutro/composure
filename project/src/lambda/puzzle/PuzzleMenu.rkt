@@ -17,7 +17,10 @@
   (.set-type $TckLambdaSlot puzzle.expected-type)
   (.set-text $TypeHint (str puzzle.expected-type))
   (.set-bbcode (get-node "%PuzzleText") puzzle.description)
-  (Game.play-track puzzle.track))
+  (Game.queue-track puzzle.track))
+
+(define (_exit-tree)
+  (Game.queue-track null))
 
 (define (_on-TckLambdaSlot-term-changed term)
   (.set-bbcode $Error "")

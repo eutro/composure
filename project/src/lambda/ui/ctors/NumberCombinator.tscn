@@ -6,9 +6,8 @@
 [node name="NumberCombinator" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -799.0
+margin_right = -812.0
 margin_bottom = -550.0
-rect_min_size = Vector2( 225, 50 )
 script = ExtResource( 2 )
 
 [node name="HBox" type="HBoxContainer" parent="."]
@@ -24,8 +23,9 @@ editable = false
 
 [node name="Number" type="SpinBox" parent="HBox"]
 margin_left = 54.0
-margin_right = 220.865
+margin_right = 212.0
 margin_bottom = 50.0
+size_flags_horizontal = 3
 min_value = -999.0
 max_value = 999.0
 

@@ -4,17 +4,18 @@
 
 (define onready at $AnimationTree)
 
-(define MAX_SPEED 6)
+(define const ACCEL_SPEED 10)
+(define const MAX_SPEED 6)
+(define const RUN_THRESHOLD 4)
 
-(define RUN_THRESHOLD 4)
-
+(define target-vel : Vector3 (Vector3 0 0 0))
 (define velocity : Vector3 (Vector3 0 0 0))
 
 (define (unnan x)
   (if (is-nan x) 0 x))
 
 (define (user-move vel last-vel)
-  (+set! velocity
+  (+set! target-vel
          (Vector3 (- (unnan vel.x) (unnan last-vel.x))
                   0
                   (- (unnan vel.y) (unnan last-vel.y))))
@@ -22,7 +23,7 @@
   (when (or (is-inf len-sqr)
             (is-nan len-sqr)
             (len-sqr . < . 0.1))
-    (set! velocity (Vector3 0 0 0)))
+    (set! target-vel (Vector3 0 0 0)))
   null)
 
 (define (compare-distance a b)
@@ -46,12 +47,19 @@
       vel))
 
 (define (_physics-process delta)
-  (define speed (.length velocity))
   (cond
-    [(> speed 0)
-     (define vel (cap-vel velocity))
-     (look-at (+ translation vel) Vector3.UP)
-     (set! speed (.length (move-and-slide vel)))
+    [(== target-vel Vector3.ZERO) null]
+    [else (set! velocity (* (.length velocity) (.normalized target-vel)))])
+  (fset! velocity .move-toward target-vel (* delta ACCEL_SPEED))
+  (fset! velocity cap-vel)
+
+  (cond
+    [((.length velocity) . > . 0)
+     (when (!= target-vel Vector3.ZERO)
+       (look-at (+ translation target-vel) Vector3.UP))
+     (fset! velocity move-and-slide)
+     (set! translation.y 0) ;; So we can't run up chairs and stay there -_-
+     (define speed (.length velocity))
      (set! (ref at "parameters/Motion/blend_amount")
            (/ (min speed RUN_THRESHOLD) RUN_THRESHOLD))
      (set! (ref at "parameters/Run/blend_amount")

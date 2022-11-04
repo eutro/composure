@@ -11,5 +11,5 @@ dest_files=[ "res://.import/transience.ogg-8a48e2dd691c5d13cc3297777ff39064.oggs
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

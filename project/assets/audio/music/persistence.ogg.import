@@ -11,5 +11,5 @@ dest_files=[ "res://.import/persistence.ogg-0f07e0567983d432eb9c59ab941a7520.ogg
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

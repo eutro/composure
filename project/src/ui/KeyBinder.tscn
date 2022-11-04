@@ -57,8 +57,6 @@ margin_top = -25.0
 margin_right = 25.0
 margin_bottom = 25.0
 size_flags_horizontal = 0
-editable = true
-remove_on_drag = true
 
 [node name="Hint" parent="Control/VBoxContainer" instance=ExtResource( 4 )]
 anchor_right = 0.0

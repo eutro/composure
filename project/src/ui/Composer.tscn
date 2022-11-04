@@ -36,7 +36,7 @@ tab_align = 0
 
 [node name="Combinator" parent="HB/Tabs" instance=ExtResource( 2 )]
 margin_left = 12.3202
-margin_top = 59.3469
+margin_top = 60.3469
 margin_right = -13.3469
 margin_bottom = -11.2935
 

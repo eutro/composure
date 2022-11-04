@@ -5,6 +5,8 @@
 
 (define term : LambdaValue)
 
+(define (export Font) code-font)
+
 (define (export bool) editable true)
 (define (export bool) remove-on-drag true)
 (define (export bool) play-sound true)
@@ -29,10 +31,7 @@
     (when (!= null new-term)
       (set! preview (.create-preview new-term))
       (add-child preview)
-      (set! hint-tooltip (.to-string (.get-type new-term)))
-      (for ([line (.get-tooltip new-term)])
-        (+set! hint-tooltip "\n")
-        (+set! hint-tooltip line)))
+      (set! hint_tooltip "a"))
 
     (set! term new-term)
     (emit-signal "term_changed" term)))
@@ -101,3 +100,13 @@
 
 (define (_on-LambdaSlot-focus-exited)
   (.hide $Focus))
+
+(define (_make-custom-tooltip for-text)
+  (define ttc (.instance (preload "TooltipContents.tscn")))
+  (.push-font ttc code-font)
+  (.append-bbcode ttc (.to-string (.get-type term)))
+  (.pop ttc)
+  (for ([line (.get-tooltip term)])
+    (.newline ttc)
+    (.append-bbcode ttc line))
+  ttc)

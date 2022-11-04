@@ -10,7 +10,8 @@
 (define (mount)
   (when (== null mounted)
     (set! mounted (.instance scene))
-    (.add-child (get-node mount-point) mounted)))
+    (.add-child (get-node mount-point) mounted))
+  mounted)
 
 (define (unmount)
   (when (!= null mounted)

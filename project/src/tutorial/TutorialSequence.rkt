@@ -1,0 +1,3 @@
+#lang gdlisp
+
+(extends Control)

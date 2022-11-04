@@ -94,11 +94,16 @@
          (not (.-value (appv-int v [-1 -10])))))
   (Result.new
    is-ok
-   (and (not is-ok)
-        (cond
-          [(.-value (appv-int v [1 0])) "[b]Less[/b] than, not greater"]
-          [(.-value (appv-int v [0 0])) "[b]Strictly[/b] less than, if they are equal it must be false!"]
-          [else "Incorrect answer"]))))
+   (cond
+     [is-ok ""]
+     [(and (.-value (appv-int v [2 0]))
+           (.-value (appv-int v [3 0]))
+           (not (.-value (appv-int v [-3 0]))))
+      "[b]Less[/b] than, not greater"]
+     [(and (.-value (appv-int v [0 1]))
+           (.-value (appv-int v [0 0])))
+      "[b]Strictly[/b] less than, if they are equal it must be false!"]
+     [else "Incorrect answer"])))
 
 (define-puzzle sort-2
   #:category "Sorting"
@@ -115,10 +120,12 @@
          (== -10 (.-value (appv-int v [-1 -10])))))
   (Result.new
    is-ok
-   (and (not is-ok)
-        (cond
-          [(== 10 (.-value (appv-int v [0 10]))) "[b]Lower[/b] of its two arguments, not greater"]
-          [else "Incorrect answer"]))))
+   (cond
+     [is-ok ""]
+     [(and (== 10 (.-value (appv-int v [0 10])))
+           (== 10 (.-value (appv-int v [10 0]))))
+      "[b]Lower[/b] of its two arguments, not greater"]
+     [else "Incorrect answer"])))
 
 (define (eq-pair lhs rhs b)
   (and (== lhs b.car)

@@ -48,6 +48,7 @@ stretch_mode = 6
 [node name="Printers" type="VBoxContainer" parent="HUD"]
 anchor_bottom = 1.0
 margin_right = 343.0
+mouse_filter = 2
 alignment = 2
 
 [node name="Composer" parent="." instance=ExtResource( 1 )]
@@ -60,10 +61,6 @@ anchor_top = 0.1
 anchor_right = 0.9
 anchor_bottom = 0.9
 mouse_filter = 2
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-autoplay = true
-bus = "Music"
 
 [node name="Open" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )

@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
 [ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=6]
 
 [node name="Room1" type="Spatial"]
 script = ExtResource( 2 )
@@ -17,11 +18,29 @@ edge_items = [ 3, 4, 14 ]
 mesh_library = ExtResource( 1 )
 cell_center_y = false
 data = {
-"cells": PoolIntArray( 0, 0, 655374, 65532, 0, 655374, 65533, 0, 5, 65535, 0, 655369, 196608, 0, 655380, 262140, 0, 655380, 262141, 0, 655380, 262142, 0, 655380, 262143, 0, 655380, -3, 0, 13, -2, 0, 13, -1, 0, 13, 0, 1, 655374, 65532, 1, 655374, 65533, 1, 655374, 65535, 1, 655374, 196608, 1, 655380, 262140, 1, 655380, 262141, 1, 655380, 262142, 1, 655380, 262143, 1, 655380, -2, 1, 13, 0, 65535, 655374, 65532, 65535, 655374, 65533, 65535, 655374, 65534, 65535, 655374, 65535, 65535, 655374, 196608, 65535, 655380, 262140, 65535, 655380, 262141, 65535, 655380, 262142, 65535, 655380, 262143, 65535, 655380 )
+"cells": PoolIntArray( 0, 0, 655374, 65532, 0, 655374, 65533, 0, 5, 196608, 0, 655380, 262140, 0, 655380, 262141, 0, 655380, 262142, 0, 655380, 262143, 0, 655380, -3, 0, 13, -2, 0, 13, -1, 0, 13, 0, 1, 655374, 65532, 1, 655374, 65533, 1, 655374, 65535, 1, 655374, 196608, 1, 655380, 262140, 1, 655380, 262141, 1, 655380, 262142, 1, 655380, 262143, 1, 655380, -2, 1, 13, 0, 65535, 655374, 65532, 65535, 655374, 65533, 65535, 655374, 65534, 65535, 655374, 65535, 65535, 655374, 196608, 65535, 655380, 262140, 65535, 655380, 262141, 65535, 655380, 262142, 65535, 655380, 262143, 65535, 655380 )
 }
 __meta__ = {
 "_editor_clip_": 0,
-"_editor_floor_": Vector3( 0, 3, 0 )
+"_editor_floor_": Vector3( 0, 0, 0 )
+}
+
+[node name="RandomTile4" type="Spatial" parent="GridMap"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1 )
+script = ExtResource( 6 )
+child_map = NodePath("GridMap")
+
+[node name="GridMap" type="GridMap" parent="GridMap/RandomTile4"]
+mesh_library = ExtResource( 1 )
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PoolIntArray( 0, 0, 1441799, 0, 2, 655398, 0, 3, 655369 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 0, 0 )
 }
 
 [node name="Anchors" type="Spatial" parent="."]

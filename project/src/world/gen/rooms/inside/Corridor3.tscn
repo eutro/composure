@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
+[ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
+[ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=6]
+
+[node name="FirstCorridor" type="Spatial"]
+script = ExtResource( 2 )
+gridmap = NodePath("GridMap")
+anchors = NodePath("Anchors")
+entities = NodePath("Entities")
+edge_items = [ 3, 4, 14 ]
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource( 1 )
+cell_center_y = false
+data = {
+"cells": PoolIntArray( 0, 65528, 6, 2, 65528, 14, 65534, 65528, 14, 196608, 65528, 20, 196609, 65528, 20, 196610, 65528, 20, 262142, 65528, 20, 262143, 65528, 20, -65536, 65528, 13, -65535, 65528, 13, -1, 65528, 13, 0, 65529, 14, 1, 65529, 14, 2, 65529, 14, 65534, 65529, 14, 65535, 65529, 14, 196608, 65529, 20, 196609, 65529, 20, 196610, 65529, 20, 262142, 65529, 20, 262143, 65529, 20, -65536, 65529, 13, -65535, 65529, 13, -1, 65529, 13 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 0, 0 )
+}
+
+[node name="RandomTile" type="Spatial" parent="GridMap"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07347, 0, -15.1369 )
+script = ExtResource( 6 )
+child_map = NodePath("GridMap")
+
+[node name="GridMap" type="GridMap" parent="GridMap/RandomTile"]
+mesh_library = ExtResource( 1 )
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PoolIntArray( 0, 0, 1048607, 65534, 0, 655367, 65533, 65535, 1048581, 65535, 65535, 1048585 )
+}
+__meta__ = {
+"_editor_clip_": 0
+}
+
+[node name="Anchors" type="Spatial" parent="."]
+
+[node name="CCont" parent="Anchors" instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00155, 0, -15.3033 )
+type = 1
+
+[node name="Entities" type="Spatial" parent="."]
+
+[node name="Puzzle" parent="Entities" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.94599, 1.66876, -14.7119 )
+obj_name = "Bookcase"
+category = "Sorting"
+fact_path = NodePath("RandomFact")
+
+[node name="RandomFact" parent="Entities/Puzzle" instance=ExtResource( 5 )]
+min_value = 30.0
+max_value = 50.0
+step = 1.0
+value_name = "Unsorted"
+units = " Books"
+
+[node name="OmniLight" type="OmniLight" parent="Entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.00588, 5.66257, -15.7134 )
+light_color = Color( 0.9, 0.8487, 0.729, 1 )
+light_energy = 0.474
+omni_range = 6.99457
