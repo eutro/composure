@@ -128,8 +128,8 @@
      [else "Incorrect answer"])))
 
 (define (eq-pair lhs rhs b)
-  (and (== lhs b.car)
-       (== rhs b.cdr)))
+  (and (== lhs b.car.value)
+       (== rhs b.cdr.value)))
 
 (define-puzzle sort-3
   #:category "Sorting"

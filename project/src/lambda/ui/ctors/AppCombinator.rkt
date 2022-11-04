@@ -1,6 +1,6 @@
 #lang gdlisp
 
-(extends AspectRatioContainer)
+(extends Control)
 
 (define (export Array NodePath) args)
 

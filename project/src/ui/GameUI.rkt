@@ -6,8 +6,12 @@
 
 (define (export PackedScene) Printer)
 
+(define (get-composer-button)
+  $HUD/ComposerButton)
+
 (define (_ready)
-  (set! Game.ui self))
+  (set! Game.ui self)
+  (.start (.mount $Tutorial)))
 
 (define (get-gui)
   (.-mounted $Composer))

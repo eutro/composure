@@ -7,13 +7,10 @@
 [sub_resource type="DynamicFont" id=2]
 font_data = ExtResource( 3 )
 
-[node name="AppCombinator" type="AspectRatioContainer"]
+[node name="AppCombinator" type="Control"]
 anchor_right = 0.195312
 anchor_bottom = 0.216667
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": true
-}
 
 [node name="VBox" type="VBoxContainer" parent="."]
 margin_right = 200.0

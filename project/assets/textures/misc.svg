@@ -28,9 +28,9 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
      showgrid="true"
-     inkscape:zoom="14.491797"
-     inkscape:cx="222.78121"
-     inkscape:cy="30.776031"
+     inkscape:zoom="22.627417"
+     inkscape:cx="176.35685"
+     inkscape:cy="65.407377"
      inkscape:window-width="1920"
      inkscape:window-height="1005"
      inkscape:window-x="0"
@@ -247,7 +247,8 @@
        y1="5.0904322"
        x2="34.922047"
        y2="8.134306"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.0014776,0.00914156)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3066"
@@ -256,7 +257,8 @@
        y1="21.26819"
        x2="31.55534"
        y2="18.317884"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-0.00229101,-0.00175226)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient3290"
@@ -300,16 +302,16 @@
        class="UnoptimicedTransforms"
        transform="matrix(2.282774,0,0,2.6154237,-0.90174889,11.175132)" />
     <circle
-       style="fill:none;stroke:url(#linearGradient1779);stroke-width:0.79375;stroke-linecap:round;stroke-opacity:1;stop-color:#000000;stroke-dasharray:none;fill-opacity:1"
+       style="fill:none;fill-opacity:1;stroke:url(#linearGradient1779);stroke-width:0.79375;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
        id="path3444"
-       cx="33.074394"
-       cy="6.6054416"
+       cx="33.072918"
+       cy="6.614583"
        r="1.7199383" />
     <circle
-       style="fill:none;stroke:url(#linearGradient1829);stroke-width:0.79375;stroke-linecap:round;stroke-opacity:1;stop-color:#000000;stroke-dasharray:none"
+       style="fill:none;stroke:url(#linearGradient1829);stroke-width:0.79375;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;stop-color:#000000"
        id="path3444-2"
-       cx="33.075207"
-       cy="19.845503"
+       cx="33.072918"
+       cy="19.84375"
        r="1.7199383" />
     <path
        style="fill:url(#linearGradient3292);fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
