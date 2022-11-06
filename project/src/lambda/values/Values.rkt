@@ -562,7 +562,7 @@
     (.finish g (ref s 1))))
 
 (define-construct (corrupt f) ;; I think this is catchier than `arr`
-  #:category "Combinators" #:unlocked? false #:name "Corrupt"
+  #:category "Combinators" #:unlocked? true #:name "Corrupt"
   #:description ["Creates an action from a pure function"]
   #:class-name Corrupt
   #:short-name "η"
