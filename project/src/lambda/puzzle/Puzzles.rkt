@@ -197,7 +197,7 @@ returns any solution to [code]ax² + bx + c = 0[/code]."
     Types.MON_NUM
     (Types.mono-bin-fun
      Types.MON_NUM Types.MON_NUM
-     (Types.mono-pair Types.MON_NUM Types.MON_NUM))))
+     Types.MON_NUM)))
   #:track tracks.transience
   #:check (v)
   (Result.new
@@ -514,6 +514,7 @@ Once again, you may wish to solve the [b]Combinator[/b] puzzles first."
      [is-ok ""]
      [else (+ "Incorrect answer, failed on: " (str failed-on))])))
 
+#;
 (define-puzzle sort-7
   #:category "Sorting"
   #:description "Give me a function that returns its four arguments as a pair of pairs with values in ascending order."
@@ -573,6 +574,22 @@ Once again, you may wish to solve the [b]Combinator[/b] puzzles first."
    (and (is-equal-approx 30 (.-value (v.apply (Values.wrap-vec3 (Vector3 40 30 20)))))
         (is-equal-approx 20 (.-value (v.apply (Values.wrap-vec3 (Vector3 40 20 30)))))
         (is-equal-approx 40 (.-value (v.apply (Values.wrap-vec3 (Vector3 20 40 -10))))))
+   "Incorrect answer"))
+
+(define (is-perp? u v)
+  (and (not (.is-equal-approx v (Vector2 0 0)))
+       (is-zero-approx (.dot u v))))
+
+(define-puzzle vec-3
+  #:category "Vector"
+  #:description "Give me a function that returns a (nontrivial) perpendicular to a 2D vector."
+  #:type (Type.new [] (Types.mono-fun Types.MON_VEC2 Types.MON_VEC2))
+  #:track tracks.rest
+  #:check (v)
+  (Result.new
+   (and (is-perp? (Vector2 30 20) (.-value (v.apply (Values.wrap-vec2 (Vector2 30 20)))))
+        (is-perp? (Vector2 20 30) (.-value (v.apply (Values.wrap-vec2 (Vector2 20 30)))))
+        (is-perp? (Vector2 40 -10) (.-value (v.apply (Values.wrap-vec2 (Vector2 40 -10))))))
    "Incorrect answer"))
 
 (define (init-progress)

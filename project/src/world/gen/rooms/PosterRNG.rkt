@@ -19,6 +19,7 @@
   (set! unused-pool (.slice sprites cut-1 (len sprites))))
 
 (define (next)
+  (randomize)
   (define i (% (randi) (len used-0-pool)))
   (define j (% (randi) (len used-1-pool)))
   (define k (% (randi) (len unused-pool)))

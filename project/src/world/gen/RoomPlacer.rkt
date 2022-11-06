@@ -58,6 +58,7 @@
   ;; and seedable, since the order in which anchors are forced
   ;; (i.e. the path of the player) can change the generation,
   ;; hence no seed or rng passed in here
+  (randomize)
   (define exclusions {})
   (define chance-sum 1.0)
   (let loop ()

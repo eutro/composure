@@ -562,7 +562,7 @@
     (.finish g (ref s 1))))
 
 (define-construct (corrupt f) ;; I think this is catchier than `arr`
-  #:category "Combinators" #:unlocked? true #:name "Corrupt"
+  #:category "Actions" #:unlocked? true #:name "Corrupt"
   #:description ["Creates an action from a pure function"]
   #:class-name Corrupt
   #:short-name "η"
@@ -689,11 +689,15 @@
   (cached-type (Values.auto-type Values.VAL_CURRY [f a]))
   (define (apply b) (.apply f (.apply (Values.VAL_PAIR.apply a) b))))
 
+(define (unlock-ski?)
+  (or (Game.puzzle-completed? "Combinator" 2)
+      (Game.puzzle-completed? "Sorting" 2)
+      (Game.puzzle-completed? "Arithmetic" 5)
+      (Game.puzzle-completed? "Vector" 2)))
+
 (define-construct (s f g) ;; λf g x.(f x)(g x)
   #:category "Combinators"
-  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
-                  (Game.puzzle-completed? "Sorting" 2)
-                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:unlocked? (unlock-ski?)
   #:name "S Combinator"
   #:description ["S f g x : Applies f of x to g of x"
                  "Lambda form: λf.λg.λx.(f x)(g x)"]
@@ -715,9 +719,7 @@
 
 (define-construct (k value)
   #:category "Combinators"
-  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
-                  (Game.puzzle-completed? "Sorting" 2)
-                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:unlocked? (unlock-ski?)
   #:name "Constant"
   #:description ["Creates a function that always returns the given value"
                  "Lambda form: λx.λy.x"]
@@ -731,9 +733,7 @@
 
 (define-pure (i x)
   #:category "Combinators"
-  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
-                  (Game.puzzle-completed? "Sorting" 2)
-                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:unlocked? (unlock-ski?)
   #:name "Identity"
   #:description ["Returns its argument"]
   #:short-name "I"

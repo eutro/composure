@@ -1,0 +1,98 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
+[ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
+[ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=4]
+[ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=5]
+[ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=6]
+
+[sub_resource type="CylinderShape" id=1]
+height = 3.69218
+radius = 4.79629
+
+[node name="Room5" type="Spatial"]
+script = ExtResource( 2 )
+gridmap = NodePath("GridMap")
+anchors = NodePath("Anchors")
+entities = NodePath("Entities")
+edge_items = [ 3, 4, 14 ]
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource( 1 )
+cell_center_y = false
+data = {
+"cells": PoolIntArray( 1, 0, 1048590, 65531, 0, 1048590, 196608, 0, 1441812, 196609, 0, 1441812, 262139, 0, 1441812, 262140, 0, 1441812, 262141, 0, 1441812, 262142, 0, 1441812, 262143, 0, 1441812, -65536, 0, 1048589, -4, 0, 1048589, -3, 0, 1048589, -2, 0, 1048589, -1, 0, 1048589, 1, 1, 1048590, 65531, 1, 1048590, 196608, 1, 1441812, 196609, 1, 1441812, 262139, 1, 1441812, 262140, 1, 1441812, 262141, 1, 1441812, 262142, 1, 1441812, 262143, 1, 1441812, -65536, 1, 1048589, -4, 1, 1048589, -3, 1, 1048589, -2, 1, 1048589, -1, 1, 1048589, 0, 65533, 1048590, 1, 65533, 1048590, 65531, 65533, 1048590, 65532, 65533, 1048590, 65533, 65533, 1048590, 65534, 65533, 1048590, 65535, 65533, 1048590, 196608, 65533, 1441812, 196609, 65533, 1441812, 262139, 65533, 1441812, 262140, 65533, 1441812, 262141, 65533, 1441812, 262142, 65533, 1441812, 262143, 65533, 1441812, 1, 65534, 1048590, 65531, 65534, 1048590, 65532, 65534, 1441807, 196608, 65534, 1441812, 196609, 65534, 1441812, 262139, 65534, 1441812, 262140, 65534, 1441812, 262141, 65534, 1441812, 262142, 65534, 1441812, 262143, 65534, 1441812, -65536, 65534, 1048589, -4, 65534, 1048589, -3, 65534, 1048589, -2, 65534, 1048589, -1, 65534, 1048589, 1, 65535, 1048590, 65531, 65535, 1048590, 196606, 65535, 1441833, 196608, 65535, 1441812, 196609, 65535, 1441812, 262139, 65535, 1441812, 262140, 65535, 1441812, 262141, 65535, 1441812, 262142, 65535, 1441812, 262143, 65535, 1441812, -65536, 65535, 1048589, -4, 65535, 1048589, -3, 65535, 1048589, -2, 65535, 1048589, -1, 65535, 1048589 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 3, 0 )
+}
+
+[node name="RandomTile" type="Spatial" parent="GridMap"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.07347, 0, 0.8631 )
+script = ExtResource( 4 )
+child_map = NodePath("GridMap")
+
+[node name="GridMap" type="GridMap" parent="GridMap/RandomTile"]
+mesh_library = ExtResource( 1 )
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PoolIntArray( 0, 0, 1048595, 0, 1, 1048592 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 3, 0 )
+}
+
+[node name="RandomTile2" type="Spatial" parent="GridMap"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07347, 0, -3.1369 )
+script = ExtResource( 4 )
+child_map = NodePath("GridMap")
+
+[node name="GridMap" type="GridMap" parent="GridMap/RandomTile2"]
+mesh_library = ExtResource( 1 )
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PoolIntArray( 0, 0, 1441830, 65535, 0, 1441801 )
+}
+__meta__ = {
+"_editor_clip_": 0
+}
+
+[node name="Anchors" type="Spatial" parent="."]
+
+[node name="Anchor" parent="Anchors" instance=ExtResource( 3 )]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -3.00339, 0, 3.22346 )
+type = 2
+
+[node name="Entities" type="Spatial" parent="."]
+
+[node name="OmniLight" type="OmniLight" parent="Entities"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.99572, 4.54745, -1.01079 )
+light_color = Color( 0.9, 0.8487, 0.729, 1 )
+light_energy = 0.474
+omni_range = 7.97
+omni_attenuation = 0.933034
+
+[node name="ArithPuzzle" parent="Entities" instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06119, 1.74066, -2.92195 )
+shape = NodePath("CollisionShape")
+obj_name = "Closet"
+category = "Arithmetic"
+fact_path = NodePath("RandomFact")
+
+[node name="RandomFact" parent="Entities/ArithPuzzle" instance=ExtResource( 6 )]
+min_value = 60.0
+max_value = 95.0
+step = 0.1
+value_name = "Average sleeve"
+units = "% of arm"
+
+[node name="CollisionShape" type="CollisionShape" parent="Entities/ArithPuzzle"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.921, 0.0288675, 2.84651 )
+shape = SubResource( 1 )

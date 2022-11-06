@@ -25,6 +25,9 @@
    "room1" (preload "../gen/rooms/inside/Room1.tres")
    "room2" (preload "../gen/rooms/inside/Room2.tres")
    "room3" (preload "../gen/rooms/inside/Room3.tres")
+   "room4" (preload "../gen/rooms/inside/Room4.tres")
+   "room5" (preload "../gen/rooms/inside/Room5.tres")
+   "room6" (preload "../gen/rooms/inside/Room6.tres")
    "roomtiny" (preload "../gen/rooms/inside/RoomTiny.tres")
    "roomffs" (preload "../gen/rooms/inside/RoomOhFFS.tres")})
 
@@ -42,8 +45,8 @@
      [1.0])]
    ;; 2
    [(RoomPlacer.RoomSet.new
-     [rooms.room1 rooms.room2 rooms.room3]
-     [0.3 0.3 0.4])
+     [rooms.room1 rooms.room2 rooms.room3 rooms.room4 rooms.room5 rooms.room6]
+     [0.2 0.15 0.2 0.15 0.15 0.15])
     (RoomPlacer.RoomSet.new
      [rooms.roomtiny]
      [1.0])

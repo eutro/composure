@@ -28,7 +28,7 @@ _bundled = {
 "cells": PoolIntArray( 0, 0, 1048607, 65534, 0, 655367, 65533, 65535, 1048581, 65535, 65535, 1048585 )
 }, {
 "_editor_clip_": 0
-}, ExtResource( 2 ), Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.94599, 1.66876, -14.7119 ), ExtResource( 3 ), ExtResource( 1 ), "Bookcase", "Sorting", NodePath("RandomFact"), ExtResource( 7 ), ExtResource( 4 ), 30.0, 50.0, 1.0, "Unsorted", " Books", Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.988941, 4.54745, -15.7134 ), Color( 0.9, 0.8487, 0.729, 1 ), 0.474, 6.99457, 2.82843 ],
+}, ExtResource( 2 ), Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.94599, 1.66876, -14.7119 ), ExtResource( 3 ), ExtResource( 1 ), "Bookcase", "Sorting", NodePath("RandomFact"), ExtResource( 7 ), ExtResource( 4 ), 30.0, 50.0, 1.0, "Unsorted", " Books", Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.988941, 4.54745, -15.0327 ), Color( 0.9, 0.8487, 0.729, 1 ), 0.474, 6.99457, 2.82843 ],
 "version": 2
 }
 

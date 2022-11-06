@@ -64,7 +64,7 @@ value_name = "Unsorted"
 units = " Books"
 
 [node name="OmniLight" type="OmniLight" parent="Entities"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.988941, 4.54745, -15.7134 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.988941, 4.54745, -15.0327 )
 light_color = Color( 0.9, 0.8487, 0.729, 1 )
 light_energy = 0.474
 omni_range = 6.99457
