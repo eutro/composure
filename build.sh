@@ -4,6 +4,7 @@ HERE="$(dirname "$(readlink -f $0)")"
 cd "$HERE/project"
 
 rm -r ./export/
+mkdir ./export/
 
 godot --export "Linux/X11"
 
