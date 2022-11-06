@@ -15,4 +15,4 @@ mkdir -p ../export/HTML5/
 sed -si '/\[rendering\]/{$!{N;s#\[rendering\]\n#\0\nquality/driver/driver_name="GLES2"#;ty;P;D;:y}}' ./project.godot
 godot --export "HTML5"
 sed -si '/\[rendering\]/{$!{N;N;s#\[rendering\]\n\n.*#[rendering]\n#;ty;P;D;:y}}' ./project.godot
-cp ./assets/textures/title.svg ./export/HTML5/
+cp ./assets/textures/title.svg ../export/HTML5/
