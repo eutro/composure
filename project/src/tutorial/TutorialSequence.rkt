@@ -163,7 +163,7 @@ that means, but I'm sure you do." true))
     (with-mouse-grabbed
       (set-tab 1)
       (await (show-text "Now for the [b]Keys[/b]." true))
-      (await (show-text "Press the button, and issue an input, preferrably a mouse click, touch, or joystick motion."
+      (await (show-text "Press the button, and issue an input, preferrably a mouse click, or joystick motion."
                         false)))
     (yield (~> Game.ui .get-gui .get-tabs (.get-node "Keys")) "key_setup"))
 
@@ -231,7 +231,7 @@ dimensions, then compose the action into the [i]move[/i] action."
     (append-text "[") (append-bb "[code]:)[/code]") (append-text "]")
     (append-bb " and [b]Move[/b] ")
     (append-text "[") (append-bb "[code]mv[/code]") (append-text "]")
-    (append-bb ", then [i]bind[/i] it to a mouse, touch, or joystick input.")
+    (append-bb ", then [i]bind[/i] it to a mouse or joystick input.")
     (await (continue-show-text false))
     (release-mouse)
     (await (present-choice ["Done!"]))
