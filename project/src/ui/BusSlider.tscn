@@ -9,4 +9,5 @@ max_value = 1.0
 step = 0.01
 script = ExtResource( 1 )
 
+[connection signal="drag_ended" from="." to="." method="_on_BusSlider_drag_ended"]
 [connection signal="value_changed" from="." to="." method="_on_BusSlider_value_changed"]

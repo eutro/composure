@@ -138,13 +138,36 @@
   (fade-out-music)
   (emit-signal "quit"))
 
-(define (_ready)
-  (add-child music)
-  (set! music.bus "Music")
-  (randomize))
-
 (define (play-open)
   (when (!= null ui) (.play (.get-node ui "Open"))))
 
 (define (play-close)
   (when (!= null ui) (.play (.get-node ui "Close"))))
+
+(define const BUS_COUNT 3)
+(define const buses-path "user://buses")
+
+(define (load-volume)
+  (define file (.new File))
+  (when (file.file-exists buses-path)
+    (when (== OK (.open file buses-path File.READ))
+      (for ([bus (range BUS_COUNT)])
+        (define dbl (clamp (.get-double file) 0 1))
+        (when (and (== OK (.get-error file))
+                   (0 . <= . dbl)
+                   (dbl . <= . 1))
+          (AudioServer.set-bus-volume-db bus (linear2db dbl))))
+      (.close file))))
+
+(define (save-volume)
+  (define file (.new File))
+  (.open file buses-path File.WRITE)
+  (for ([bus (range BUS_COUNT)])
+    (.store-double file (db2linear (AudioServer.get-bus-volume-db bus))))
+  (.close file))
+
+(define (_ready)
+  (add-child music)
+  (load-volume)
+  (set! music.bus "Music")
+  (randomize))
