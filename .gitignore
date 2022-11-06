@@ -4,6 +4,3 @@ export/
 
 # I'm not keeping compiler output in git, that would destroy diffs.
 *.gd
-
-# Committing this is supposedly optional https://docs.godotengine.org/en/3.0/getting_started/workflow/assets/import_process.html#files-generated
-.import/
