@@ -8,8 +8,6 @@
 (define (get-definitions)
   $HB/DefinitionList)
 
-(define (_enter-tree)
-  (when (!= null Game.ui) (.play (.get-node Game.ui "Open"))))
+(define (_enter-tree) (Game.play-open))
 
-(define (_exit-tree)
-  (when (!= null Game.ui) (.play (.get-node Game.ui "Close"))))
+(define (_exit-tree) (Game.play-close))

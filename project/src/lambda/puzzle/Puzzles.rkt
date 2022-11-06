@@ -110,7 +110,7 @@
   #:category "Arithmetic"
   #:description "What is the value of [code]3 * 4[/code]?"
   #:type Types.TY_NUM
-  #:track tracks.transience
+  #:track tracks.first
   #:check (v)
   (Result.new
    (== v.value 12)
@@ -120,7 +120,7 @@
   #:category "Arithmetic"
   #:description "Give me a function that adds two numbers together."
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
-  #:track tracks.transience
+  #:track tracks.first
   #:check (v)
   (Result.new
    (and (== 7 (.-value (appv-int v [2 5])))
@@ -156,6 +156,59 @@
         (== 40 (.-value (appv-int v [20])))
         (== -20 (.-value (appv-int v [-10])))
         (== -10 (.-value (appv-int v [-5]))))
+   "Incorrect answer"))
+
+(define-puzzle arith-5
+  #:category "Arithmetic"
+  #:description "Give me a function that squares a number."
+  #:type (Type.new [] (Types.mono-fun Types.MON_NUM Types.MON_NUM))
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (and (== 49 (.-value (appv-int v [7])))
+        (== 64 (.-value (appv-int v [8])))
+        (== 400 (.-value (appv-int v [20])))
+        (== 100 (.-value (appv-int v [-10])))
+        (== 25 (.-value (appv-int v [-5]))))
+   "Incorrect answer"))
+
+(define-puzzle arith-6
+  #:category "Arithmetic"
+  #:description "Give me a function that returns both square roots of a positive number, in any order."
+  #:type (Type.new [] (Types.mono-fun Types.MON_NUM (Types.mono-pair Types.MON_NUM Types.MON_NUM)))
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (and (eq-pair-either 7 -7 (.-value (appv-int v [49])))
+        (eq-pair-either 8 -8 (.-value (appv-int v [64])))
+        (eq-pair-either 20 -20 (.-value (appv-int v [400])))
+        (eq-pair-either 10 -10 (.-value (appv-int v [100])))
+        (eq-pair-either 5 -5 (.-value (appv-int v [25]))))
+   "Incorrect answer"))
+
+(define-puzzle arith-7
+  #:category "Arithmetic"
+  #:description "Give me a function that, given arguments [code]a[/code], [code]b[/code] and [code]c[/code], \
+returns any solution to [code]ax² + bx + c = 0[/code]."
+  #:type
+  (Type.new
+   []
+   (Types.mono-fun
+    Types.MON_NUM
+    (Types.mono-bin-fun
+     Types.MON_NUM Types.MON_NUM
+     (Types.mono-pair Types.MON_NUM Types.MON_NUM))))
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (and (eq-either 7 -7 (.-value (appv-int v [1 0 -49])))
+        (eq-either 8 -8 (.-value (appv-int v [1 0 -64])))
+        (eq-either 20 -20 (.-value (appv-int v [1 0 -400])))
+        (eq-either 10 -10 (.-value (appv-int v [1 0 -100])))
+        (eq-either 5 -5 (.-value (appv-int v [1 0 -25])))
+
+        (eq-either 3 7 (.-value (appv-int v [1 -10 21])))
+        (eq-either 3 7 (.-value (appv-int v [2 -20 42]))))
    "Incorrect answer"))
 
 (define-puzzle comb-0
@@ -262,6 +315,22 @@ i.e. [code]X f[/code] becomes [code]λx.f x x[/code]"
    (== (~> v .get-type .-type-vars len) 2)
    "Incorrect answer"))
 
+(define-puzzle comb-7
+  #:category "Combinator"
+  #:description "Give me a function that, given a binary function and a unary function, \
+returns a function that applies the unary function to the result of the binary function."
+  #:type (Type.new
+          [0 1 2 3]
+          (Types.mono-bin-fun
+           (Types.mono-bin-fun TV_A TV_B TV_C)
+           (Types.mono-fun TV_C TV_D)
+           (Types.mono-bin-fun TV_A TV_B TV_D)))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 4)
+   "Incorrect answer"))
+
 (define-puzzle sort-0
   #:category "Sorting"
   #:description "What is the minimum of 2 and 3?"
@@ -299,7 +368,36 @@ i.e. [code]X f[/code] becomes [code]λx.f x x[/code]"
 
 (define-puzzle sort-2
   #:category "Sorting"
-  #:description "Give me a function that returns the [b]lower[/b] of its two arguments."
+  #:description "Give me a function that returns -1 if its first argument is [b]less[/b] than its second, and 1 otherwise.
+
+You may wish to solve the [b]Combinator[/b] puzzles first."
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
+  #:track tracks.persistence
+  #:check (v)
+  (define is-ok
+    (and (== -1 (.-value (appv-int v [0 10])))
+         (== -1 (.-value (appv-int v [0 1])))
+         (== -1 (.-value (appv-int v [(randf) (+ (randf) 2)])))
+         (== 1 (.-value (appv-int v [(randf) (+ (randf) -2)])))
+         (== 1 (.-value (appv-int v [0 0])))
+         (== 1 (.-value (appv-int v [0.5 0.5])))
+         (== 1 (.-value (appv-int v [0 -1])))
+         (== 1 (.-value (appv-int v [-1 -10])))))
+  (Result.new
+   is-ok
+   (cond
+     [is-ok ""]
+     [(and (== -1 (.-value (appv-int v [2 0])))
+           (== -1 (.-value (appv-int v [3 0])))
+           (== 1 (.-value (appv-int v [-3 0]))))
+      "[b]Less[/b] than, not greater"]
+     [else "Incorrect answer"])))
+
+(define-puzzle sort-3
+  #:category "Sorting"
+  #:description "Give me a function that returns the [b]lower[/b] of its two arguments.
+
+Once again, you may wish to solve the [b]Combinator[/b] puzzles first."
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
   #:track tracks.persistence
   #:check (v)
@@ -323,7 +421,23 @@ i.e. [code]X f[/code] becomes [code]λx.f x x[/code]"
   (and (== lhs b.car.value)
        (== rhs b.cdr.value)))
 
-(define-puzzle sort-3
+(define (eq-val-pair lhs r-lhs r-rhs b)
+  (and (== lhs b.car.value)
+       (eq-pair r-lhs r-rhs b.cdr.value)))
+
+(define (eq-pair-pair l-lhs l-rhs r-lhs r-rhs b)
+  (and (eq-pair l-lhs l-rhs b.car.value)
+       (eq-pair r-lhs r-rhs b.cdr.value)))
+
+(define (eq-pair-either lhs rhs b)
+  (or (eq-pair lhs rhs b)
+      (eq-pair rhs lhs b)))
+
+(define (eq-either x y b)
+  (or (== x b)
+      (== y b)))
+
+(define-puzzle sort-4
   #:category "Sorting"
   #:description "Give me a function that returns its two arguments as a pair in ascending order."
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM (Types.mono-pair Types.MON_NUM Types.MON_NUM)))
@@ -331,12 +445,107 @@ i.e. [code]X f[/code] becomes [code]λx.f x x[/code]"
   #:check (v)
   (Result.new
    (and (eq-pair 0 10 (.-value (appv-int v [0 10])))
-        (eq-pair 0 1 (.-value (appv-int v [0 1])))
+        (eq-pair 0 1 (.-value (appv-int v [1 0])))
         (eq-pair 0 0 (.-value (appv-int v [0 0])))
         (eq-pair 0.5 0.5 (.-value (appv-int v [0.5 0.5])))
         (eq-pair -1 0 (.-value (appv-int v [0 -1])))
         (eq-pair -10 -1 (.-value (appv-int v [-1 -10]))))
    "Incorrect answer"))
+
+(define-puzzle sort-5
+  #:category "Sorting"
+  #:description "Give me a function that compares its first argument to its second, returns -1 if it is less, \
+1 if it is more, and 0 if they are equal."
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
+  #:track tracks.persistence
+  #:check (v)
+  (define is-ok
+    (and (== -1 (.-value (appv-int v [0 10])))
+         (== -1 (.-value (appv-int v [0 1])))
+         (== -1 (.-value (appv-int v [(randf) (+ (randf) 2)])))
+         (== 1 (.-value (appv-int v [(randf) (+ (randf) -2)])))
+         (== 0 (.-value (appv-int v [0 0])))
+         (== 0 (.-value (appv-int v [0.5 0.5])))
+         (== 1 (.-value (appv-int v [0 -1])))
+         (== 1 (.-value (appv-int v [-1 -10])))))
+  (Result.new
+   is-ok
+   (cond
+     [is-ok ""]
+     [(and (== 1 (.-value (appv-int v [0 10])))
+           (== 1 (.-value (appv-int v [0 1])))
+           (== 1 (.-value (appv-int v [(randf) (+ (randf) 2)])))
+           (== -1 (.-value (appv-int v [(randf) (+ (randf) -2)])))
+           (== 0 (.-value (appv-int v [0 0])))
+           (== 0 (.-value (appv-int v [0.5 0.5])))
+           (== -1 (.-value (appv-int v [0 -1])))
+           (== -1 (.-value (appv-int v [-1 -10]))))
+      "Other way around!"]
+     [else "Incorrect answer"])))
+
+(define-puzzle sort-6
+  #:category "Sorting"
+  #:description "Give me a function that returns its three arguments as a pair of a number and a pair, with values in ascending order."
+  #:type
+  (Type.new
+   []
+   (Types.mono-bin-fun
+    Types.MON_NUM Types.MON_NUM
+    (Types.mono-fun
+     Types.MON_NUM
+     (Types.mono-pair Types.MON_NUM (Types.mono-pair Types.MON_NUM Types.MON_NUM)))))
+  #:track tracks.persistence
+  #:check (v)
+  (define is-ok true)
+  (define failed-on null)
+  (for ([i (range 100)])
+    (define xs [(% (randi) 5) (+ (% (randi) 5) 10) (+ (% (randi) 5) 20)])
+    (define sh-xs (.duplicate xs))
+    (.shuffle sh-xs)
+    (cond
+      [(not (eq-val-pair (ref xs 0) (ref xs 1) (ref xs 2)
+                         (.-value (appv-int v sh-xs))))
+       (set! is-ok false)
+       (set! failed-on sh-xs)
+       (#%gdscript "break")]))
+  (Result.new
+   is-ok
+   (cond
+     [is-ok ""]
+     [else (+ "Incorrect answer, failed on: " (str failed-on))])))
+
+(define-puzzle sort-7
+  #:category "Sorting"
+  #:description "Give me a function that returns its four arguments as a pair of pairs with values in ascending order."
+  #:type
+  (Type.new
+   []
+   (Types.mono-bin-fun
+    Types.MON_NUM Types.MON_NUM
+    (Types.mono-bin-fun
+     Types.MON_NUM Types.MON_NUM
+     (Types.mono-pair
+      (Types.mono-pair Types.MON_NUM Types.MON_NUM)
+      (Types.mono-pair Types.MON_NUM Types.MON_NUM)))))
+  #:track tracks.persistence
+  #:check (v)
+  (define is-ok true)
+  (define failed-on null)
+  (for ([i (range 100)])
+    (define xs [(% (randi) 5) (+ (% (randi) 5) 10) (+ (% (randi) 5) 20) (+ (% (randi) 5) 30)])
+    (define sh-xs (.duplicate xs))
+    (.shuffle sh-xs)
+    (cond
+      [(not (eq-pair-pair (ref xs 0) (ref xs 1) (ref xs 2) (ref xs 3)
+                          (.-value (appv-int v sh-xs))))
+       (set! is-ok false)
+       (set! failed-on sh-xs)
+       (#%gdscript "break")]))
+  (Result.new
+   is-ok
+   (cond
+     [is-ok ""]
+     [else (+ "Incorrect answer, failed on: " (str failed-on))])))
 
 (define-puzzle vec-0
   #:category "Vector"

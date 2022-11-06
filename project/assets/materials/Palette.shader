@@ -1,7 +1,7 @@
 // NOTE: Shader automatically converted from Godot Engine 3.5.1.stable's SpatialMaterial.
 
 shader_type spatial;
-render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_toon,specular_toon;
+render_mode async_visible,blend_mix,depth_draw_opaque,cull_back,diffuse_toon,specular_disabled;
 uniform vec4 albedo : hint_color;
 uniform sampler2D texture_albedo : hint_albedo;
 uniform float specular;
@@ -12,9 +12,6 @@ uniform vec3 uv1_scale;
 uniform vec3 uv1_offset;
 uniform vec3 uv2_scale;
 uniform vec3 uv2_offset;
-
-uniform vec4 ambient: hint_color;
-
 
 void vertex() {
 	UV=UV*uv1_scale.xy+uv1_offset.xy;

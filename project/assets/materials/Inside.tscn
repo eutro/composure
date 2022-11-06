@@ -1,46 +1,49 @@
-[gd_scene load_steps=80 format=2]
+[gd_scene load_steps=83 format=2]
 
-[ext_resource path="res://assets/materials/Palette.material" type="Material" id=1]
-[ext_resource path="res://assets/models/Bed_Single.obj" type="ArrayMesh" id=2]
-[ext_resource path="res://assets/models/Table_RoundLarge.obj" type="ArrayMesh" id=3]
-[ext_resource path="res://assets/models/Drawer_1.obj" type="ArrayMesh" id=4]
-[ext_resource path="res://assets/models/Wall.obj" type="ArrayMesh" id=5]
-[ext_resource path="res://assets/models/WallCorner.obj" type="ArrayMesh" id=6]
-[ext_resource path="res://assets/models/BookCaseBooks.obj" type="ArrayMesh" id=7]
-[ext_resource path="res://assets/models/BookCaseLargeBooks.obj" type="ArrayMesh" id=8]
-[ext_resource path="res://assets/models/Bookshelf.obj" type="ArrayMesh" id=9]
-[ext_resource path="res://assets/models/Carpet_Round.obj" type="ArrayMesh" id=10]
-[ext_resource path="res://assets/models/Closet2.obj" type="ArrayMesh" id=11]
-[ext_resource path="res://assets/models/CoffeeTable.obj" type="ArrayMesh" id=12]
-[ext_resource path="res://assets/models/Coffee_Table_2.obj" type="ArrayMesh" id=13]
-[ext_resource path="res://assets/models/Lamp2.obj" type="ArrayMesh" id=14]
+[ext_resource path="res://assets/models/Bookshelf.obj" type="ArrayMesh" id=1]
+[ext_resource path="res://assets/models/Wall.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://assets/models/BookCaseBooks.obj" type="ArrayMesh" id=3]
+[ext_resource path="res://assets/materials/Palette.material" type="Material" id=4]
+[ext_resource path="res://assets/materials/PaletteTrans.material" type="Material" id=5]
+[ext_resource path="res://assets/models/Trashcan_Small2.obj" type="ArrayMesh" id=6]
+[ext_resource path="res://assets/models/Bed_Single.obj" type="ArrayMesh" id=7]
+[ext_resource path="res://assets/models/Drawer_1.obj" type="ArrayMesh" id=8]
+[ext_resource path="res://assets/models/BookCaseLargeBooks.obj" type="ArrayMesh" id=9]
+[ext_resource path="res://assets/models/Table_RoundLarge.obj" type="ArrayMesh" id=10]
+[ext_resource path="res://assets/models/WallCorner.obj" type="ArrayMesh" id=11]
+[ext_resource path="res://assets/models/Closet2.obj" type="ArrayMesh" id=12]
+[ext_resource path="res://assets/models/Carpet_Round.obj" type="ArrayMesh" id=13]
+[ext_resource path="res://assets/models/CoffeeTable.obj" type="ArrayMesh" id=14]
 [ext_resource path="res://assets/models/FloorTile.obj" type="ArrayMesh" id=15]
-[ext_resource path="res://assets/models/WallSolid.obj" type="ArrayMesh" id=16]
-[ext_resource path="res://assets/models/Trashcan_Small2.obj" type="ArrayMesh" id=17]
+[ext_resource path="res://assets/models/Coffee_Table_2.obj" type="ArrayMesh" id=16]
+[ext_resource path="res://assets/models/Lamp2.obj" type="ArrayMesh" id=17]
 [ext_resource path="res://assets/models/ShortCloset.obj" type="ArrayMesh" id=18]
-[ext_resource path="res://assets/models/Shelf_Small1.obj" type="ArrayMesh" id=19]
+[ext_resource path="res://assets/models/WallSolid.obj" type="ArrayMesh" id=19]
 [ext_resource path="res://assets/models/Shelf_Small2.obj" type="ArrayMesh" id=20]
-[ext_resource path="res://assets/models/Drawer_5.obj" type="ArrayMesh" id=21]
-[ext_resource path="res://assets/models/WallBlock.obj" type="ArrayMesh" id=22]
-[ext_resource path="res://assets/models/FloorTile2.obj" type="ArrayMesh" id=23]
-[ext_resource path="res://assets/models/Bathroom_Sink.obj" type="ArrayMesh" id=24]
-[ext_resource path="res://assets/models/Couch_Small2.obj" type="ArrayMesh" id=25]
-[ext_resource path="res://assets/models/Couch_Medium1.obj" type="ArrayMesh" id=26]
-[ext_resource path="res://assets/models/Couch_Small1.obj" type="ArrayMesh" id=27]
+[ext_resource path="res://assets/models/Shelf_Small1.obj" type="ArrayMesh" id=21]
+[ext_resource path="res://assets/models/Drawer_5.obj" type="ArrayMesh" id=22]
+[ext_resource path="res://assets/models/WallBlock.obj" type="ArrayMesh" id=23]
+[ext_resource path="res://assets/models/FloorTile2.obj" type="ArrayMesh" id=24]
+[ext_resource path="res://assets/models/Bathroom_Sink.obj" type="ArrayMesh" id=25]
+[ext_resource path="res://assets/models/Couch_Small2.obj" type="ArrayMesh" id=26]
+[ext_resource path="res://assets/models/Couch_Medium1.obj" type="ArrayMesh" id=27]
 [ext_resource path="res://assets/models/Bed.obj" type="ArrayMesh" id=28]
-[ext_resource path="res://assets/models/BedKing.obj" type="ArrayMesh" id=29]
+[ext_resource path="res://assets/models/Couch_Small1.obj" type="ArrayMesh" id=29]
 [ext_resource path="res://assets/models/Desk.obj" type="ArrayMesh" id=30]
-[ext_resource path="res://assets/models/NightStand.obj" type="ArrayMesh" id=31]
-[ext_resource path="res://assets/models/OfficeChair.obj" type="ArrayMesh" id=32]
-[ext_resource path="res://assets/models/Plant.obj" type="ArrayMesh" id=33]
-[ext_resource path="res://assets/models/SofaLong.obj" type="ArrayMesh" id=34]
-[ext_resource path="res://assets/models/Stool.obj" type="ArrayMesh" id=35]
-[ext_resource path="res://assets/models/Table.obj" type="ArrayMesh" id=36]
-[ext_resource path="res://assets/models/Vase.obj" type="ArrayMesh" id=37]
-[ext_resource path="res://assets/models/Vase2.obj" type="ArrayMesh" id=38]
-[ext_resource path="res://assets/models/Table2.obj" type="ArrayMesh" id=39]
-[ext_resource path="res://assets/models/Closet.obj" type="ArrayMesh" id=40]
-[ext_resource path="res://assets/models/Chair_3.obj" type="ArrayMesh" id=41]
+[ext_resource path="res://assets/models/BedKing.obj" type="ArrayMesh" id=31]
+[ext_resource path="res://assets/models/NightStand.obj" type="ArrayMesh" id=32]
+[ext_resource path="res://assets/models/OfficeChair.obj" type="ArrayMesh" id=33]
+[ext_resource path="res://assets/models/Plant.obj" type="ArrayMesh" id=34]
+[ext_resource path="res://assets/models/SofaLong.obj" type="ArrayMesh" id=35]
+[ext_resource path="res://assets/models/Stool.obj" type="ArrayMesh" id=36]
+[ext_resource path="res://assets/models/Table.obj" type="ArrayMesh" id=37]
+[ext_resource path="res://assets/models/Vase.obj" type="ArrayMesh" id=38]
+[ext_resource path="res://assets/models/Vase2.obj" type="ArrayMesh" id=39]
+[ext_resource path="res://assets/models/Table2.obj" type="ArrayMesh" id=40]
+[ext_resource path="res://assets/models/Closet.obj" type="ArrayMesh" id=41]
+[ext_resource path="res://assets/models/Chair_3.obj" type="ArrayMesh" id=42]
+[ext_resource path="res://assets/models/Light_Ceiling2.obj" type="ArrayMesh" id=43]
+[ext_resource path="res://assets/models/Light_Cube.obj" type="ArrayMesh" id=44]
 
 [sub_resource type="ConvexPolygonShape" id=1]
 points = PoolVector3Array( 0.982216, 0.758965, -1.08797, 0.950898, 0.739341, 1.86625, 0.982216, 0.469779, -1.08797, 0.950898, 0.739341, -1.89749, 0.946559, 1.35458, -1.96961, 0.946559, 1.35458, -1.86818, 0.909958, 0.780445, 1.86625, 0.909958, 0.739341, 1.90714, 0.946559, 0.460895, 1.96923, 0.950898, 0.490994, 1.86625, 0.946559, 0.0400432, 1.96923, 0.944861, 0, 1.97, 0.944861, 0, -1.97, 0.946559, 0.0400432, -1.96961, 0.950898, 0.490994, -1.89749, -0.943679, 1.35458, -1.96961, -0.943679, 1.35458, -1.86818, -0.867459, 0.780445, 1.86625, -0.867459, 0.739341, 1.90714, -0.943679, 0.460895, 1.96923, -0.945, 0, 1.97, -0.945, 0, -1.97, -0.908399, 0.739341, 1.86625 )
@@ -161,8 +164,8 @@ points = PoolVector3Array( 0.380861, 0.736826, 0.380861, -0.380861, 0.736826, 0.
 [node name="Bed_Single" type="MeshInstance" parent="."]
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1, 0, 0 )
 visible = false
-mesh = ExtResource( 2 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 7 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Bed_Single"]
 
@@ -172,8 +175,8 @@ shape = SubResource( 1 )
 [node name="Table_RoundLarge" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
 visible = false
-mesh = ExtResource( 3 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 10 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Table_RoundLarge"]
 
@@ -183,9 +186,9 @@ shape = SubResource( 30 )
 [node name="Drawer_1" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.441013 )
 visible = false
-mesh = ExtResource( 4 )
+mesh = ExtResource( 8 )
 skeleton = NodePath("../Table_RoundLarge")
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Drawer_1"]
 
@@ -194,8 +197,8 @@ shape = SubResource( 3 )
 
 [node name="Wall" type="MeshInstance" parent="."]
 visible = false
-mesh = ExtResource( 5 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 2 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Wall"]
 
@@ -204,8 +207,8 @@ shape = SubResource( 22 )
 
 [node name="WallCorner" type="MeshInstance" parent="."]
 visible = false
-mesh = ExtResource( 6 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 11 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="WallCorner"]
 
@@ -215,8 +218,8 @@ shape = SubResource( 23 )
 [node name="BookCaseBooks" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.570529, 0, 0 )
 visible = false
-mesh = ExtResource( 7 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 3 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="BookCaseBooks"]
 
@@ -226,8 +229,8 @@ shape = SubResource( 6 )
 [node name="BookCaseLargeBooks" type="MeshInstance" parent="."]
 transform = Transform( -8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, 1, 0, 0.584868 )
 visible = false
-mesh = ExtResource( 8 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 9 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="BookCaseLargeBooks"]
 
@@ -237,8 +240,8 @@ shape = SubResource( 7 )
 [node name="Bookshelf" type="MeshInstance" parent="."]
 transform = Transform( 0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, -0.737172 )
 visible = false
-mesh = ExtResource( 9 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Bookshelf"]
 
@@ -246,14 +249,14 @@ material/0 = ExtResource( 1 )
 shape = SubResource( 8 )
 
 [node name="Carpet_Round" type="MeshInstance" parent="."]
-mesh = ExtResource( 10 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 13 )
+material/0 = ExtResource( 4 )
 
 [node name="Closet2" type="MeshInstance" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, -0.317278, 0, 0 )
 visible = false
-mesh = ExtResource( 11 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 12 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Closet2"]
 
@@ -263,8 +266,8 @@ shape = SubResource( 9 )
 [node name="CoffeeTable" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 12 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 14 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="CoffeeTable"]
 
@@ -274,8 +277,8 @@ shape = SubResource( 10 )
 [node name="CoffeeTable2" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 13 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 16 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="CoffeeTable2"]
 
@@ -284,10 +287,10 @@ shape = SubResource( 11 )
 
 [node name="Lamp2" type="MeshInstance" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0.404294, 0, -0.408643 )
-visible = false
-mesh = ExtResource( 14 )
+mesh = ExtResource( 17 )
 skeleton = NodePath("")
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Lamp2"]
 
@@ -298,7 +301,7 @@ shape = SubResource( 12 )
 transform = Transform( 1, 0, 0, 0, 0.99, 0, 0, 0, 1, 0, 0, 0 )
 visible = false
 mesh = ExtResource( 15 )
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="FloorCarpet"]
 
@@ -308,8 +311,8 @@ shape = SubResource( 13 )
 [node name="WallSolid" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.99, 0, 0, 0, 1, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 16 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 19 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="WallSolid"]
 
@@ -319,8 +322,8 @@ shape = SubResource( 20 )
 [node name="Trashcan_Small2" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.461875, 0, 0.236205 )
 visible = false
-mesh = ExtResource( 17 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 6 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Trashcan_Small2"]
 
@@ -331,7 +334,7 @@ shape = SubResource( 15 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.568754 )
 visible = false
 mesh = ExtResource( 18 )
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="ShortCloset"]
 
@@ -341,8 +344,8 @@ shape = SubResource( 16 )
 [node name="Shelf_Small1" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.422509, 0.722039 )
 visible = false
-mesh = ExtResource( 19 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 21 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Shelf_Small1"]
 
@@ -353,7 +356,7 @@ shape = SubResource( 17 )
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0.444428 )
 visible = false
 mesh = ExtResource( 20 )
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Shelf_Small2"]
 
@@ -363,8 +366,8 @@ shape = SubResource( 18 )
 [node name="Drawer5" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.432025 )
 visible = false
-mesh = ExtResource( 21 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 22 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Drawer5"]
 
@@ -373,8 +376,8 @@ shape = SubResource( 19 )
 
 [node name="WallTile" type="MeshInstance" parent="."]
 visible = false
-mesh = ExtResource( 22 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 23 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="WallTile"]
 
@@ -384,8 +387,8 @@ shape = SubResource( 21 )
 [node name="FloorCarpet2" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.99, 0, 0, 0, 1, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 23 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 24 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="FloorCarpet2"]
 
@@ -395,8 +398,8 @@ shape = SubResource( 13 )
 [node name="Sink" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.76848 )
 visible = false
-mesh = ExtResource( 24 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 25 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Sink"]
 
@@ -406,8 +409,8 @@ shape = SubResource( 24 )
 [node name="Couch_Medium1" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
 visible = false
-mesh = ExtResource( 26 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 27 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Couch_Medium1"]
 
@@ -417,8 +420,8 @@ shape = SubResource( 25 )
 [node name="Couch_Small1" type="MeshInstance" parent="."]
 transform = Transform( 0.969364, 0, -0.245629, 0, 1, 0, 0.245629, 0, 0.969364, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 27 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 29 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Couch_Small1"]
 
@@ -428,8 +431,8 @@ shape = SubResource( 26 )
 [node name="Couch_Small2" type="MeshInstance" parent="."]
 transform = Transform( 0.990521, 0, 0.137358, 0, 1, 0, -0.137358, 0, 0.990521, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 25 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 26 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Couch_Small2"]
 
@@ -440,7 +443,7 @@ shape = SubResource( 27 )
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 1, 0, 0 )
 visible = false
 mesh = ExtResource( 28 )
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Bed_Single2"]
 
@@ -450,8 +453,8 @@ shape = SubResource( 31 )
 [node name="Bed_King" type="MeshInstance" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 1, 0, 1 )
 visible = false
-mesh = ExtResource( 29 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 31 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Bed_King"]
 
@@ -462,7 +465,7 @@ shape = SubResource( 32 )
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0, 0 )
 visible = false
 mesh = ExtResource( 30 )
-material/0 = ExtResource( 1 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Desk"]
 
@@ -472,8 +475,8 @@ shape = SubResource( 33 )
 [node name="NightStand" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, -0.477218 )
 visible = false
-mesh = ExtResource( 31 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 32 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="NightStand"]
 
@@ -483,8 +486,8 @@ shape = SubResource( 34 )
 [node name="OfficeChair" type="MeshInstance" parent="."]
 transform = Transform( 1.8684, 0, 0.713509, 0, 2, 0, -0.713509, 0, 1.8684, -0.0977325, 0, -0.13504 )
 visible = false
-mesh = ExtResource( 32 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 33 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="OfficeChair"]
 
@@ -494,8 +497,8 @@ shape = SubResource( 35 )
 [node name="Plant" type="MeshInstance" parent="."]
 transform = Transform( 1.8684, 0, 0.713509, 0, 2, 0, -0.713509, 0, 1.8684, -0.501414, 0, -0.6241 )
 visible = false
-mesh = ExtResource( 33 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 34 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Plant"]
 
@@ -505,8 +508,8 @@ shape = SubResource( 36 )
 [node name="SofaL" type="MeshInstance" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0.431988, 0, 1.1122 )
 visible = false
-mesh = ExtResource( 34 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 35 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="SofaL"]
 
@@ -516,8 +519,8 @@ shape = SubResource( 37 )
 [node name="Stool" type="MeshInstance" parent="."]
 transform = Transform( 1.78626, 0, 0.899605, 0, 2, 0, -0.899605, 0, 1.78626, -0.25135, 0, 0.302963 )
 visible = false
-mesh = ExtResource( 35 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 36 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Stool"]
 
@@ -527,8 +530,8 @@ shape = SubResource( 38 )
 [node name="Table" type="MeshInstance" parent="."]
 transform = Transform( 1.94731, 0, 0.456056, 0, 2, 0, -0.456056, 0, 1.94731, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 36 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 37 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Table"]
 
@@ -538,8 +541,8 @@ shape = SubResource( 39 )
 [node name="Table2" type="MeshInstance" parent="."]
 transform = Transform( 1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 1 )
 visible = false
-mesh = ExtResource( 39 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 40 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Table2"]
 
@@ -549,8 +552,8 @@ shape = SubResource( 42 )
 [node name="Vase" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.516364, 0, -0.611771 )
 visible = false
-mesh = ExtResource( 37 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 38 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Vase"]
 
@@ -560,8 +563,8 @@ shape = SubResource( 40 )
 [node name="Vase2" type="MeshInstance" parent="."]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, -0.687747, 0, -0.316925 )
 visible = false
-mesh = ExtResource( 38 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 39 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Vase2"]
 
@@ -571,8 +574,8 @@ shape = SubResource( 41 )
 [node name="Closet" type="MeshInstance" parent="."]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, -0.670331, 0, 0 )
 visible = false
-mesh = ExtResource( 40 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 41 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Closet"]
 
@@ -582,10 +585,25 @@ shape = SubResource( 43 )
 [node name="Chair3" type="MeshInstance" parent="."]
 transform = Transform( 1.47378, 0, 0.27922, 0, 1.5, 0, -0.27922, 0, 1.47378, 0, 0, 0 )
 visible = false
-mesh = ExtResource( 41 )
-material/0 = ExtResource( 1 )
+mesh = ExtResource( 42 )
+material/0 = ExtResource( 4 )
 
 [node name="StaticBody" type="StaticBody" parent="Chair3"]
 
 [node name="CollisionShape" type="CollisionShape" parent="Chair3/StaticBody"]
 shape = SubResource( 44 )
+
+[node name="Light1" type="MeshInstance" parent="."]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0 )
+mesh = ExtResource( 43 )
+skeleton = NodePath("")
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 5 )
+
+[node name="Light2" type="MeshInstance" parent="."]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0 )
+visible = false
+mesh = ExtResource( 44 )
+skeleton = NodePath("")
+material/0 = ExtResource( 4 )
+material/1 = ExtResource( 5 )

@@ -280,7 +280,7 @@
   #:body (LambdaWrapper.new (+ a.value b.value) (.get-type a)))
 
 (define-pure (sub a b)
-  #:category "Maths" #:unlocked? false #:name "Subtract"
+  #:category "Maths" #:unlocked? true #:name "Subtract"
   #:description ["Subtracts two numbers or vectors"]
   #:short-name "-"
   #:type (Type.new {0 {Types.TC_SUB true}} (Types.mono-bin-fun TV_A TV_A TV_A))
@@ -301,12 +301,19 @@
     [_ (push-error "What the genuine fuck")]))
 
 (define-pure (div a b)
-  #:category "Maths" #:unlocked? false #:name "Divide"
+  #:category "Maths" #:unlocked? (Game.puzzle-completed? "Arithmetic" 0) #:name "Divide"
   #:description ["Divides two numbers or vectors (elementwise)"
                  "Dividing by zero results in zero in all cases"]
   #:short-name "/"
   #:type (Type.new {0 {Types.TC_DIV true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (zero-div a.value b.value) (.get-type a)))
+
+(define-pure (sqrt x)
+  #:category "Maths" #:unlocked? (Game.puzzle-completed? "Arithmetic" 5) #:name "Square Root"
+  #:description ["Returns the principal square root of a number, or NaN if that is not real"]
+  #:short-name "√"
+  #:type (Type.new [] (Types.mono-fun Types.MON_NUM Types.MON_NUM))
+  #:body (wrap-num (sqrt x.value)))
 
 (begin-escape
   (define-syntax (emit-ops stx)
@@ -483,6 +490,50 @@
            (text-preview finished-name)
            body ...))])))
 
+#;#;
+(define-pure (sort3 x y z)
+  #:category "Misc" #:unlocked? true #:name "S3"
+  #:description ["h"]
+  #:short-name "s3"
+  #:type
+  (Type.new
+   []
+   (Types.mono-bin-fun
+    Types.MON_NUM Types.MON_NUM
+    (Types.mono-fun
+     Types.MON_NUM
+     (Types.mono-pair Types.MON_NUM (Types.mono-pair Types.MON_NUM Types.MON_NUM)))))
+  #:body
+  (define s [x.value y.value z.value])
+  (.sort s)
+  (match s
+    [[(var l) (var m) (var h)]
+     (.apply (VAL_PAIR.apply (wrap-num l))
+             (.apply (VAL_PAIR.apply (wrap-num m)) (wrap-num h)))]))
+
+(define-pure (sort4 w x y z)
+  #:category "Misc" #:unlocked? true #:name "S4"
+  #:description ["h"]
+  #:short-name "s4"
+  #:type
+  (Type.new
+   []
+   (Types.mono-bin-fun
+    Types.MON_NUM Types.MON_NUM
+    (Types.mono-bin-fun
+     Types.MON_NUM Types.MON_NUM
+     (Types.mono-pair
+      (Types.mono-pair Types.MON_NUM Types.MON_NUM)
+      (Types.mono-pair Types.MON_NUM Types.MON_NUM)))))
+  #:body
+  (define s [w.value x.value y.value z.value])
+  (.sort s)
+  (match s
+    [[(var ll) (var l) (var m) (var h)]
+     (.apply (VAL_PAIR.apply
+              (.apply (VAL_PAIR.apply (wrap-num ll)) (wrap-num l)))
+             (.apply (VAL_PAIR.apply (wrap-num m)) (wrap-num h)))]))
+
 (define-compose compose
   #:category "Combinators" #:unlocked? true #:name "Compose"
   #:description ["Composes two functions, from left to right"
@@ -578,7 +629,10 @@
     (.finish a2 (ref s 1))))
 
 (define-construct (flip f b)
-  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 0) #:name "Flip"
+  #:category "Combinators"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 0)
+                  (Game.puzzle-completed? "Sorting" 1))
+  #:name "Flip"
   #:description ["Flips the arguments of a binary function"]
   #:class-name Flip
   #:short-name "F"
@@ -595,7 +649,10 @@
     (.apply (.apply f a) b)))
 
 (define-construct (uncurry f)
-  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 4) #:name "Uncurry"
+  #:category "Combinators"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 4)
+                  (Game.puzzle-completed? "Sorting" 1))
+  #:name "Uncurry"
   #:description ["Converts a binary function into a unary function accepting a pair as its argument"]
   #:class-name Uncurry
   #:short-name "!Cur"
@@ -613,7 +670,10 @@
     (.apply (.apply f pair.car) pair.cdr)))
 
 (define-construct (curry f a)
-  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 4) #:name "Curry"
+  #:category "Combinators"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 4)
+                  (Game.puzzle-completed? "Sorting" 1))
+  #:name "Curry"
   #:description ["Converts a unary function of a pair to a binary function"]
   #:class-name Curry
   #:short-name "Cur"
@@ -627,10 +687,14 @@
   (text-preview "Cur''")
   (define pair-ty)
   (cached-type (Values.auto-type Values.VAL_CURRY [f a]))
-  (define (apply b) (.apply f (.apply (Values.VAL_CONS.apply a) b))))
+  (define (apply b) (.apply f (.apply (Values.VAL_PAIR.apply a) b))))
 
 (define-construct (s f g) ;; λf g x.(f x)(g x)
-  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "S Combinator"
+  #:category "Combinators"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
+                  (Game.puzzle-completed? "Sorting" 2)
+                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:name "S Combinator"
   #:description ["S f g x : Applies f of x to g of x"
                  "Lambda form: λf.λg.λx.(f x)(g x)"]
   #:class-name S
@@ -650,7 +714,11 @@
             (.apply g x))))
 
 (define-construct (k value)
-  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "Constant"
+  #:category "Combinators"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
+                  (Game.puzzle-completed? "Sorting" 2)
+                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:name "Constant"
   #:description ["Creates a function that always returns the given value"
                  "Lambda form: λx.λy.x"]
   #:class-name K
@@ -662,7 +730,11 @@
   (define (apply _x) value))
 
 (define-pure (i x)
-  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "Identity"
+  #:category "Combinators"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
+                  (Game.puzzle-completed? "Sorting" 2)
+                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:name "Identity"
   #:description ["Returns its argument"]
   #:short-name "I"
   #:type (Type.new [0] (Types.mono-fun TV_A TV_A))
@@ -784,7 +856,11 @@
   #:finish (_s) null)
 
 (define-pure (pair a b)
-  #:category "Misc" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "Pair"
+  #:category "Misc"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 2)
+                  (Game.puzzle-completed? "Sorting" 2)
+                  (Game.puzzle-completed? "Arithmetic" 5))
+  #:name "Pair"
   #:description ["Creates a pair"]
   #:short-name ":"
   #:type (Type.new [0 1] (Types.mono-bin-fun TV_A TV_B (Types.mono-pair TV_A TV_B)))
@@ -816,7 +892,10 @@
   #:category "Misc" #:unlocked? false #:name "False")
 
 (define-pure (select pred thenv elsev)
-  #:category "Misc" #:unlocked? (Game.puzzle-completed? "Combinator" 1) #:name "Select"
+  #:category "Misc"
+  #:unlocked? (or (Game.puzzle-completed? "Combinator" 1)
+                  (Game.puzzle-completed? "Sorting" 1))
+  #:name "Select"
   #:description ["Select p x y : Matches on a boolean p, returning x if true, or y otherwise"
                  "Note: Values are not lazy, if you want to delay computation you must use functions"]
   #:short-name "sel"

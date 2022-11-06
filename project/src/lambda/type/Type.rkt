@@ -81,7 +81,7 @@
      (for ([i (range 1 (len x))])
        (.append args (mono-from-json (ref x i))))
      (MonoCtor.new ctor args)]
-    [else (MonoVar.new x)]))
+    [else (MonoVar.new (int x))]))
 
 (define static (from-json x)
   (define Self (load "res://src/lambda/type/Type.gd"))
@@ -90,6 +90,6 @@
     (define cnstrs {})
     (for ([cn (ref e 1)])
       (set! (ref cnstrs (Types.lookup-typeclass cn)) true))
-    (set! (ref tvs (ref e 0)) cnstrs))
+    (set! (ref tvs (int (ref e 0))) cnstrs))
   (define mono (mono-from-json x.mono))
   (Self.new tvs mono))

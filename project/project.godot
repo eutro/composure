@@ -89,6 +89,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/lambda/ui/ctors/NumberCombinator.gd"
 }, {
+"base": "Resource",
+"class": "PosterList",
+"language": "GDScript",
+"path": "res://src/world/gen/rooms/PosterList.gd"
+}, {
 "base": "Spatial",
 "class": "RandomTile",
 "language": "GDScript",
@@ -156,6 +161,7 @@ _global_script_class_icons={
 "MonoCtor": "",
 "MonoVar": "",
 "NumberCombinator": "",
+"PosterList": "",
 "RandomTile": "",
 "Result": "",
 "RoomPlacer": "",
@@ -185,6 +191,7 @@ Types="*res://src/lambda/type/Types.gd"
 Values="*res://src/lambda/values/Values.gd"
 Puzzles="*res://src/lambda/puzzle/Puzzles.gd"
 Game="*res://src/util/Game.gd"
+PosterRng="*res://src/world/gen/rooms/PosterRNG.gd"
 
 [display]
 

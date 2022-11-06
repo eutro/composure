@@ -19,3 +19,7 @@
 
 (define (_on_Close_pressed)
   (.unmount (get-parent)))
+
+(define (_enter-tree) (Game.play-open))
+
+(define (_exit-tree) (Game.play-close))

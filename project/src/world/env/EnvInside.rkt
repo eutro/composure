@@ -25,7 +25,8 @@
    "room1" (preload "../gen/rooms/inside/Room1.tres")
    "room2" (preload "../gen/rooms/inside/Room2.tres")
    "room3" (preload "../gen/rooms/inside/Room3.tres")
-   "roomtiny" (preload "../gen/rooms/inside/RoomTiny.tres")})
+   "roomtiny" (preload "../gen/rooms/inside/RoomTiny.tres")
+   "roomffs" (preload "../gen/rooms/inside/RoomOhFFS.tres")})
 
 (define onready anchor-types : Array #;[[RoomSet]]
   [;; 0
@@ -45,6 +46,9 @@
      [0.3 0.3 0.4])
     (RoomPlacer.RoomSet.new
      [rooms.roomtiny]
+     [1.0])
+    (RoomPlacer.RoomSet.new
+     [rooms.roomffs]
      [1.0])]])
 
 (define (ensure-neighbours)

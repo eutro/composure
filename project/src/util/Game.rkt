@@ -142,3 +142,9 @@
   (add-child music)
   (set! music.bus "Music")
   (randomize))
+
+(define (play-open)
+  (when (!= null ui) (.play (.get-node ui "Open"))))
+
+(define (play-close)
+  (when (!= null ui) (.play (.get-node ui "Close"))))

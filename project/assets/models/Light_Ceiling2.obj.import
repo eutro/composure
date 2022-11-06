@@ -1,0 +1,20 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Light_Ceiling2.obj-a697e4e2e4c0f9bbba6c752fba855ede.mesh"
+
+[deps]
+
+files=[ "res://.import/Light_Ceiling2.obj-a697e4e2e4c0f9bbba6c752fba855ede.mesh" ]
+
+source_file="res://assets/models/Light_Ceiling2.obj"
+dest_files=[ "res://.import/Light_Ceiling2.obj-a697e4e2e4c0f9bbba6c752fba855ede.mesh", "res://.import/Light_Ceiling2.obj-a697e4e2e4c0f9bbba6c752fba855ede.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+octahedral_compression=true
+optimize_mesh_flags=4286

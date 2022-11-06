@@ -15,7 +15,8 @@
   (define creset (get-node "%ConfirmReset"))
   (.popup creset)
   (yield creset "confirmed")
-  (Game.reset))
+  (Game.reset)
+  (Game.quit))
 
 (define (_ready)
   (define progress $MC/VB/Progress)
