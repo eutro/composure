@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
@@ -6,12 +6,13 @@
 [ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=6]
+[ext_resource path="res://src/world/gen/OriginEntities.tscn" type="PackedScene" id=7]
 
 [node name="Origin" type="Spatial"]
 script = ExtResource( 2 )
 gridmap = NodePath("GridMap")
 anchors = NodePath("Anchors")
-entities = NodePath("Entities")
+entities = NodePath("OriginEntities")
 edge_items = [ 3, 4, 14 ]
 
 [node name="GridMap" type="GridMap" parent="."]
@@ -66,21 +67,21 @@ __meta__ = {
 [node name="Anchor" parent="Anchors" instance=ExtResource( 3 )]
 transform = Transform( -4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6.99614, 0, -1.04553 )
 
-[node name="Entities" type="Spatial" parent="."]
+[node name="OriginEntities" parent="." instance=ExtResource( 7 )]
 
-[node name="OmniLight" type="OmniLight" parent="Entities"]
+[node name="OmniLight" type="OmniLight" parent="OriginEntities"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.66369, -0.738813 )
 light_color = Color( 0.901961, 0.847059, 0.729412, 1 )
 light_energy = 0.5
 omni_range = 10.64
 
-[node name="Puzzle" parent="Entities" instance=ExtResource( 4 )]
+[node name="Puzzle" parent="OriginEntities" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.92009, 1.83893, 3.25012 )
 obj_name = "Closet"
 category = "Arithmetic"
 fact_path = NodePath("RandomFact")
 
-[node name="RandomFact" parent="Entities/Puzzle" instance=ExtResource( 5 )]
+[node name="RandomFact" parent="OriginEntities/Puzzle" instance=ExtResource( 5 )]
 min_value = 2.0
 max_value = 5.0
 step = 1.0

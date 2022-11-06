@@ -11,6 +11,11 @@
   (.connect mm "play_pressed" self "_on_MainMenu_play_pressed"))
 
 (define (_ready)
+  (start-main-menu)
+  (.connect Game "quit" self "_on_Game_quit"))
+
+(define (_on_Game_quit)
+  (.queue-free $InGame)
   (start-main-menu))
 
 (define (_on_MainMenu_play_pressed)

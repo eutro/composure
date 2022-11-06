@@ -102,6 +102,7 @@
   (.hide $Focus))
 
 (define (_make-custom-tooltip for-text)
+  (define ctrl (.new Control))
   (define ttc (.instance (preload "TooltipContents.tscn")))
   (.push-font ttc code-font)
   (.append-bbcode ttc (.to-string (.get-type term)))
@@ -109,4 +110,5 @@
   (for ([line (.get-tooltip term)])
     (.newline ttc)
     (.append-bbcode ttc line))
-  ttc)
+  (.add-child ctrl ttc)
+  ctrl)

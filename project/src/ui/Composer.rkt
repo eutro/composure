@@ -5,8 +5,11 @@
 (define (get-tabs)
   $HB/Tabs)
 
+(define (get-definitions)
+  $HB/DefinitionList)
+
 (define (_enter-tree)
-  (.play (.get-node Game.ui "Open")))
+  (when (!= null Game.ui) (.play (.get-node Game.ui "Open"))))
 
 (define (_exit-tree)
-  (.play (.get-node Game.ui "Close")))
+  (when (!= null Game.ui) (.play (.get-node Game.ui "Close"))))

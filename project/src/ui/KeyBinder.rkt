@@ -13,6 +13,8 @@
 (define current-key null)
 (define expected-type null)
 
+(signal key-setup #;key)
+
 (define (_on-Button-pressed)
   (.hide (get-node button-path))
   (set! awaiting-input true)
@@ -21,10 +23,11 @@
   null)
 
 (define (setup-key key)
-  (when key
+  (when (!= null key)
     (set! awaiting-input false)
     (.show (get-node button-path))
-    (set-current-key key)))
+    (set-current-key key)
+    (emit-signal "key_setup" key)))
 
 (define (_gui-input evt)
   (when awaiting-input
@@ -75,4 +78,5 @@
 (define (_on_BoundLambda_term_changed term)
   (when (and (!= null current-key)
              (not setting-up))
-    (Game.keys.bind-key current-key term)))
+    (Game.keys.bind-key current-key term)
+    (Game.dirty)))

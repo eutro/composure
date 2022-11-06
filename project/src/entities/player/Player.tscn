@@ -10,7 +10,7 @@ height = 3.0
 radius = 0.7
 
 [sub_resource type="CylinderShape" id=12]
-radius = 4.93437
+radius = 1.0445
 
 [sub_resource type="AnimationNodeAnimation" id=9]
 animation = "Idle"
@@ -42,7 +42,7 @@ nodes/TimeScale/position = Vector2( -160, 240 )
 nodes/WalkA/node = SubResource( 8 )
 nodes/WalkA/position = Vector2( -440, 220 )
 nodes/output/position = Vector2( 580, 160 )
-node_connections = [ "output", 0, "Motion", "TimeScale", 0, "WalkA", "Run", 0, "TimeScale", "Run", 1, "RunA", "Motion", 0, "IdleA", "Motion", 1, "Run" ]
+node_connections = [ "output", 0, "Motion", "Motion", 0, "IdleA", "Motion", 1, "Run", "Run", 0, "TimeScale", "Run", 1, "RunA", "TimeScale", 0, "WalkA" ]
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 3 )

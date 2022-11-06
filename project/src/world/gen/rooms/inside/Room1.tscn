@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
@@ -6,6 +6,13 @@
 [ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=6]
+
+[sub_resource type="CylinderShape" id=3]
+radius = 5.00249
+
+[sub_resource type="CylinderShape" id=2]
+height = 2.92612
+radius = 6.53467
 
 [node name="Room1" type="Spatial"]
 script = ExtResource( 2 )
@@ -140,6 +147,7 @@ omni_range = 10.64
 
 [node name="ClosetPuzzle" parent="Entities" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.20818, 1.12475, -6.80031 )
+shape = NodePath("CollisionShape")
 obj_name = "Small Closet"
 category = "Arithmetic"
 fact_path = NodePath("RandomFact")
@@ -151,8 +159,13 @@ step = 1.0
 value_name = "Boots"
 units = " Pairs"
 
+[node name="CollisionShape" type="CollisionShape" parent="Entities/ClosetPuzzle"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.23774, 2.38419e-07, 3.88633 )
+shape = SubResource( 3 )
+
 [node name="BookCasePuzzle" parent="Entities" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5329, 1.5344, -5.99437 )
+shape = NodePath("CollisionShape")
 obj_name = "Large Bookcase"
 category = "Sorting"
 fact_path = NodePath("RandomFact")
@@ -163,6 +176,10 @@ max_value = 100.0
 step = 1.0
 value_name = "Swaps"
 units = " Required"
+
+[node name="CollisionShape" type="CollisionShape" parent="Entities/BookCasePuzzle"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.65725, -2.38419e-07, 3.3359 )
+shape = SubResource( 2 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 0.801181, 0.239434, -0.548435, 0, 0.916468, 0.400109, 0.598422, -0.32056, 0.734256, 2.95822, 2.95962, 0 )

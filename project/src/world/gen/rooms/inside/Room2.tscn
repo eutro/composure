@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
@@ -6,6 +6,9 @@
 [ext_resource path="res://src/entities/PuzzleArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/entities/RandomFact.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=6]
+
+[sub_resource type="CylinderShape" id=1]
+radius = 3.77183
 
 [node name="Room1" type="Spatial"]
 script = ExtResource( 2 )
@@ -96,6 +99,7 @@ omni_range = 10.64
 
 [node name="Puzzle" parent="Entities" instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5257, 1.64619, -4.06564 )
+shape = NodePath("CollisionShape")
 obj_name = "Bookcase"
 category = "Sorting"
 fact_path = NodePath("RandomFact")
@@ -106,3 +110,7 @@ max_value = 90.0
 step = 0.1
 value_name = "Romance Books"
 units = "%"
+
+[node name="CollisionShape" type="CollisionShape" parent="Entities/Puzzle"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.83888, 0, 0.657753 )
+shape = SubResource( 1 )

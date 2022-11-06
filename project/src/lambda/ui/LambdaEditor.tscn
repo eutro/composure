@@ -89,14 +89,23 @@ margin_left = 201.0
 margin_right = 251.0
 margin_bottom = 50.0
 
-[node name="Output" parent="AppCombinator/VBox" index="1"]
-margin_top = 54.0
-margin_bottom = 104.0
+[node name="OutHBox" parent="AppCombinator/VBox" index="1"]
+margin_top = 56.0
+margin_right = 251.0
+margin_bottom = 106.0
+
+[node name="TextureRect" parent="AppCombinator/VBox/OutHBox" index="0"]
+margin_left = 73.0
+margin_right = 123.0
+
+[node name="Output" parent="AppCombinator/VBox/OutHBox" index="1"]
+margin_left = 127.0
+margin_right = 177.0
 
 [node name="Error" parent="AppCombinator/VBox" index="2"]
-margin_top = 108.0
+margin_top = 112.0
 margin_right = 251.0
-margin_bottom = 138.0
+margin_bottom = 142.0
 
 [node name="AppLabel" type="Label" parent="AppCombinator"]
 anchor_right = 1.0

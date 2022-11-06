@@ -6,7 +6,7 @@
 
 [sub_resource type="CylinderShape" id=1]
 height = 3.15967
-radius = 1.77252
+radius = 7.19154
 
 [node name="Interactible" type="Spatial"]
 script = ExtResource( 1 )
@@ -18,6 +18,7 @@ collision_mask = 2
 script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="InteractArea"]
+unique_name_in_owner = true
 shape = SubResource( 1 )
 
 [node name="Panel" parent="." instance=ExtResource( 5 )]

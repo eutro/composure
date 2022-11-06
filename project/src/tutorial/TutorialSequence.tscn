@@ -74,3 +74,9 @@ margin_top = 5.0
 margin_right = -0.000488281
 margin_bottom = -0.00799561
 mouse_filter = 2
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

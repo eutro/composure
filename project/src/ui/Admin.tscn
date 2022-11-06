@@ -1,0 +1,129 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/themes/FlatUI/kenneyUI-red.tres" type="Theme" id=1]
+[ext_resource path="res://src/ui/Admin.gd" type="Script" id=2]
+[ext_resource path="res://src/ui/Settings.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/fonts/Noto_Sans/NotoSans-SemiBold.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 4 )
+
+[node name="Admin" type="ScrollContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+label_font = SubResource( 2 )
+
+[node name="MC" type="MarginContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 576.0
+size_flags_horizontal = 3
+custom_constants/margin_right = 10
+
+[node name="VB" type="VBoxContainer" parent="MC"]
+margin_right = 1014.0
+margin_bottom = 576.0
+size_flags_horizontal = 3
+custom_constants/separation = 6
+
+[node name="QTTS" type="Button" parent="MC/VB"]
+margin_right = 1014.0
+margin_bottom = 47.251
+mouse_default_cursor_shape = 2
+text = "Quit to Title Screen"
+
+[node name="Settings" parent="MC/VB" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 53.0
+margin_right = 1014.0
+margin_bottom = 329.0
+size_flags_horizontal = 3
+
+[node name="Settings" parent="MC/VB/Settings" index="0"]
+margin_right = 1014.0
+
+[node name="MasterLbl" parent="MC/VB/Settings" index="1"]
+margin_right = 1014.0
+
+[node name="MasterSld" parent="MC/VB/Settings" index="2"]
+margin_right = 1014.0
+scrollable = false
+
+[node name="MusicLbl" parent="MC/VB/Settings" index="3"]
+margin_right = 1014.0
+
+[node name="MusicSld" parent="MC/VB/Settings" index="4"]
+margin_right = 1014.0
+scrollable = false
+
+[node name="FxLbl" parent="MC/VB/Settings" index="5"]
+margin_right = 1014.0
+
+[node name="FxSld" parent="MC/VB/Settings" index="6"]
+margin_right = 1014.0
+scrollable = false
+
+[node name="Label2" type="Label" parent="MC/VB"]
+margin_top = 335.0
+margin_right = 1014.0
+margin_bottom = 380.0
+custom_fonts/font = SubResource( 1 )
+text = "Progress"
+
+[node name="ReplayTutorial" type="Button" parent="MC/VB"]
+margin_top = 386.0
+margin_right = 1014.0
+margin_bottom = 433.251
+mouse_default_cursor_shape = 2
+text = "Replay Tutorial"
+
+[node name="Label" type="Label" parent="MC/VB"]
+margin_top = 439.0
+margin_right = 1014.0
+margin_bottom = 467.0
+custom_fonts/font = SubResource( 3 )
+text = "Puzzle Progress"
+
+[node name="Progress" type="GridContainer" parent="MC/VB"]
+margin_top = 473.0
+margin_right = 1014.0
+margin_bottom = 523.0
+rect_min_size = Vector2( 0, 50 )
+
+[node name="Reset" type="Button" parent="MC/VB"]
+margin_top = 529.0
+margin_right = 1014.0
+margin_bottom = 576.251
+mouse_default_cursor_shape = 2
+text = "Reset All Progress"
+
+[node name="ConfirmReset" type="ConfirmationDialog" parent="MC/VB/Reset"]
+unique_name_in_owner = true
+visible = true
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -164.0
+margin_top = -71.9795
+margin_right = 164.0
+margin_bottom = 74.0205
+dialog_text = "This will delete ALL your progress, including controls, puzzles, and custom definitions. Are you sure?"
+dialog_autowrap = true
+
+[connection signal="pressed" from="MC/VB/QTTS" to="." method="_on_QTTS_pressed"]
+[connection signal="pressed" from="MC/VB/ReplayTutorial" to="." method="_on_ReplayTutorial_pressed"]
+[connection signal="pressed" from="MC/VB/Reset" to="." method="_on_Reset_pressed"]
+
+[editable path="MC/VB/Settings"]

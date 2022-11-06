@@ -10,7 +10,7 @@
                 [up : String]  [down : String]))
 
 (define (_map-key)
-  ["Joystick" stick])
+  ["Joystick" (float stick)])
 
 (define (_scene)
   (preload "JoystickDisplay.tscn"))

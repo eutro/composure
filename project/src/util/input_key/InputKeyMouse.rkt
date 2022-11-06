@@ -8,7 +8,7 @@
 (splice-record ([event : InputEventMouseButton]))
 
 (define (_map-key)
-  ["Mouse" (.-button-index event)])
+  ["Mouse" (float (.-button-index event))])
 
 (define (_scene)
   (preload "MouseDisplay.tscn"))

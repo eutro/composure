@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://src/ui/MountableNode.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/ui/Composer.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/audio/sfx/open.ogg" type="AudioStream" id=6]
 [ext_resource path="res://assets/audio/sfx/close.ogg" type="AudioStream" id=7]
 [ext_resource path="res://src/tutorial/TutorialSequence.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/lambda/puzzle/Unlocked.tscn" type="PackedScene" id=9]
 
 [node name="GameUI" type="CanvasLayer"]
 script = ExtResource( 4 )
@@ -62,6 +63,9 @@ anchor_top = 0.1
 anchor_right = 0.9
 anchor_bottom = 0.9
 mouse_filter = 2
+
+[node name="Unlocked" parent="." instance=ExtResource( 1 )]
+scene = ExtResource( 9 )
 
 [node name="Tutorial" parent="." instance=ExtResource( 1 )]
 margin_left = 10.0

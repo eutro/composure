@@ -1,9 +1,10 @@
 #lang gdlisp
 
 (extends Node)
+(require "../../macros.rkt")
 
 (begin-escape
-  (require (only-in racket/base define-syntax)
+  (require (only-in racket/base begin-for-syntax define-syntax)
            (for-syntax racket racket/syntax syntax/parse gdlisp/utils))
   (define-syntax (define-type stx)
     (syntax-parse stx
@@ -27,6 +28,7 @@
                            {~? infix false}
                            {{~? {~@ {~@ tc true} ...}}}
                            (funcref self #,fmt-str)))
+           (do-onready (set! (ref CTORS name) #,ctor-id))
            #,(cond
                [(= 0 arity)
                 (define mon-id (format-id stx "MON_~a" upcase-name))
@@ -41,11 +43,25 @@
                   (define (#,mon-id arg-name ...)
                     (MonoCtor.new #,ctor-id [arg-name ...])))])))])))
 
+(begin-ready!)
+
 (define TC_ADD (TypeClass.new "Add"))
 (define TC_SUB (TypeClass.new "Sub"))
 (define TC_MUL (TypeClass.new "Mul"))
 (define TC_DIV (TypeClass.new "Div"))
 (define TC_VEC (TypeClass.new "Vec"))
+(define (lookup-typeclass x)
+  (match x
+    ["Add" TC_ADD]
+    ["Sub" TC_SUB]
+    ["Mul" TC_MUL]
+    ["Div" TC_DIV]
+    ["Vec" TC_VEC]
+    [_ (assert false "Failed Lookup") null]))
+
+(define CTORS {})
+(define (lookup-ctor x)
+  (ref CTORS x))
 
 ;; Wrapper {
 ;;   value: T
@@ -101,3 +117,5 @@
   (if (.-is-ok res)
       (.new Result true (.generalise tcx res-ty))
       res))
+
+(finish-ready!)

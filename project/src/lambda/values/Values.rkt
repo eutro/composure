@@ -5,6 +5,8 @@
 (require "../../macros.rkt"
          threading)
 
+(begin-ready!)
+
 (begin-escape
   (require (only-in racket/base
                     define-syntax ...
@@ -29,9 +31,11 @@
 
   (begin-for-syntax
     (define-splicing-syntax-class category-clause
-      #:attributes (category user-name)
+      #:attributes (category user-name unlocked?)
       (pattern {~seq #:category category:expr
-                     #:name user-name:str}))
+                     #:unlocked? u-e:expr
+                     #:name user-name:str}
+               #:attr unlocked? #'{~? u-e #t}))
     (define collected-categories (box null)))
 
   (define-syntax (reset-categories! _stx)
@@ -41,10 +45,10 @@
     (syntax-parse stx
       [(_ category:str ...)
        (syntax-parse (unbox collected-categories)
-         [((cat nm val) ...)
+         [((cat nm val ul) ...)
           (define category-values
             (for/fold ([vals (hash)])
-                      ([entry (in-syntax #'((cat nm val) ...))])
+                      ([entry (in-syntax #'((cat nm val ul) ...))])
               (define c (syntax->list entry))
               (define cat-name (syntax-e (car c)))
               (hash-set vals cat-name
@@ -61,22 +65,31 @@
              stx))
           (syntax-parse (for/list ([cat (in-syntax #'(category ...))])
                           (cons cat (hash-ref category-values (syntax-e cat))))
-            [((cat {nm val} ...) ...)
+            [((cat {nm val ul} ...) ...)
              (syntax/loc stx
                (define CATEGORIES
-                 {{~@ cat [[nm val] ...]} ...}))])])]))
+                 {{~@ cat [[nm val ul] ...]} ...}))])])]))
 
   (define-syntax (define-global-val stx)
     (syntax-parse stx
       [(_ name:id value:expr
           {~optional c:category-clause})
-       (define name-str (~a (syntax-e #'name)))
+       (define name-str (mangle (symbol->string (syntax-e #'name))))
        (define caps-name (string->symbol (format "VAL_~a" (string-upcase name-str))))
+       (define cond-name (format "~a_is_unlocked" name-str))
+       (define cond-sym (string->symbol cond-name))
        (when (datum {~? c #f})
          (set-box! collected-categories
-                   (cons #`(c.category c.user-name #,caps-name) (unbox collected-categories))))
+                   (cons #`(c.category c.user-name #,caps-name (funcref self #,cond-name))
+                         (unbox collected-categories))))
        (quasisyntax/loc stx
-         (define #,caps-name value))]))
+         (begin
+           (define (#,cond-sym) c.unlocked?)
+           (define #,caps-name value)))]))
+
+  (define-syntax (stringify-sym stx)
+    (syntax-parse stx
+      [(_ x:id) (datum->syntax #'x (mangle (symbol->string (syntax-e #'x))))]))
 
   (define-syntax (define-action stx)
     (syntax-parse stx
@@ -89,16 +102,22 @@
           #:start () start_:expr ...+
           #:step (x:id s0:id) step_:expr ...+
           #:finish (s1:id) finish_:expr ...+)
-       (syntax/loc stx
+       (define parse-id (format-id #'name "parse_~a" #'name))
+       (define name-str (mangle (symbol->string (syntax-e #'name))))
+       (define caps-name (string->symbol (format "VAL_~a" (string-upcase name-str))))
+       (quasisyntax/loc stx
          (begin
            (class cn
              (extends LambdaValue)
              (cached-type type ...)
              (define (create-preview) preview)
              {~? (define (_add-tooltip tt) (.append-array tt [desc ...]))}
+             (define (_to-json) [(stringify-sym cn)])
              (define (start) start_ ...)
              (define (step x s0) step_ ...)
              (define (finish s1) finish_ ...))
+           (define (#,parse-id _x) #,caps-name)
+           (do-onready (set! (ref DESER_KEYS (stringify-sym cn)) (funcref self (stringify-sym #,parse-id))))
            (define-global-val name (.new cn) {~? {~@ . category}})))]))
 
   (define-syntax (define-construct stx)
@@ -117,9 +136,14 @@
          (begin
            (defrecord class-name (args ...)
              (extends LambdaValue)
+             (define (_to-json)
+               [(stringify-sym class-name) (.to-json args) ...])
+             (define static (from-json x)
+               (match x [[_ (var args) ...] (.new class-name (Values.from-json args) ...)]))
              body ...)
            (define (#,ctor-name args ...)
              (.new class-name args ...))
+           (do-onready (set! (ref DESER_KEYS (stringify-sym class-name)) (funcref class-name "from_json")))
            (define-global-val name
              (Partial.new
               short-name
@@ -188,6 +212,21 @@
       [1 (.append tt "Applied to 1 argument")]
       [_ (.append tt (+ "Applied to " (str p-args-len) " arguments"))])
     null)
+
+  (define (_to-json)
+    (define args-json [])
+    (let loop ([tl p-args])
+      (when (!= null tl)
+        (.append args-json (.to-json tl.car))
+        (recur loop tl.cdr)))
+    ["Partial"
+     name
+     tooltip
+     (.to-json type)
+     arity
+     func-ref.function
+     args-json])
+
   (define (apply x)
     (cond
       [(arity . <= . 1)
@@ -212,6 +251,16 @@
         (.new Cons x p-args)
         (+ 1 p-args-len))])))
 
+(define (partial-from-json x)
+  (match x
+    [[_ (var nm) (var tt) (var ty) (var ar) (var f) (var pa)]
+     (define p-args null)
+     (.invert pa)
+     (for ([arg pa])
+       (fset! p-args ~> (Cons.new (Values.from-json arg) _)))
+     (Partial.new nm tt (Type.from-json ty) ar (funcref self f) p-args (len pa))]))
+(do-onready (set! (ref DESER_KEYS "Partial") (funcref self "partial_from_json")))
+
 (define TV_A (MonoVar.new 0))
 (define TV_B (MonoVar.new 1))
 (define TV_C (MonoVar.new 2))
@@ -224,21 +273,21 @@
 (reset-categories!)
 
 (define-pure (add a b)
-  #:category "Maths" #:name "Add"
+  #:category "Maths" #:unlocked? true #:name "Add"
   #:description ["Adds two numbers or vectors"]
   #:short-name "+"
   #:type (Type.new {0 {Types.TC_ADD true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (+ a.value b.value) (.get-type a)))
 
 (define-pure (sub a b)
-  #:category "Maths" #:name "Subtract"
+  #:category "Maths" #:unlocked? false #:name "Subtract"
   #:description ["Subtracts two numbers or vectors"]
   #:short-name "-"
   #:type (Type.new {0 {Types.TC_SUB true}} (Types.mono-bin-fun TV_A TV_A TV_A))
   #:body (LambdaWrapper.new (- a.value b.value) (.get-type a)))
 
 (define-pure (mul a b)
-  #:category "Maths" #:name "Multiply"
+  #:category "Maths" #:unlocked? (Game.puzzle-completed? "Arithmetic" 0) #:name "Multiply"
   #:description ["Multiplies two numbers or vectors (elementwise)"]
   #:short-name "*"
   #:type (Type.new {0 {Types.TC_MUL true}} (Types.mono-bin-fun TV_A TV_A TV_A))
@@ -252,7 +301,7 @@
     [_ (push-error "What the genuine fuck")]))
 
 (define-pure (div a b)
-  #:category "Maths" #:name "Divide"
+  #:category "Maths" #:unlocked? false #:name "Divide"
   #:description ["Divides two numbers or vectors (elementwise)"
                  "Dividing by zero results in zero in all cases"]
   #:short-name "/"
@@ -278,7 +327,7 @@
          (syntax/loc stx
            (begin
              (define-pure (name a b)
-               #:category "Maths" #:name uname
+               #:category "Maths" #:unlocked? (Game.puzzle-completed? "Sorting" 0) #:name uname
                #:description [desc]
                #:short-name op-str
                #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_BOOL))
@@ -291,42 +340,42 @@
           [eq is_equal_approx == "Equal to"])
 
 (define-pure (_not x)
-  #:category "Misc" #:name "Not"
+  #:category "Misc" #:unlocked? false #:name "Not"
   #:description ["Returns the inverse of a boolean"]
   #:short-name "not"
   #:type (Type.new [] (Types.mono-fun Types.MON_BOOL Types.MON_BOOL))
   #:body (LambdaWrapper.new (not x.value) Types.MON_BOOL))
 
 (define-pure (scale a b)
-  #:category "Maths" #:name "Scale Vector"
+  #:category "Maths" #:unlocked? false #:name "Scale Vector"
   #:description ["Scales a vector by a number"]
   #:short-name "*."
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-bin-fun Types.MON_NUM TV_A TV_A))
   #:body (LambdaWrapper.new (* a.value b.value) (.get-type b)))
 
 (define-pure (magnitude v)
-  #:category "Maths" #:name "Vector Magnitude"
+  #:category "Maths" #:unlocked? false #:name "Vector Magnitude"
   #:description ["Gets the magnitude of a vector"]
   #:short-name "|u|"
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-fun TV_A Types.MON_NUM))
   #:body (wrap-num (.length v.value)))
 
 (define-pure (normalise v)
-  #:category "Maths" #:name "Normalise"
+  #:category "Maths" #:unlocked? false #:name "Normalise"
   #:description ["Normalise a vector"]
   #:short-name "û"
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-fun TV_A TV_A))
   #:body (wrap-num (.normalized v.value)))
 
 (define-pure (dot a b)
-  #:category "Maths" #:name "Dot Product"
+  #:category "Maths" #:unlocked? (Game.puzzle-completed? "Vector" 1) #:name "Dot Product"
   #:description ["Computes the dot product of two vectors"]
   #:short-name "⋅"
   #:type (Type.new {0 {Types.TC_VEC true}} (Types.mono-bin-fun TV_A TV_A Types.MON_NUM))
   #:body (wrap-num (.dot a.value b.value)))
 
 (define-pure (cross a b)
-  #:category "Maths" #:name "Cross Product"
+  #:category "Maths" #:unlocked? false #:name "Cross Product"
   #:description ["Computes the cross product of two 3D vectors"
                  "Note: Space is right-handed"]
   #:short-name "×"
@@ -334,32 +383,32 @@
   #:body (wrap-num (.cross a.value b.value)))
 
 (define-pure (project-xz vec)
-  #:category "Maths" #:name "Project XZ"
+  #:category "Maths" #:unlocked? false #:name "Project XZ"
   #:description ["Projects a 3D vector into the XZ plane, discarding the Y coordinate"]
   #:short-name "XZ"
   #:type (Type.new [] (Types.mono-fun Types.MON_VEC3 Types.MON_VEC2))
   #:body (wrap-vec2 (Vector2 vec.value.x vec.value.z)))
 (define-pure (project-xy vec)
-  #:category "Maths" #:name "Project XY"
+  #:category "Maths" #:unlocked? false #:name "Project XY"
   #:description ["Projects a 3D vector into the XY plane, discarding the Z coordinate"]
   #:short-name "XY"
   #:type (Type.new [] (Types.mono-fun Types.MON_VEC3 Types.MON_VEC2))
   #:body (wrap-vec2 (Vector2 vec.value.x vec.value.y)))
 (define-pure (project-yz vec)
-  #:category "Maths" #:name "Project YZ"
+  #:category "Maths" #:unlocked? false #:name "Project YZ"
   #:description ["Projects a 3D vector into the YZ plane, discarding the X coordinate"]
   #:short-name "YZ"
   #:type (Type.new [] (Types.mono-fun Types.MON_VEC3 Types.MON_VEC2))
   #:body (wrap-vec2 (Vector2 vec.value.y vec.value.z)))
 
 (define-pure (vec2 x y)
-  #:category "Maths" #:name "Vector2"
+  #:category "Maths" #:unlocked? (Game.puzzle-completed? "Vector" 0) #:name "Vector2"
   #:description ["Vector2 x y : Constructs a 2D vector from components"]
   #:short-name "v2"
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_VEC2))
   #:body (wrap-vec2 (Vector2 x.value y.value)))
 (define-pure (vec3 x y z)
-  #:category "Maths" #:name "Vector3"
+  #:category "Maths" #:unlocked? (Game.puzzle-completed? "Vector" 0) #:name "Vector3"
   #:description ["Vector3 x y z : Constructs a 3D vector from components"
                  "Note: Y is considered \"up\""]
   #:short-name "v3"
@@ -367,21 +416,21 @@
   #:body (wrap-vec3 (Vector3 x.value y.value z.value)))
 
 (define-pure (plane normal distance)
-  #:category "Maths" #:name "Plane"
+  #:category "Maths" #:unlocked? false #:name "Plane"
   #:description ["Plane n d : Constructs a plane with normal n, d away from the origin"]
   #:short-name "Π"
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_NUM Types.MON_PLANE))
   #:body (LambdaWrapper.new (Plane (.normalized (.-value normal)) (.-value distance)) Types.TY_PLANE))
 
 (define-pure (ray origin direction)
-  #:category "Maths" #:name "Ray"
+  #:category "Maths" #:unlocked? false #:name "Ray"
   #:description ["Ray o d : Constructs a ray with origin o and direction d"]
   #:short-name "R"
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_VEC3 Types.MON_VEC3 Types.MON_RAY))
   #:body (LambdaWrapper.new {"origin" origin.value "direction" direction.value} Types.TY_RAY))
 
 (define-pure (intersect-plane plane ray)
-  #:category "Maths" #:name "Intersect Plane"
+  #:category "Maths" #:unlocked? false #:name "Intersect Plane"
   #:description ["Finds the intersection of a plane and a ray"
                  "Returns Nothing if they do not intersect"]
   #:short-name "i"
@@ -435,7 +484,7 @@
            body ...))])))
 
 (define-compose compose
-  #:category "Combinators" #:name "Compose"
+  #:category "Combinators" #:unlocked? true #:name "Compose"
   #:description ["Composes two functions, from left to right"
                  "Note: This is in the opposite direction to [code]∘[/code]"]
   #:class-name Compose
@@ -446,7 +495,7 @@
   (define (apply x) (.apply g (.apply f x))))
 
 (define-compose composea
-  #:category "Combinators" #:name "Compose Actions"
+  #:category "Combinators" #:unlocked? true #:name "Compose Actions"
   #:description ["Composes two actions, from left to right"
                  "Note: This is in the opposite direction to [code]∘[/code]"]
   #:class-name ComposeA
@@ -462,7 +511,7 @@
     (.finish g (ref s 1))))
 
 (define-construct (corrupt f) ;; I think this is catchier than `arr`
-  #:category "Combinators" #:name "Corrupt"
+  #:category "Combinators" #:unlocked? false #:name "Corrupt"
   #:description ["Creates an action from a pure function"]
   #:class-name Corrupt
   #:short-name "η"
@@ -483,7 +532,7 @@
   (define (finish _s) null))
 
 (define-construct (liftA f a)
-  #:category "Combinators" #:name "Lift Action"
+  #:category "Combinators" #:unlocked? false #:name "Lift Action"
   #:description ["Creates a new action that applies a function to its result"
                  "In other words, lift a function to actions"]
   #:class-name LiftA
@@ -503,7 +552,7 @@
   (define (finish s) (.finish a s)))
 
 (define-construct (liftA2 f a1 a2)
-  #:category "Combinators" #:name "Lift Action 2"
+  #:category "Combinators" #:unlocked? false #:name "Lift Action 2"
   #:description ["Combines two actions by applying their results to a function"
                  "In other words, lift a binary function to actions"]
   #:class-name LiftA2
@@ -529,7 +578,7 @@
     (.finish a2 (ref s 1))))
 
 (define-construct (flip f b)
-  #:category "Combinators" #:name "Flip"
+  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 0) #:name "Flip"
   #:description ["Flips the arguments of a binary function"]
   #:class-name Flip
   #:short-name "F"
@@ -546,7 +595,7 @@
     (.apply (.apply f a) b)))
 
 (define-construct (uncurry f)
-  #:category "Combinators" #:name "Uncurry"
+  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 4) #:name "Uncurry"
   #:description ["Converts a binary function into a unary function accepting a pair as its argument"]
   #:class-name Uncurry
   #:short-name "!Cur"
@@ -564,7 +613,7 @@
     (.apply (.apply f pair.car) pair.cdr)))
 
 (define-construct (curry f a)
-  #:category "Combinators" #:name "Curry"
+  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 4) #:name "Curry"
   #:description ["Converts a unary function of a pair to a binary function"]
   #:class-name Curry
   #:short-name "Cur"
@@ -581,7 +630,7 @@
   (define (apply b) (.apply f (.apply (Values.VAL_CONS.apply a) b))))
 
 (define-construct (s f g) ;; λf g x.(f x)(g x)
-  #:category "Combinators" #:name "S Combinator"
+  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "S Combinator"
   #:description ["S f g x : Applies f of x to g of x"
                  "Lambda form: λf.λg.λx.(f x)(g x)"]
   #:class-name S
@@ -601,7 +650,7 @@
             (.apply g x))))
 
 (define-construct (k value)
-  #:category "Combinators" #:name "Constant"
+  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "Constant"
   #:description ["Creates a function that always returns the given value"
                  "Lambda form: λx.λy.x"]
   #:class-name K
@@ -612,17 +661,15 @@
   (text-preview "K'")
   (define (apply _x) value))
 
-(class Id
-  (extends LambdaValue)
-  (cached-type (Type.new [0] (Types.mono-fun Values.TV_A Values.TV_A)))
-  (text-preview "I")
-  (define (_add-tooltip tt) (.append tt "Returns its argument"))
-  (define (apply x) x))
-(define-global-val i (.new Id)
-  #:category "Combinators" #:name "Identity")
+(define-pure (i x)
+  #:category "Combinators" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "Identity"
+  #:description ["Returns its argument"]
+  #:short-name "I"
+  #:type (Type.new [0] (Types.mono-fun TV_A TV_A))
+  #:body x)
 
 (define-construct (passthrough f) ;; `first` is a really really bad name
-  #:category "Combinators" #:name "Passthrough"
+  #:category "Combinators" #:unlocked? false #:name "Passthrough"
   #:description ["Creates an action with an extra untouched argument"]
   #:class-name Passthrough
   #:short-name "P"
@@ -641,7 +688,7 @@
   (define (finish s) (.finish f s)))
 
 (define-action (move vel)
-  #:category "Actions" #:name "Move"
+  #:category "Actions" #:unlocked? true #:name "Move"
   #:description ["Move the player in the specified direction"]
   #:class-name Move
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_UNIT))
@@ -658,7 +705,7 @@
   null)
 
 (define-action (interact _u)
-  #:category "Actions" #:name "Interact"
+  #:category "Actions" #:unlocked? true #:name "Interact"
   #:description ["Interact with the closest interactible object in range upon release"]
   #:class-name Interact
   #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_UNIT))
@@ -668,7 +715,7 @@
   #:finish (_s) (Game.world.player.interact-nearest) null)
 
 (define-action (prn x)
-  #:category "Actions" #:name "Print"
+  #:category "Actions" #:unlocked? true #:name "Print"
   #:description ["Show the value on screen, and return it"]
   #:class-name Print
   #:type (Type.new [0] (Types.mono-action Values.TV_A Values.TV_A))
@@ -678,7 +725,7 @@
   #:finish (s) (.queue-free s) null)
 
 (define-action (get-player-posn _u)
-  #:category "Actions" #:name "Player Position"
+  #:category "Actions" #:unlocked? false #:name "Player Position"
   #:description ["Get the eye position of the player in the world"]
   #:class-name GetPlayerPosn
   #:type (Type.new [0] (Types.mono-action Values.TV_A Types.MON_VEC3))
@@ -688,7 +735,7 @@
   #:finish (_s) null)
 
 (define-action (get-mouse-posn _u)
-  #:category "Actions" #:name "Mouse Position"
+  #:category "Actions" #:unlocked? false #:name "Mouse Position"
   #:description ["Get the position of the mouse on the screen"
                  "Note: the center of the screen is (0, 0), top left is (-1, -1) and bottom right is (1, 1)"
                  "It is possible to get values greater than 1 by moving the mouse out of the window"]
@@ -700,7 +747,7 @@
   #:finish (_s) null)
 
 (define-action (camera-project pos)
-  #:category "Actions" #:name "Camera Project"
+  #:category "Actions" #:unlocked? false #:name "Camera Project"
   #:description ["Get the projection from the camera of a position on the screen"
                  "Note: the center of the screen is (0, 0), top left is (-1, -1) and bottom right is (1, 1)"]
   #:class-name CameraProject
@@ -718,7 +765,7 @@
   #:finish (_s) null)
 
 (define-action (psctxzprtp vec) ;; Project Screen Coordinate to XZ Plane Relative to Player
-  #:category "Actions" #:name "PSCtXZPRtP"
+  #:category "Actions" #:unlocked? true #:name "PSCtXZPRtP"
   #:description ["Project a screen coordinate to the XZ plane (floor) relative to the player"]
   #:class-name PSCtXZPRtP
   #:type (Type.new [] (Types.mono-action Types.MON_VEC2 Types.MON_VEC2))
@@ -736,8 +783,8 @@
   (Values.wrap-vec2 (Vector2 intersection.x intersection.z))
   #:finish (_s) null)
 
-(define-pure (cons a b)
-  #:category "Misc" #:name "Cons"
+(define-pure (pair a b)
+  #:category "Misc" #:unlocked? (Game.puzzle-completed? "Combinator" 2) #:name "Pair"
   #:description ["Creates a pair"]
   #:short-name ":"
   #:type (Type.new [0 1] (Types.mono-bin-fun TV_A TV_B (Types.mono-pair TV_A TV_B)))
@@ -755,17 +802,21 @@
 (class Unit
   (extends LambdaValue)
   (define (get-type) Types.TY_UNIT)
-  (text-preview "()"))
+  (define (_to-string) "()")
+  (text-preview "()")
+  (define (_to-json) ["Unit"]))
 (define-global-val unit (.new Unit)
-  #:category "Misc" #:name "Unit")
+  #:category "Misc" #:unlocked? false #:name "Unit")
+(define (parse-unit _x) VAL_UNIT)
+(do-onready (set! (ref DESER_KEYS "Unit") (funcref self "parse_unit")))
 
 (define-global-val _true (LambdaWrapper.new true Types.TY_BOOL)
-  #:category "Misc" #:name "True")
+  #:category "Misc" #:unlocked? false #:name "True")
 (define-global-val _false (LambdaWrapper.new false Types.TY_BOOL)
-  #:category "Misc" #:name "False")
+  #:category "Misc" #:unlocked? false #:name "False")
 
 (define-pure (select pred thenv elsev)
-  #:category "Misc" #:name "Select"
+  #:category "Misc" #:unlocked? (Game.puzzle-completed? "Combinator" 1) #:name "Select"
   #:description ["Select p x y : Matches on a boolean p, returning x if true, or y otherwise"
                  "Note: Values are not lazy, if you want to delay computation you must use functions"]
   #:short-name "sel"
@@ -773,7 +824,7 @@
   #:body (if pred.value thenv elsev))
 
 (define-pure (unmaybe mb ifabs ifpres)
-  #:category "Misc" #:name "Unmaybe"
+  #:category "Misc" #:unlocked? false #:name "Unmaybe"
   #:description ["Matches on a maybe value, applying the function if present, or returning the default value"]
   #:short-name "!M"
   #:type
@@ -791,7 +842,7 @@
       (ifpres.apply mb.value)))
 
 (define-pure (unray ray f)
-  #:category "Misc" #:name "Unray"
+  #:category "Misc" #:unlocked? false #:name "Unray"
   #:description ["Deconstructs a ray, applying the function to the origin and direction, in that order"]
   #:short-name "!R"
   #:type
@@ -807,7 +858,7 @@
       (.apply (Values.wrap-vec3 ray.value.direction))))
 
 (define-pure (unplane plane f)
-  #:category "Misc" #:name "Unplane"
+  #:category "Misc" #:unlocked? false #:name "Unplane"
   #:description ["Deconstructs a plane, applying the function to the normal and distance, in that order"]
   #:short-name "!Π"
   #:type
@@ -822,4 +873,15 @@
       (.apply (Values.wrap-vec3 plane.value.normal))
       (.apply (Values.wrap-num plane.value.d))))
 
+(define DESER_KEYS {})
+(define (from-json js)
+  (match js
+    [["LambdaWrapper" (var vl) (var ty)]
+     (LambdaWrapper.new vl (Type.from-json ty))]
+    [[(var key) ..] (.call-func (ref DESER_KEYS key) js)]
+    [_
+     (push-error "Failed deserialisation")
+     null]))
+
 (emit-categories! "Maths" "Combinators" "Actions" "Misc")
+(finish-ready!)

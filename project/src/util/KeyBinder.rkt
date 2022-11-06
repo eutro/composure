@@ -4,6 +4,18 @@
 
 (define key-map {})
 
+(define (load-json x)
+  (.clear key-map)
+  (for ([e x])
+    (set! (ref key-map (ref e 0))
+          (Values.from-json (ref e 1)))))
+
+(define (save-json)
+  (define js [])
+  (for ([k key-map])
+    (.append js [k (.to-json (ref key-map k))]))
+  js)
+
 (define (->input-key evt-or-key)
   (if (is evt-or-key InputKeyBase)
       evt-or-key

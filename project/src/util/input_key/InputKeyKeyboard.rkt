@@ -8,7 +8,7 @@
 (splice-record ([event : InputEventKey]))
 
 (define (_map-key)
-  ["Key" (.get-scancode-with-modifiers event)])
+  ["Key" (float (.get-scancode-with-modifiers event))])
 
 (define (_scene)
   (preload "KeyboardDisplay.tscn"))

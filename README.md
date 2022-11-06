@@ -1,6 +1,9 @@
 # ![Composure](./project/assets/textures/title.svg)
 
-Compose your thoughts and functions. You'll be alright.
+_Compose your thoughts and functions. You'll be alright._
+
+Composure is a game about solving puzzles with functions built in
+point-free style: there are no variables, only combinators.
 
 ## Building
 

@@ -24,12 +24,14 @@
 
 (define (_on-TckLambdaSlot-term-changed term)
   (.set-bbcode $Error "")
+  (.hide $SuccessMsg)
   (when (!= null term)
     (define res (.call-func puzzle.check term))
     (cond
       [res.is-ok
        (.set-emitting $TckLambdaSlot/Particles true)
        (.play $Success)
+       (.show $SuccessMsg)
        (emit-signal "puzzle_passed")]
       [else
        (.set-bbcode $Error (+ "[center]" res.value "[/center]"))

@@ -17,3 +17,6 @@
 
 (define (_to-string)
   (str value))
+
+(define (_to-json)
+  ["LambdaWrapper" value (.to-json type)])

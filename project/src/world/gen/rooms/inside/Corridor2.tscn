@@ -1,9 +1,8 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/world/tiles/Inside.meshlib" type="MeshLibrary" id=1]
 [ext_resource path="res://src/world/gen/RoomScene.gd" type="Script" id=2]
 [ext_resource path="res://src/world/gen/Anchor.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=4]
 [ext_resource path="res://src/world/gen/RandomTile.gd" type="Script" id=5]
 
 [node name="FirstCorridor" type="Spatial"]
@@ -42,7 +41,7 @@ __meta__ = {
 
 [node name="RandomTile2" type="Spatial" parent="GridMap"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99178, 0, -11.018 )
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 child_map = NodePath("GridMap")
 
 [node name="GridMap" type="GridMap" parent="GridMap/RandomTile2"]
@@ -59,7 +58,7 @@ __meta__ = {
 
 [node name="RandomTile3" type="Spatial" parent="GridMap"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.99178, 0, 15.0837 )
-script = ExtResource( 4 )
+script = ExtResource( 5 )
 child_map = NodePath("GridMap")
 
 [node name="GridMap" type="GridMap" parent="GridMap/RandomTile3"]

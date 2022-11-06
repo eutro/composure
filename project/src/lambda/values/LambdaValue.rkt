@@ -24,3 +24,10 @@
   (for ([x xs])
     (fset! val .apply x))
   val)
+
+(define (to-json)
+  (_to-json))
+
+(define (_to-json)
+  (assert false (+ "Could not save " (str self) " as JSON"))
+  null)

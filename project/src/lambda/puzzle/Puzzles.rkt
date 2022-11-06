@@ -20,19 +20,48 @@
     menu))
 
 (begin-escape
-  (require (only-in racket/base define-syntax)
+  (require (only-in racket/base begin-for-syntax define-syntax)
            (for-syntax racket
                        racket/syntax
                        syntax/parse
                        gdlisp/utils))
+  (begin-for-syntax
+    (define puzzles (make-hash)))
+  (define-syntax (reset-puzzles! stx)
+    (hash-clear! puzzles)
+    #'(begin))
+
+  (define-syntax (emit-puzzles! stx)
+    (syntax-parse stx
+      [(_ names:str ...)
+       (when (not (= (hash-count puzzles)
+                     (add1 (length (syntax->list #'(names ...))))))
+         (raise-syntax-error
+          'emit-puzzles!
+          (format "mismatched keys;\n  expected: ~s \\ (\"Impossible\")\n  got: ~s"
+                  (hash-keys puzzles)
+                  (syntax->datum #'(names ...)))
+          stx))
+       (syntax-parse
+           (for/list ([(cat c-pzzls) (in-hash puzzles)])
+             #`(#,cat #,(reverse c-pzzls)))
+         [((cat:str [pzl ...]) ...)
+          #'(begin
+              (define PUZZLE_TYPES [names ...])
+              (define PUZZLES
+                {{~@ cat [pzl ...]} ...}))])]))
+
   (define-syntax (define-puzzle stx)
     (syntax-parse stx
-      [(_ name
-          #:category cat:expr #;nya
+      [(_ name:id
+          #:category cat:str #;nya
           #:description desc:expr
           #:type type:expr
           #:track track:expr
           #:check (val:id) body:expr ...)
+       (define cat-str (syntax-e #'cat))
+       (hash-set! puzzles cat-str
+                  (cons #'name (hash-ref puzzles cat-str null)))
        (with-syntax* ([check-fn (format-id #'name "~a-check" #'name)]
                       [check-name (mangle (symbol->string (syntax-e #'check-fn)))])
          (syntax/loc stx
@@ -46,6 +75,18 @@
                 (funcref self check-name)
                 track)))))])))
 
+(define (appv-int f xs)
+  (for ([i (range (len xs))])
+    (fset! (ref xs i) Values.wrap-num))
+  (.apply-a f xs))
+
+(define TV_A (MonoVar.new 0))
+(define TV_B (MonoVar.new 1))
+(define TV_C (MonoVar.new 2))
+(define TV_D (MonoVar.new 3))
+
+(reset-puzzles!)
+
 (define-puzzle impossible-puzzle
   #:category "Impossible"
   #:description "What is the last digit of π?"
@@ -54,7 +95,7 @@
   #:check (_v) (Result.new false "Incorrect answer"))
 
 (define-puzzle tutorial-puzzle
-  #:category "Simple Arithmetic"
+  #:category "Arithmetic"
   #:description "What is the value of [code]2 + 2[/code]?"
   #:type Types.TY_NUM
   #:track tracks.first ;; so true!
@@ -65,17 +106,168 @@
        "One think only please"
        "Incorrect answer")))
 
+(define-puzzle arith-1
+  #:category "Arithmetic"
+  #:description "What is the value of [code]3 * 4[/code]?"
+  #:type Types.TY_NUM
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (== v.value 12)
+   "Incorrect answer"))
+
+(define-puzzle arith-2
+  #:category "Arithmetic"
+  #:description "Give me a function that adds two numbers together."
+  #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM Types.MON_NUM))
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (and (== 7 (.-value (appv-int v [2 5])))
+        (== 8 (.-value (appv-int v [3 5])))
+        (== 15 (.-value (appv-int v [5 10])))
+        (== 61 (.-value (appv-int v [60 1])))
+        (== 10 (.-value (appv-int v [-20 30]))))
+   "Incorrect answer"))
+
+(define-puzzle arith-3
+  #:category "Arithmetic"
+  #:description "Give me a function that adds 10 to a number."
+  #:type (Type.new [] (Types.mono-fun Types.MON_NUM Types.MON_NUM))
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (and (== 17 (.-value (appv-int v [7])))
+        (== 18 (.-value (appv-int v [8])))
+        (== 30 (.-value (appv-int v [20])))
+        (== 0 (.-value (appv-int v [-10])))
+        (== 5 (.-value (appv-int v [-5]))))
+   "Incorrect answer"))
+
+(define-puzzle arith-4
+  #:category "Arithmetic"
+  #:description "Give me a function that doubles a number."
+  #:type (Type.new [] (Types.mono-fun Types.MON_NUM Types.MON_NUM))
+  #:track tracks.transience
+  #:check (v)
+  (Result.new
+   (and (== 14 (.-value (appv-int v [7])))
+        (== 16 (.-value (appv-int v [8])))
+        (== 40 (.-value (appv-int v [20])))
+        (== -20 (.-value (appv-int v [-10])))
+        (== -10 (.-value (appv-int v [-5]))))
+   "Incorrect answer"))
+
+(define-puzzle comb-0
+  #:category "Combinator"
+  #:description "Give me a function that composes any two functions, from [b]left[/b] to [b]right[/b].
+
+i.e. X f g -> λx.g(f x)"
+  #:type (Type.new
+          [0 1 2]
+          (Types.mono-bin-fun
+           (Types.mono-fun TV_A TV_B)
+           (Types.mono-fun TV_B TV_C)
+           (Types.mono-fun TV_A TV_C)))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 3)
+   "Incorrect answer"))
+
+(define-puzzle comb-1
+  #:category "Combinator"
+  #:description "Give me a function that composes any two functions, from [b]right[/b] to [b]left[/b].
+
+i.e. [code]X f g[/code] becomes [code]λx.f(g x)[/code]"
+  #:type (Type.new
+          [0 1 2]
+          (Types.mono-bin-fun
+           (Types.mono-fun TV_B TV_C)
+           (Types.mono-fun TV_A TV_B)
+           (Types.mono-fun TV_A TV_C)))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 3)
+   "Incorrect answer"))
+
+(define-puzzle comb-2
+  #:category "Combinator"
+  #:description "Give me a function that returns [code]1[/code] if its argument is true, or [code]0[/code] if it is false."
+  #:type (Type.new [] (Types.mono-fun Types.MON_BOOL Types.MON_NUM))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (and (== 1 (.-value (.apply v (LambdaWrapper.new true Types.TY_BOOL))))
+        (== 0 (.-value (.apply v (LambdaWrapper.new false Types.TY_BOOL)))))
+   "Incorrect answer"))
+
+(define-puzzle comb-3
+  #:category "Combinator"
+  #:description "Give me a function that, given a value [code]x[/code], returns a pair of [code]x[/code] and [code]x[/code]."
+  #:type (Type.new
+          [0]
+          (Types.mono-fun
+           TV_A
+           (Types.mono-pair TV_A TV_A)))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 1)
+   "Incorrect answer"))
+
+(define-puzzle comb-4
+  #:category "Combinator"
+  #:description "Give me a function that, given a binary function [code]f[/code], returns a function that \
+applies its argument to [code]f[/code] twice.
+
+i.e. [code]X f[/code] becomes [code]λx.f x x[/code]"
+  #:type (Type.new
+          [0 1]
+          (Types.mono-fun
+           (Types.mono-bin-fun TV_A TV_A TV_B)
+           (Types.mono-fun TV_A TV_B)))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 2)
+   "Incorrect answer"))
+
+(define-puzzle comb-5
+  #:category "Combinator"
+  #:description "Give me a function that, given a pair, returns its left value."
+  #:type (Type.new
+          [0 1]
+          (Types.mono-fun
+           (Types.mono-pair TV_A TV_B)
+           TV_A))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 2)
+   "Incorrect answer"))
+
+(define-puzzle comb-6
+  #:category "Combinator"
+  #:description "Give me a function that swaps the values in a pair."
+  #:type (Type.new
+          [0 1]
+          (Types.mono-fun
+           (Types.mono-pair TV_A TV_B)
+           (Types.mono-pair TV_B TV_A)))
+  #:track tracks.red-tears
+  #:check (v)
+  (Result.new
+   (== (~> v .get-type .-type-vars len) 2)
+   "Incorrect answer"))
+
 (define-puzzle sort-0
   #:category "Sorting"
   #:description "What is the minimum of 2 and 3?"
   #:type Types.TY_NUM
   #:track tracks.persistence
   #:check (v) (Result.new (== v.value 2) "Incorrect answer"))
-
-(define (appv-int f xs)
-  (for ([i (range (len xs))])
-    (fset! (ref xs i) Values.wrap-num))
-  (.apply-a f xs))
 
 (define-puzzle sort-1
   #:category "Sorting"
@@ -133,7 +325,7 @@
 
 (define-puzzle sort-3
   #:category "Sorting"
-  #:description "Give me a function that returns its two arguments as a pair in ascending order"
+  #:description "Give me a function that returns its two arguments as a pair in ascending order."
   #:type (Type.new [] (Types.mono-bin-fun Types.MON_NUM Types.MON_NUM (Types.mono-pair Types.MON_NUM Types.MON_NUM)))
   #:track tracks.persistence
   #:check (v)
@@ -146,19 +338,65 @@
         (eq-pair -10 -1 (.-value (appv-int v [-1 -10]))))
    "Incorrect answer"))
 
+(define-puzzle vec-0
+  #:category "Vector"
+  #:description "What is the length of the vector [code](0, 1, 0)[/code]?"
+  #:type Types.TY_NUM
+  #:track tracks.rest
+  #:check (v) (Result.new (== 1 v.value) "Incorrect answer"))
+
+(define-puzzle vec-1
+  #:category "Vector"
+  #:description "Give me a 3D vector that points [b]up[/b]."
+  #:type Types.TY_VEC3
+  #:track tracks.rest
+  #:check (v)
+  (define is-ok (.is-equal-approx Vector3.UP (.normalized v.value)))
+  (Result.new is-ok "Incorrect answer"))
+
+(define-puzzle vec-2
+  #:category "Vector"
+  #:description "Give me a function that returns the [code]y[/code] component of a 3D vector."
+  #:type (Type.new [] (Types.mono-fun Types.MON_VEC3 Types.MON_NUM))
+  #:track tracks.rest
+  #:check (v)
+  (Result.new
+   (and (is-equal-approx 30 (.-value (v.apply (Values.wrap-vec3 (Vector3 40 30 20)))))
+        (is-equal-approx 20 (.-value (v.apply (Values.wrap-vec3 (Vector3 40 20 30)))))
+        (is-equal-approx 40 (.-value (v.apply (Values.wrap-vec3 (Vector3 20 40 -10))))))
+   "Incorrect answer"))
+
 (define (init-progress)
-  {
-   "Arithmetic" 0
-   "Sorting" 0
-   "Impossible" 0
-   })
+  (define m {})
+  (for ([k PUZZLES])
+    (set! (ref m k) 0))
+  m)
+
+(define (compute-unlocked ucat)
+  (define l [])
+  (for ([cat Values.CATEGORIES])
+    (for ([entry (ref Values.CATEGORIES cat)])
+      (define unlocked-before (DefinitionList.is-entry-unlocked entry))
+      (when (not unlocked-before)
+        (+set! (ref Game.puzzle-progress ucat) 1)
+        (define unlocked-after (DefinitionList.is-entry-unlocked entry))
+        (when unlocked-after
+          (.append l [cat entry]))
+        (-set! (ref Game.puzzle-progress ucat) 1))))
+  l)
 
 (define (inc-progress cat)
-  (+set! (ref Game.puzzle-progress cat) 1))
+  (define unlocked (compute-unlocked cat))
+  (fset! (ref Game.puzzle-progress cat) ~> (+ 1) (min (len (ref PUZZLES cat))))
+  (~> Game.ui .mount-gui .get-definitions .recompute-children)
+  (Game.dirty)
+  unlocked)
+
+(define (ref-wrap v i)
+  (ref v (min i (- (len v) 1))))
 
 (define (next-puzzle-for-category cat)
   (define progress (ref Game.puzzle-progress cat))
-  (match cat
-    ["Arithmetic" tutorial-puzzle]
-    ["Sorting" (match progress [0 sort-0] [1 sort-1] [2 sort-2] [_ sort-3])]
-    [_ impossible-puzzle]))
+  (ref-wrap (.get PUZZLES cat "Impossible") progress))
+
+(emit-puzzles! "Arithmetic" "Vector" "Sorting" "Combinator") ;; hide "Impossible"

@@ -10,8 +10,15 @@
   $HUD/ComposerButton)
 
 (define (_ready)
-  (set! Game.ui self)
-  (.start (.mount $Tutorial)))
+  (set! Game.ui self))
+
+(define (start-tutorial arg)
+  (.unmount $Tutorial)
+  (.start (.mount $Tutorial) arg))
+
+(define (start-reloaded)
+  (.unmount $Tutorial)
+  (.start-reloaded (.mount $Tutorial)))
 
 (define (get-gui)
   (.-mounted $Composer))

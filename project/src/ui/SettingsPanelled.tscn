@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/themes/FlatUI/UIpack_vector.svg" type="Texture" id=1]
+[ext_resource path="res://src/ui/Settings.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/ui/SettingsPanelled.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxTexture" id=19]
+texture = ExtResource( 1 )
+region_rect = Rect2( 1, 310, 100, 100 )
+margin_left = 12.3202
+margin_right = 13.3469
+margin_top = 13.3469
+margin_bottom = 11.2935
+
+[node name="SettingsPanelled" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 19 )
+script = ExtResource( 3 )
+
+[node name="Settings" parent="." instance=ExtResource( 2 )]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -60.0
+
+[node name="Close" type="Button" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -60.0
+margin_right = -10.0
+margin_bottom = -10.0
+text = "Close"
+
+[connection signal="pressed" from="Close" to="." method="_on_Close_pressed"]
