@@ -22,3 +22,17 @@ jobs:
 
       - name: Compile GDLisp
         run: raco gdlisp ./project
+      
+      - name: Setup Godot
+        uses: Vitorgus/Setup-Godot@v1.1.1
+        with:
+          godot-version: 3.5.1
+
+      - name: Export Game
+        run: ./build.sh
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: export
+          path: ./export
